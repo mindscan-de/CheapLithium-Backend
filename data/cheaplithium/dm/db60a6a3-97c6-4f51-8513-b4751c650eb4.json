@@ -26,13 +26,13 @@
       "kbarticle": "",
       "nextactions": [
         {
-          "name": "no",
+          "name": "less_than_or_equal_to_50_samples",
           "next": "DN_c18f5206-d5aa-4c83-91ad-d41fa8e3d897",
           "template": "",
           "transitif": ""
         },
         {
-          "name": "yes",
+          "name": "more_than_50_samples",
           "next": "DN_d2d5eacc-3dba-456c-b8dc-62b58afd0e68",
           "template": "",
           "transitif": ""
@@ -155,7 +155,7 @@
     },
     {
       "uuid": "DN_bf514192-076e-418f-90bc-9bb77e2ba4f9",
-      "name": "101.classifier.use_SVC",
+      "name": "101.classifier.use_Linear_SVC",
       "type": "hit",
       "kbarticle": "",
       "nextactions": [

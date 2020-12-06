@@ -84,11 +84,51 @@
       "name": "004.decide_predicting_quantity",
       "type": "hit",
       "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "yes",
+          "next": "DN_e169aed7-7b2c-4fd7-ac7f-65bd6ddb52e7",
+          "template": "",
+          "transitif": ""
+        },
+        {
+          "name": "no",
+          "next": "DN_ecfff1c1-46ea-4e9f-b843-9734b1c4eceb",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_ecfff1c1-46ea-4e9f-b843-9734b1c4eceb",
+      "name": "005.just_looking",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "yes",
+          "next": "DN_22d76065-1b10-4617-b8a4-46cd72d92a6c",
+          "template": "",
+          "transitif": ""
+        },
+        {
+          "name": "no",
+          "next": "DN_481e6e84-9d49-42dd-8bbc-182928c5083b",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_481e6e84-9d49-42dd-8bbc-182928c5083b",
+      "name": "006.predicting_structure",
+      "type": "hit",
+      "kbarticle": "",
       "nextactions": []
     },
     {
       "uuid": "DN_d7ebf650-0dfa-4310-ab09-0efc89f0e7eb",
-      "name": "100.cl.decide_large_sample_size",
+      "name": "100.classes.decide_large_sample_size",
       "type": "hit",
       "kbarticle": "",
       "nextactions": []
@@ -101,9 +141,37 @@
       "nextactions": []
     },
     {
+      "uuid": "DN_e169aed7-7b2c-4fd7-ac7f-65bd6ddb52e7",
+      "name": "300.regression.decide_large_sample_size",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": []
+    },
+    {
+      "uuid": "DN_22d76065-1b10-4617-b8a4-46cd72d92a6c",
+      "name": "400.try_randomized_pca",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": []
+    },
+    {
       "uuid": "DN_c18f5206-d5aa-4c83-91ad-d41fa8e3d897",
       "name": "801.get_more_data",
       "type": "mit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "always",
+          "next": "DN_614b16a9-68f2-42cb-8a9b-14537a764d5b",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_50621e0e-1d61-415f-925a-2f36d2377788",
+      "name": "802.tough_luck",
+      "type": "hit",
       "kbarticle": "",
       "nextactions": [
         {

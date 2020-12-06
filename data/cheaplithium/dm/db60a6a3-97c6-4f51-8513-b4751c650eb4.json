@@ -287,6 +287,128 @@
       "name": "200.cluster.is_number_of_categories_known",
       "type": "hit",
       "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "yes",
+          "next": "DN_d0a25b06-83ef-4cde-a476-a36b4f534fca",
+          "template": "",
+          "transitif": ""
+        },
+        {
+          "name": "no",
+          "next": "DN_4f891b9b-d07a-4a7f-93e2-8d82ad68a90b",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_d0a25b06-83ef-4cde-a476-a36b4f534fca",
+      "name": "201.clustering.decde_is_mid_size_samples",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "is_less_than_10k_samples",
+          "next": "DN_5512fa96-4f4a-4cbf-8461-88e5889681d4",
+          "template": "",
+          "transitif": ""
+        },
+        {
+          "name": "is_more_than_10k_samples",
+          "next": "DN_9b20eea6-087c-47d1-bd03-910c590446f1",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_5512fa96-4f4a-4cbf-8461-88e5889681d4",
+      "name": "202.clustering.use_KMeans",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "not_working",
+          "next": "DN_76f7db51-484f-4bf4-9fe1-a47faf149276",
+          "template": "",
+          "transitif": ""
+        },
+        {
+          "name": "working",
+          "next": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_76f7db51-484f-4bf4-9fe1-a47faf149276",
+      "name": "203.clustering.use_Spectral_Clustering_or_GMM",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "always",
+          "next": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_9b20eea6-087c-47d1-bd03-910c590446f1",
+      "name": "204.clustering.Minibatch_KMeans",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "always",
+          "next": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_4f891b9b-d07a-4a7f-93e2-8d82ad68a90b",
+      "name": "205.clustering.decide_is_mid_size",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "less_than_10k_samples",
+          "next": "DN_86a4ab23-86b0-49e1-881e-0c40350c41cf",
+          "template": "",
+          "transitif": ""
+        },
+        {
+          "name": "more_than_10k_samples",
+          "next": "DN_50621e0e-1d61-415f-925a-2f36d2377788",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_86a4ab23-86b0-49e1-881e-0c40350c41cf",
+      "name": "206.clustering.use_MeanShift_VBGMM",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "always",
+          "next": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
+      "name": "299.clustering.endstate",
+      "type": "end",
+      "kbarticle": "",
       "nextactions": []
     },
     {

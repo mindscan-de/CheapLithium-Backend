@@ -416,6 +416,114 @@
       "name": "300.regression.decide_large_sample_size",
       "type": "hit",
       "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "larger_or_equal_to_100k_samples",
+          "next": "DN_a1c5afa8-b141-4c3b-b62b-68554d9fd94b",
+          "template": "",
+          "transitif": ""
+        },
+        {
+          "name": "less_than_100k_samples",
+          "next": "DN_0a1d7ae1-c499-40c3-b479-0d37635e1197",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_a1c5afa8-b141-4c3b-b62b-68554d9fd94b",
+      "name": "301.regression.are_only_few_features_important",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "few_are_important",
+          "next": "DN_c2ce33b2-3d70-420a-8d2a-2d75b43be08e",
+          "template": "",
+          "transitif": ""
+        },
+        {
+          "name": "more_than_few_are_important",
+          "next": "DN_01673d36-b97b-44a6-b634-6dc6a57158b7",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_c2ce33b2-3d70-420a-8d2a-2d75b43be08e",
+      "name": "302.regression.use_Lasso_or_ElasticNet",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "always",
+          "next": "DN_4cfefb7a-19e6-4bb1-ba2b-3109c72849aa",
+          "template": "",
+          "transitif": ""
+        },
+        {
+          "name": "not_working",
+          "next": "DN_082378a7-cc7e-4cec-bff0-64b23af413c8",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_01673d36-b97b-44a6-b634-6dc6a57158b7",
+      "name": "303.regression.use_RidgeRegression_or_SVR_kernel_linear",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "working",
+          "next": "DN_4cfefb7a-19e6-4bb1-ba2b-3109c72849aa",
+          "template": "",
+          "transitif": ""
+        },
+        {
+          "name": "not_working",
+          "next": "DN_082378a7-cc7e-4cec-bff0-64b23af413c8",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_082378a7-cc7e-4cec-bff0-64b23af413c8",
+      "name": "304.regression.use_SVR_kernelrbf_or_EnsembleRegressors",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "always",
+          "next": "DN_4cfefb7a-19e6-4bb1-ba2b-3109c72849aa",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_0a1d7ae1-c499-40c3-b479-0d37635e1197",
+      "name": "305.regression.use_SGD_Regressor",
+      "type": "hit",
+      "kbarticle": "",
+      "nextactions": [
+        {
+          "name": "always",
+          "next": "DN_4cfefb7a-19e6-4bb1-ba2b-3109c72849aa",
+          "template": "",
+          "transitif": ""
+        }
+      ]
+    },
+    {
+      "uuid": "DN_4cfefb7a-19e6-4bb1-ba2b-3109c72849aa",
+      "name": "399.regression.endstate",
+      "type": "end",
+      "kbarticle": "",
       "nextactions": []
     },
     {

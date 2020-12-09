@@ -332,15 +332,27 @@ async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:s
     
     return create_successful_uuid_result(uuid)
 
-##
-## Unfinished yet
-##
-
 @app.post("/CheapLithium/rest/updateDecisionModel")
 async def update_decision_model(uuid: str = Form(...), name:str = Form(...),  displayname:str=Form(...), 
     description:str=Form(...), version:str = Form(...)):
-    # update that model in the dictionary... - no persistence required
+    
+    uuid = strip_uuid(uuid)
+    
+    if uuid in decisionModelDatabase:
+        decisionModel = decisionModelDatabase[uuid]
+        decisionModel[DM_NAME] = name
+        decisionModel[DM_DISPLAYNAME] = displayname
+        decisionModel[DM_DESCRIPTION] = description
+        decisionModel[DM_VERSION] = version
+    else:
+        print({"message", "uuid_not in database"})
+        return {"message", "uuid_not in database"}
+    
     return create_successful_uuid_result(uuid)
+
+##
+## Unfinished yet
+##
 
 
 @app.post("/CheapLithium/rest/cloneDecisionModel")

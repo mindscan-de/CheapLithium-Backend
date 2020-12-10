@@ -398,10 +398,7 @@ async def provide_decision_thread(uuid: str='b5ef3ee2-e059-458f-b8a4-77ce7301fef
 
 # TODO: implement the decisionlist by crawling the keys of the Database and join it with the filenames of the directory.
 
-@app.get("/CheapLithium/rest/getDecisionThreadList")
-async def get_decision_thread_list():
-    return {
-        "threads" : [
+baseThreads = [
                 {
                     "uuid" : "b5ef3ee2-e059-458f-b8a4-77ce7301fef0",
                     "environment" : {
@@ -418,4 +415,45 @@ async def get_decision_thread_list():
                     "owner": ""
                 }
             ]
+
+@app.get("/CheapLithium/rest/getDecisionThreadList")
+async def get_decision_thread_list():
+    global baseThreads
+    threads = baseThreads.copy()
+    
+    global decisionThreadDatabase 
+    for _,value in decisionThreadDatabase.items():
+        threads.append( value );
+        
+    return {
+        "threads" : threads 
         }
+
+@app.post("/CheapLithium/rest/startDecisionThread")
+async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form("")):
+    global decisionThreadDatabase;
+    
+    dmuuid = strip_uuid(uuid)
+    
+    # load decisionModel information by
+    # calculate startnode
+    startnode = "XXY";
+    
+    threadUuid = str(uid.uuid4())
+    
+    newThread={
+            "uuid" : str(threadUuid),
+            "environment" : {},
+            "currentstate" : "START",
+            "currentmodel" : dmuuid,
+            "currentnode"  : startnode,
+            "ticketreference" : [ ticketreference ],
+            "owner" : ""
+        }
+    
+    decisionThreadDatabase[threadUuid] = newThread
+    
+    # TODO: use execution engine for initial run until halt...
+    
+    return create_successful_uuid_result(threadUuid)
+    

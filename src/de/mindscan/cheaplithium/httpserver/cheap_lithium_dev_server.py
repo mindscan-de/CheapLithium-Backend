@@ -152,8 +152,6 @@ async def create_decision_model( name:str = Form(...), displayname:str=Form(...)
 @app.post("/CheapLithium/rest/createDecisionNode")
 async def create_decision_node (name:str = Form(...), exectype:str = Form(...), 
                                 kbarticle:str = Form(""), dmuuid:str=Form(...)):
-    global decisionModelDatabase
-    
     dmuuid = strip_uuid(dmuuid)
     
     dnode, _ = decisionModel.create_decision_node_internal(name, exectype, kbarticle, [])
@@ -164,8 +162,6 @@ async def create_decision_node (name:str = Form(...), exectype:str = Form(...),
 
 @app.post("/CheapLithium/rest/persistDecisionModel")
 async def persist_decision_model ( uuid: str = Form(...)):
-    global decisionModelDatabase
-    
     uuid = strip_uuid(uuid)
     persist_decision_model_internal(uuid)
     

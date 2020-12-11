@@ -31,26 +31,41 @@ SOFTWARE.
 # -----------------------------------------
 
 # Internal Model of the Decision Model
-DM_NODES = 'nodes'
-DM_NAME = 'name'
-DM_UUID = 'uuid'
+DM_NODES       = 'nodes'
+DM_NAME        = 'name'
+DM_UUID        = 'uuid'
 DM_DISPLAYNAME = 'displayname'
 DM_DESCRIPTION = 'description'
-DM_STARTNODE = 'startnode'
-DM_VERSION = 'version'
+DM_STARTNODE   = 'startnode'
+DM_VERSION     = 'version'
 
 # Internal Model of the Decision Node
-DN_UUID = 'uuid'
-DN_NAME = 'name'
-DN_TYPE = 'type'
-DN_TYPE_END = 'end'
-DN_TYPE_START = 'start'
-DN_TYPE_HIT = 'hit'
-DN_TYPE_MIT = 'mit'
-DN_KBARTICLE = 'kbarticle'
+DN_UUID        = 'uuid'
+DN_NAME        = 'name'
+DN_TYPE        = 'type'
+DN_TYPE_END    = 'end'
+DN_TYPE_START  = 'start'
+DN_TYPE_HIT    = 'hit'
+DN_TYPE_MIT    = 'mit'
+DN_KBARTICLE   = 'kbarticle'
 DN_NEXTACTIONS = 'nextactions'
 
 # Internal Model of the Decision Node Transition
-DNT_NAME = 'name'
-DNT_NEXT = 'next'
-DNT_TEMPLATE = 'template'
+DNT_NAME       = 'name'
+DNT_NEXT       = 'next'
+DNT_TEMPLATE   = 'template'
+
+# internal Model of the Knowledge Base 
+KBA_UUID        = 'uuid'
+KBA_PAGETITLE   = 'pagetitle'
+KBA_PAGECONTENT = 'pagecontent'
+KBA_PAGESUMMARY = 'pagesummary'
+
+#incternal Model of the Decision Thread
+DT_UUID          = 'uuid'
+DT_ENVIRONMENT   = 'environment'
+DT_CURRENTSTATE  = 'currentstate'
+DT_CURRENTMODEL  = 'currentmodel'
+DT_CURRENTNODE   = 'currentnode' 
+DT_TICKETFERENCE = 'ticketreference' 
+DT_OWNER         = 'owner'

@@ -34,7 +34,7 @@ import os.path
 
 from fastapi import FastAPI, Form
 
-from .datamodel_consts import *
+from de.mindscan.cheaplithium.datamodel.consts import *
 
 app = FastAPI()
 
@@ -416,13 +416,13 @@ async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form(
     threadUuid = str(uid.uuid4())
     
     newThread={
-            "uuid" : str(threadUuid),
-            "environment" : {},
-            "currentstate" : "START",
-            "currentmodel" : dmuuid,
-            "currentnode"  : startnode,
-            "ticketreference" : [ ticketreference ],
-            "owner" : ""
+            DT_UUID : str(threadUuid),
+            DT_ENVIRONMENT : {},
+            DT_CURRENTSTATE : "START",
+            DT_CURRENTMODEL : dmuuid,
+            DT_CURRENTNODE  : startnode,
+            DT_TICKETFERENCE : [ ticketreference ],
+            DT_OWNER : ""
         }
     
     decisionThreadDatabase[threadUuid] = newThread

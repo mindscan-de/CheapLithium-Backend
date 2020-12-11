@@ -25,8 +25,11 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+SRC_BASE_DIR  = '../../../../../src'
+DATA_BASE_DIR = '../../../../../data'
+
 import sys
-sys.path.insert(0,'../../../../../src')
+sys.path.insert(0,SRC_BASE_DIR)
 
 import json
 import uuid as uid
@@ -34,12 +37,15 @@ import os.path
 
 from fastapi import FastAPI, Form
 
-from de.mindscan.cheaplithium.datamodel.consts import *
-
 app = FastAPI()
 
-DATAMODEL_DIR = '../../../../../data/cheaplithium/dm/'
-DATATHREAD_DIR = '../../../../../data/cheaplithium/threads/'
+
+
+# import the data model column names / property names
+from de.mindscan.cheaplithium.datamodel.consts import *
+
+DATAMODEL_DIR = DATA_BASE_DIR + '/cheaplithium/dm/'
+DATATHREAD_DIR = DATA_BASE_DIR + '/cheaplithium/threads/'
 
 
 # -----------------------------------------

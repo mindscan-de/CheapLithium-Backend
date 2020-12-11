@@ -34,39 +34,13 @@ import os.path
 
 from fastapi import FastAPI, Form
 
+from .datamodel_consts import *
+
 app = FastAPI()
 
 DATAMODEL_DIR = '../../../../../data/cheaplithium/dm/'
 DATATHREAD_DIR = '../../../../../data/cheaplithium/threads/'
 
-# -----------------------------------------
-# Data Model property names
-# -----------------------------------------
-
-# Internal Model of the Decision Model
-DM_NODES = 'nodes'
-DM_NAME = 'name'
-DM_UUID = 'uuid'
-DM_DISPLAYNAME = 'displayname'
-DM_DESCRIPTION = 'description'
-DM_STARTNODE = 'startnode'
-DM_VERSION = 'version'
-
-# Internal Model of the Decision Node
-DN_UUID = 'uuid'
-DN_NAME = 'name'
-DN_TYPE = 'type'
-DN_TYPE_END = 'end'
-DN_TYPE_START = 'start'
-DN_TYPE_HIT = 'hit'
-DN_TYPE_MIT = 'mit'
-DN_KBARTICLE = 'kbarticle'
-DN_NEXTACTIONS = 'nextactions'
-
-# Internal Model of the Decision Node Transition
-DNT_NAME = 'name'
-DNT_NEXT = 'next'
-DNT_TEMPLATE = 'template'
 
 # -----------------------------------------
 # DecisionModel "Database"

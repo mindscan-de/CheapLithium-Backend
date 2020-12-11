@@ -72,22 +72,6 @@ def strip_uuid(uuid):
         return uuid[3:]
     return uuid
 
-def create_decision_model_internal(name:str, displayname:str, description:str, version:str):
-    dmUuid = uid.uuid4()
-    
-    endnode, _ = decisionModel.create_decision_node_internal('900.endstate',DN_TYPE_END,'',[])  
-    startnode, _ = decisionModel.create_decision_node_internal('000.startstate',DN_TYPE_START,'',[endnode])
-
-    decisionModel = {
-        DM_UUID: 'DM_' + str(dmUuid), 
-        DM_NAME: name, 
-        DM_DISPLAYNAME: displayname, 
-        DM_VERSION: version, 
-        DM_DESCRIPTION: description, 
-        DM_STARTNODE: startnode[DN_UUID],
-        DM_NODES: [startnode, endnode]}
-    
-    return  decisionModel, str(dmUuid)
 
 def insert_decision_node_into_decision_model(dn, dmuuid:str):
     global decisionModelDatabase
@@ -161,7 +145,7 @@ async def create_decision_model( name:str = Form(...), displayname:str=Form(...)
     global decisionModelDatabase
     
     # Create and Cache the model until restart
-    model, uuid  = create_decision_model_internal(name, displayname, description, version)
+    model, uuid  = decisionModel.create_decision_model_internal(name, displayname, description, version)
     decisionModelDatabase[uuid] =  model
     
     return create_successful_uuid_result(uuid)

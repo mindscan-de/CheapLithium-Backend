@@ -67,3 +67,21 @@ class DecisionModel(object):
                 pass
         
         return decisionNode, dnUuid
+    
+    def create_decision_model_internal(self, name:str, displayname:str, description:str, version:str):
+        dmUuid = str(uid.uuid4())
+        
+        endnode, _ = self.create_decision_node_internal('900.endstate',DN_TYPE_END,'',[])  
+        startnode, _ = self.create_decision_node_internal('000.startstate',DN_TYPE_START,'',[endnode])
+    
+        decisionModel = {
+            DM_UUID: 'DM_' + dmUuid, 
+            DM_NAME: name, 
+            DM_DISPLAYNAME: displayname, 
+            DM_VERSION: version, 
+            DM_DESCRIPTION: description, 
+            DM_STARTNODE: startnode[DN_UUID],
+            DM_NODES: [startnode, endnode]}
+        
+        return  decisionModel, dmUuid
+

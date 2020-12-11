@@ -72,30 +72,11 @@ def strip_uuid(uuid):
         return uuid[3:]
     return uuid
 
-
-def create_decision_node_internal(dnname, dntype, kbarticle, dnfollownodes):
-    dnUuid = uid.uuid4()
-    decisionNode = {
-        DN_UUID: 'DN_' + str(dnUuid), 
-        DN_NAME: dnname , 
-        DN_TYPE: dntype , 
-        DN_KBARTICLE: kbarticle ,
-        DN_NEXTACTIONS: []}
-    
-    if len(dnfollownodes) >= 1:
-        if(len(dnfollownodes)) == 1:
-            tn = decisionModel.create_decision_node_transition_internal('default', dnfollownodes[0][DN_UUID], '')
-            decisionNode[DN_NEXTACTIONS].append(tn)
-        else:
-            pass
-    
-    return decisionNode, str(dnUuid)
-
 def create_decision_model_internal(name:str, displayname:str, description:str, version:str):
     dmUuid = uid.uuid4()
     
-    endnode, _ = create_decision_node_internal('900.endstate',DN_TYPE_END,'',[])  
-    startnode, _ = create_decision_node_internal('000.startstate',DN_TYPE_START,'',[endnode])
+    endnode, _ = decisionModel.create_decision_node_internal('900.endstate',DN_TYPE_END,'',[])  
+    startnode, _ = decisionModel.create_decision_node_internal('000.startstate',DN_TYPE_START,'',[endnode])
 
     decisionModel = {
         DM_UUID: 'DM_' + str(dmUuid), 
@@ -192,7 +173,7 @@ async def create_decision_node (name:str = Form(...), exectype:str = Form(...),
     
     dmuuid = strip_uuid(dmuuid)
     
-    dnode, _ = create_decision_node_internal(name, exectype, kbarticle, [])
+    dnode, _ = decisionModel.create_decision_node_internal(name, exectype, kbarticle, [])
     insert_decision_node_into_decision_model(dnode, dmuuid)
     
     # return back to model

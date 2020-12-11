@@ -25,8 +25,9 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+import uuid as uid
 
-from de.mindscan.cheaplithium.datamodel.consts import *
+from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 
 class DecisionModel(object):
     '''
@@ -46,3 +47,23 @@ class DecisionModel(object):
             DNT_NAME: name, 
             DNT_NEXT: nextnodeuuid, 
             DNT_TEMPLATE: template }
+
+    def create_decision_node_internal(self, dnname, dntype, kbarticle, dnfollownodes):
+        dnUuid = str(uid.uuid4())
+        decisionNode = {
+            DN_UUID: 'DN_' + dnUuid, 
+            DN_NAME: dnname , 
+            DN_TYPE: dntype , 
+            DN_KBARTICLE: kbarticle ,
+            DN_NEXTACTIONS: []}
+        
+        if len(dnfollownodes) >= 1:
+            if(len(dnfollownodes)) == 1:
+                tn = self.create_decision_node_transition_internal(
+                    'default', dnfollownodes[0][DN_UUID], '')
+                decisionNode[DN_NEXTACTIONS].append(tn)
+            else:
+                # TODO: if more then do something else
+                pass
+        
+        return decisionNode, dnUuid

@@ -85,6 +85,10 @@ class DecisionModel(object):
         
         return  decisionModel, dmUuid
 
+    # TODO: implement the listing by crawling the keys of the Database and join it with the filenames of the directory.
+    #       also skip files, which keys are already present in the list -> no deseialization needed.
+    #       in future use a database and use SQL and/or NOSQL, but for this approach, we really don't need a database at this stage.
+
     def select_decision_models_from_backend(self):
         # 2020-11-29:
         # this is just a crude hack, but there is no reason to implement an index of the models right now.

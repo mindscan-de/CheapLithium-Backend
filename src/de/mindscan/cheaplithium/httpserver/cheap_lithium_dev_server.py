@@ -171,11 +171,6 @@ async def persist_decision_model ( uuid: str = Form(...)):
     
     return create_successful_uuid_result(uuid)
 
-
-# TODO: implement the listing by crawling the keys of the Database and join it with the filenames of the directory.
-#       also skip files, which keys are already present in the list -> no deseialization needed.
-#       in future use a database and use SQL and/or NOSQL, but for this approach, we really don't need a database at this stage.
-
 @app.get("/CheapLithium/rest/getDecisionModelList")
 async def get_decision_model_list():
     return decisionModel.select_decision_models_from_backend()

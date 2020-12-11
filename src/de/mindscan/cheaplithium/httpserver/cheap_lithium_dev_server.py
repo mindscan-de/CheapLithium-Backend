@@ -34,7 +34,7 @@ import os.path
 
 from fastapi import FastAPI, Form
 
-from ..datamodel.consts import *
+from de.mindscan.cheaplithium.datamodel.consts import *
 
 app = FastAPI()
 

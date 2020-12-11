@@ -43,10 +43,12 @@ app = FastAPI()
 
 # import the data model column names / property names
 from de.mindscan.cheaplithium.datamodel.consts import *
+from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 
 DATAMODEL_DIR = DATA_BASE_DIR + '/cheaplithium/dm/'
 DATATHREAD_DIR = DATA_BASE_DIR + '/cheaplithium/threads/'
 
+decisionModel = DecisionModel(DATAMODEL_DIR)
 
 # -----------------------------------------
 # DecisionModel "Database"
@@ -71,12 +73,6 @@ def strip_uuid(uuid):
     return uuid
 
 
-def create_decision_node_transition_internal( name, nextnodeuuid, template):
-    return { 
-        DNT_NAME: name, 
-        DNT_NEXT: nextnodeuuid, 
-        DNT_TEMPLATE: template }
-
 def create_decision_node_internal(dnname, dntype, kbarticle, dnfollownodes):
     dnUuid = uid.uuid4()
     decisionNode = {
@@ -88,7 +84,7 @@ def create_decision_node_internal(dnname, dntype, kbarticle, dnfollownodes):
     
     if len(dnfollownodes) >= 1:
         if(len(dnfollownodes)) == 1:
-            tn = create_decision_node_transition_internal('default', dnfollownodes[0][DN_UUID], '')
+            tn = decisionModel.create_decision_node_transition_internal('default', dnfollownodes[0][DN_UUID], '')
             decisionNode[DN_NEXTACTIONS].append(tn)
         else:
             pass

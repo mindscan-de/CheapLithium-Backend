@@ -26,14 +26,26 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
+# import the data model column names / property names
+from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
+# import the data tables / access to data on a amore abstract level
+from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
+from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
+
+
 class DecisionExecutionEngine(object):
     '''
     classdocs
     '''
 
 
-    def __init__(self, params):
+    def __init__(self, decisionModels: DecisionModel, decisionThreads: DecisionThread):
         '''
         Constructor
         '''
+        self.__decisionModels = decisionModels
+        self.__decisionThreads = decisionThreads
         
+        
+    def run(self, thread_uuid:str):
+        pass

@@ -86,6 +86,8 @@ class DecisionModel(object):
             DM_STARTNODE: startnode[DN_UUID],
             DM_NODES: [startnode, endnode]}
         
+        self.__inMemoryDatabase[dmUuid] = decisionModel
+        
         return  decisionModel, dmUuid
     
     def insert_decision_node_into_decision_model(self, dn, dmuuid:str):

@@ -108,11 +108,8 @@ async def provide_decision_model( uuid:str='0518f24f-41a0-4f13-b5f6-94a015b5b04c
 @app.post("/CheapLithium/rest/createDecisionModel")
 async def create_decision_model( name:str = Form(...), displayname:str=Form(...), 
     description:str=Form(...), version:str = Form(...)):
-    global decisionModelDatabase
     
-    # Create and Cache the model until restart
-    model, uuid  = decisionModel.create_decision_model_internal(name, displayname, description, version)
-    decisionModelDatabase[uuid] =  model
+    _, uuid  = decisionModel.create_decision_model_internal(name, displayname, description, version)
     
     return create_successful_uuid_result(uuid)
 

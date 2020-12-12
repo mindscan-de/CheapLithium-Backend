@@ -120,11 +120,11 @@ class DecisionModel(object):
 
     
     # TODO: refactor that into file backend (later).
-    def persist_decision_model_internal(self, dmuuid, data):
+    def persist_decision_model_internal(self, dmuuid):
         jsonfilepath = self.__datamodel_directory + dmuuid + '.json'
         
         with open(jsonfilepath,"w") as json_target_file:
-            json.dump(data, json_target_file,indent=2);
+            json.dump(self.__inMemoryDatabase[dmuuid], json_target_file,indent=2);
 
 
     # TODO: implement the listing by crawling the keys of the Database and join it with the filenames of the directory.

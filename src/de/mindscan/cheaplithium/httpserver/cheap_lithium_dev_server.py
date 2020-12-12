@@ -74,15 +74,14 @@ def strip_uuid(uuid):
 
 
 def persist_decision_model_internal(dmuuid):
-    global decisionModelDatabase
     try:
         read_uuid = uid.UUID('{' + dmuuid + '}')
     except:
         return {"messsage":"invalid uuid"}
     
     if ( str(read_uuid) == dmuuid):
-        if dmuuid in decisionModelDatabase:
-            decisionModel.persist_decision_model_internal(dmuuid, decisionModelDatabase[dmuuid])
+        if decisionModel.isInDatabase(dmuuid):
+            decisionModel.persist_decision_model_internal(dmuuid)
         
     return dmuuid
 

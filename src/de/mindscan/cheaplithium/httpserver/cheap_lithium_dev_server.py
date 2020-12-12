@@ -47,7 +47,7 @@ from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 DATAMODEL_DIR = DATA_BASE_DIR + '/cheaplithium/dm/'
 DATATHREAD_DIR = DATA_BASE_DIR + '/cheaplithium/threads/'
 
-decisionModel = DecisionModel(DATAMODEL_DIR)
+decisionModels = DecisionModel(DATAMODEL_DIR)
 
 # -----------------------------------------
 # DecisionModel "Database"
@@ -88,7 +88,7 @@ async def provide_decision_model( uuid:str='0518f24f-41a0-4f13-b5f6-94a015b5b04c
         return {"messsage":"invalid uuid"}
     
     if ( str(read_uuid) == uuid):
-        return decisionModel.provide_decision_model_internal(uuid)
+        return decisionModels.provide_decision_model_internal(uuid)
     else:
         return  {"message":"uuid doesn't match."}
     
@@ -99,7 +99,7 @@ async def provide_decision_model( uuid:str='0518f24f-41a0-4f13-b5f6-94a015b5b04c
 async def create_decision_model( name:str = Form(...), displayname:str=Form(...), 
     description:str=Form(...), version:str = Form(...)):
     
-    _, uuid  = decisionModel.create_decision_model_internal(name, displayname, description, version)
+    _, uuid  = decisionModels.create_decision_model_internal(name, displayname, description, version)
     
     return create_successful_uuid_result(uuid)
 
@@ -109,8 +109,8 @@ async def create_decision_node (name:str = Form(...), exectype:str = Form(...),
                                 kbarticle:str = Form(""), dmuuid:str=Form(...)):
     dmuuid = strip_uuid(dmuuid)
     
-    dnode, _ = decisionModel.create_decision_node_internal(name, exectype, kbarticle, [])
-    decisionModel.insert_decision_node_into_decision_model(dnode, dmuuid)
+    dnode, _ = decisionModels.create_decision_node_internal(name, exectype, kbarticle, [])
+    decisionModels.insert_decision_node_into_decision_model(dnode, dmuuid)
     
     return create_successful_uuid_result(dmuuid)
 
@@ -125,15 +125,15 @@ async def persist_decision_model ( uuid: str = Form(...)):
         return {"messsage":"invalid uuid"}
     
     if ( str(read_uuid) == dmuuid):
-        if decisionModel.isInDatabase(dmuuid):
-            decisionModel.persist_decision_model_internal(dmuuid)
+        if decisionModels.isInDatabase(dmuuid):
+            decisionModels.persist_decision_model_internal(dmuuid)
         
     return create_successful_uuid_result(dmuuid)
 
 
 @app.get("/CheapLithium/rest/getDecisionModelList")
 async def get_decision_model_list():
-    return decisionModel.select_decision_models_from_backend()
+    return decisionModels.select_decision_models_from_backend()
     
 
 @app.post("/CheapLithium/rest/insertDecisionNodeTransition")
@@ -142,8 +142,8 @@ async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
     
     uuid = strip_uuid(uuid)
     
-    if decisionModel.isInDatabase(uuid):
-        decisionModel.insert_decision_node_transition_internal(uuid, dnuuid,  transitionObject)
+    if decisionModels.isInDatabase(uuid):
+        decisionModels.insert_decision_node_transition_internal(uuid, dnuuid,  transitionObject)
     else:
         print({"message", "uuid_not in database"})
         return {"message", "uuid_not in database"}
@@ -157,8 +157,8 @@ async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
 
     uuid = strip_uuid(uuid)
     
-    if decisionModel.isInDatabase(uuid):
-        decisionModel.update_decision_node_transitrion_internal(uuid, dnuuid, index, transitionObject)
+    if decisionModels.isInDatabase(uuid):
+        decisionModels.update_decision_node_transitrion_internal(uuid, dnuuid, index, transitionObject)
     else:
         print({"message", "uuid_not in database"})
         return {"message", "uuid_not in database"}
@@ -170,8 +170,8 @@ async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
 async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:str=Form(...), exectype:str=Form(...), kbarticle:str=Form("")):
     uuid = strip_uuid(uuid)
     
-    if decisionModel.isInDatabase(uuid):
-        decisionModel.update_decision_node_internal(uuid, dnuuid, name, exectype, kbarticle)
+    if decisionModels.isInDatabase(uuid):
+        decisionModels.update_decision_node_internal(uuid, dnuuid, name, exectype, kbarticle)
     else:
         print({"message", "uuid_not in database"})
         return {"message", "uuid_not in database"}
@@ -185,8 +185,8 @@ async def update_decision_model(uuid: str = Form(...), name:str = Form(...),  di
     
     uuid = strip_uuid(uuid)
     
-    if decisionModel.isInDatabase(uuid):
-        decisionModel.update_decision_model_internal(uuid, name, displayname, description, version)
+    if decisionModels.isInDatabase(uuid):
+        decisionModels.update_decision_model_internal(uuid, name, displayname, description, version)
     else:
         print({"message", "uuid_not in database"})
         return {"message", "uuid_not in database"}
@@ -278,7 +278,7 @@ async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form(
     
     dmuuid = strip_uuid(uuid)
     
-    # load decisionModel information by
+    # load decisionModels information by
     # calculate startnode
     startnode = "XXY";
     

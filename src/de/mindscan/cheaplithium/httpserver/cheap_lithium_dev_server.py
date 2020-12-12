@@ -43,11 +43,13 @@ app = FastAPI()
 # import the data model column names / property names
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
+from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 
 DATAMODEL_DIR = DATA_BASE_DIR + '/cheaplithium/dm/'
 DATATHREAD_DIR = DATA_BASE_DIR + '/cheaplithium/threads/'
 
 decisionModels = DecisionModel(DATAMODEL_DIR)
+decisionThreads = DecisionThread(DATATHREAD_DIR)
 
 # -----------------------------------------
 # DecisionModel "Database"
@@ -212,28 +214,17 @@ async def clone_decision_model(uuid: str = Form(...)):
 ##
 ##
 
-# TODO: implement the cache layer seaparately, and split reading the data from disk - this code is ugly - but it still does what it should. (Was just hacked down) 
+ 
 
 @app.get("/CheapLithium/rest/getDecisionThread/{uuid}")
 async def provide_decision_thread(uuid: str='b5ef3ee2-e059-458f-b8a4-77ce7301fef0'):
-    global decisionThreadDatabase
     try:
         read_uuid = uid.UUID('{' + uuid + '}')
     except:
         return {"message":"invalid uuid"}
         
     if( str(read_uuid) == uuid):
-        if uuid in decisionThreadDatabase:
-            return decisionThreadDatabase[uuid]
-        else:
-            jsonfilepath = DATATHREAD_DIR + str(read_uuid) + '.json'
-            if os.path.isfile(jsonfilepath):
-                with open(jsonfilepath) as json_source_file:
-                    tmpDecisionThread = json.load(json_source_file)
-                    decisionThreadDatabase[uuid] = tmpDecisionThread
-                    return tmpDecisionThread
-            else:
-                return {"message":"no_such_persisted_thread"}
+        return DecisionThread.provide_decision_thread_internal(uuid)
     else:
         return {"message":"uuid doesn't match."}
      
@@ -272,29 +263,15 @@ async def get_decision_thread_list():
         "threads" : threads 
         }
 
+
 @app.post("/CheapLithium/rest/startDecisionThread")
 async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form("")):
-    global decisionThreadDatabase;
-    
     dmuuid = strip_uuid(uuid)
     
-    # load decisionModels information by
-    # calculate startnode
-    startnode = "XXY";
+    dm = decisionModels.provide_decision_model_internal(dmuuid)
+    startnode = dm[DM_STARTNODE];
     
-    threadUuid = str(uid.uuid4())
-    
-    newThread={
-            DT_UUID : str(threadUuid),
-            DT_ENVIRONMENT : {},
-            DT_CURRENTSTATE : "START",
-            DT_CURRENTMODEL : dmuuid,
-            DT_CURRENTNODE  : startnode,
-            DT_TICKETFERENCE : [ ticketreference ],
-            DT_OWNER : ""
-        }
-    
-    decisionThreadDatabase[threadUuid] = newThread
+    threadUuid = decisionThreads.create_decision_thread_internal(dmuuid, startnode, ticketreference)
     
     # TODO: use execution engine for initial run until halt...
     

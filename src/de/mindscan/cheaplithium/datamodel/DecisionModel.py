@@ -25,6 +25,8 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+
+import json
 import uuid as uid
 
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
@@ -84,6 +86,14 @@ class DecisionModel(object):
             DM_NODES: [startnode, endnode]}
         
         return  decisionModel, dmUuid
+    
+    # TODO: refactor that into file backend (later).
+    def persist_decision_model_internal(self, dmuuid, data):
+        jsonfilepath = self.__datamodel_directory + dmuuid + '.json'
+        
+        with open(jsonfilepath,"w") as json_target_file:
+            json.dump(data, json_target_file,indent=2);
+
 
     # TODO: implement the listing by crawling the keys of the Database and join it with the filenames of the directory.
     #       also skip files, which keys are already present in the list -> no deseialization needed.

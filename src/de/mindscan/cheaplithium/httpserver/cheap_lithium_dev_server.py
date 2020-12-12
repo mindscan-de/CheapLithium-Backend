@@ -93,15 +93,10 @@ def persist_decision_model_internal(dmuuid):
         read_uuid = uid.UUID('{' + dmuuid + '}')
     except:
         return {"messsage":"invalid uuid"}
-
+    
     if ( str(read_uuid) == dmuuid):
-        jsonfilepath = DATAMODEL_DIR + str(read_uuid) + '.json'
-        
         if dmuuid in decisionModelDatabase:
-            with open(jsonfilepath,"w") as json_target_file:
-                json.dump(decisionModelDatabase[dmuuid], json_target_file,indent=2);
-        
-        pass
+            decisionModel.persist_decision_model_internal(dmuuid, decisionModelDatabase[dmuuid])
         
     return dmuuid
 

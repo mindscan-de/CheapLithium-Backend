@@ -46,6 +46,14 @@ class DecisionExecutionEngine(object):
         self.__decisionModels = decisionModels
         self.__decisionThreads = decisionThreads
         
-        
+     
+    # This is executing MIT, START and END nodes (MIT - machine intelligent task)
+    # if HIT node then suspend the thread
     def run(self, thread_uuid:str):
+        pass
+    
+    # This is executing HIT nodes (HIT - human intelligent task)
+    def run_hit(self, thread_uuid:str):
+        # process the HIT
+        # then continue with run?
         pass

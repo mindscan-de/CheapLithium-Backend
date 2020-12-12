@@ -155,7 +155,6 @@ async def get_decision_model_list():
 
 @app.post("/CheapLithium/rest/insertDecisionNodeTransition")
 async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form(...), transition:str=Form(...)):
-    global decisionModelDatabase
     transitionObject = json.loads(transition)
     
     uuid = strip_uuid(uuid)
@@ -166,28 +165,22 @@ async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
         print({"message", "uuid_not in database"})
         return {"message", "uuid_not in database"}
     
-    
-    
     return create_successful_uuid_result(uuid)
 
 @app.post("/CheapLithium/rest/updateDecisionNodeTransition")
 async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form(...), index:int=Form(...), transition:str=Form(...)):
-    global decisionModelDatabase 
     transitionObject = json.loads(transition)
 
     uuid = strip_uuid(uuid)
     
-    if uuid in decisionModelDatabase:
-        decisionModel = decisionModelDatabase[uuid]
-        for decisionNode in decisionModel[DM_NODES]:
-            if decisionNode[DN_UUID] == dnuuid:
-                decisionNode[DN_NEXTACTIONS][index]=transitionObject
-                break;
+    if decisionModel.isInDatabase(uuid):
+        decisionModel.update_decision_node_transitrion_internal(uuid, dnuuid, index, transitionObject)
     else:
         print({"message", "uuid_not in database"})
         return {"message", "uuid_not in database"}
     
-    return create_successful_uuid_result(uuid)          
+    return create_successful_uuid_result(uuid)
+          
 
 @app.post("/CheapLithium/rest/updateDecisionNode")
 async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:str=Form(...), exectype:str=Form(...), kbarticle:str=Form("")):

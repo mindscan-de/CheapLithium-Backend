@@ -109,7 +109,15 @@ class DecisionModel(object):
         for decisionNode in decisionModel[DM_NODES]:
             if decisionNode[DN_UUID] == dnuuid:
                 decisionNode[DN_NEXTACTIONS].append(transitionObject)
+                return
     
+    def update_decision_node_transitrion_internal(self, uuid, dnuuid, index, transitionObject):
+        decisionModel = self.__inMemoryDatabase[uuid]
+        for decisionNode in decisionModel[DM_NODES]:
+            if decisionNode[DN_UUID] == dnuuid:
+                decisionNode[DN_NEXTACTIONS][index] = transitionObject
+                return
+
     
     # TODO: refactor that into file backend (later).
     def persist_decision_model_internal(self, dmuuid, data):

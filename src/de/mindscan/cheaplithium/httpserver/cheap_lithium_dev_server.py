@@ -33,7 +33,6 @@ sys.path.insert(0,SRC_BASE_DIR)
 
 import json
 import uuid as uid
-import os.path
 
 from fastapi import FastAPI, Form
 
@@ -48,18 +47,12 @@ from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 DATAMODEL_DIR = DATA_BASE_DIR + '/cheaplithium/dm/'
 DATATHREAD_DIR = DATA_BASE_DIR + '/cheaplithium/threads/'
 
-decisionModels = DecisionModel(DATAMODEL_DIR)
-decisionThreads = DecisionThread(DATATHREAD_DIR)
-
 # -----------------------------------------
 # DecisionModel "Database"
 # -----------------------------------------
-# persist only as long as the server is 
-# runing, for development, we don't need 
-# database support yet. Maybe never?
-# -----------------------------------------
  
-decisionThreadDatabase = {}
+decisionModels = DecisionModel(DATAMODEL_DIR)
+decisionThreads = DecisionThread(DATATHREAD_DIR)
 
 # -----------------------------------------
 # Later extract the decision modelling code
@@ -71,7 +64,6 @@ def strip_uuid(uuid):
     if(uuid.startswith("DM_") or uuid.startswith("DN_")) :
         return uuid[3:]
     return uuid
-
 
 # --------------------------------------
 # API-Webserver "code" - 
@@ -214,8 +206,6 @@ async def clone_decision_model(uuid: str = Form(...)):
 ##
 ##
 
- 
-
 @app.get("/CheapLithium/rest/getDecisionThread/{uuid}")
 async def provide_decision_thread(uuid: str='b5ef3ee2-e059-458f-b8a4-77ce7301fef0'):
     try:
@@ -230,38 +220,10 @@ async def provide_decision_thread(uuid: str='b5ef3ee2-e059-458f-b8a4-77ce7301fef
      
     return {}
 
-# TODO: implement the decisionlist by crawling the keys of the Database and join it with the filenames of the directory.
-
-baseThreads = [
-                {
-                    "uuid" : "b5ef3ee2-e059-458f-b8a4-77ce7301fef0",
-                    "environment" : {
-                            "uuid":"2a33075e-4677-4f98-b1fb-c87dd6437263",
-                            "log":[],
-                            "nodehistory" : []
-                        },
-                    "currentstate" : "STATE/WAIT/RUNNING/TERMINATED",
-                    "currentmodel" : "0518f24f-41a0-4f13-b5f6-94a015b5b04c",
-                    "currentnode" : "DN_559e9bf8-242e-4887-86fa-f3427647f1cb",
-                    "ticketreference" : [
-                        "NSSXMI-26940","NSSXMI-17262"
-                        ],
-                    "owner": ""
-                }
-            ]
 
 @app.get("/CheapLithium/rest/getDecisionThreadList")
 async def get_decision_thread_list():
-    global baseThreads
-    threads = baseThreads.copy()
-    
-    global decisionThreadDatabase 
-    for _,value in decisionThreadDatabase.items():
-        threads.append( value );
-        
-    return {
-        "threads" : threads 
-        }
+    return decisionThreads.select_all_from_decision_threads();
 
 
 @app.post("/CheapLithium/rest/startDecisionThread")

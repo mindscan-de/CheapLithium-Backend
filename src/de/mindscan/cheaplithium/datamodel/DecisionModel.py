@@ -25,11 +25,17 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
-
+import os
 import json
 import uuid as uid
 
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
+
+
+# I currently do not like, that this thing is having too much responsibilities
+# but it is still better than having these in the webserver code directly.
+# better but is not good enough -> have to refactor this later
+
 
 class DecisionModel(object):
     '''
@@ -127,6 +133,20 @@ class DecisionModel(object):
         
         with open(jsonfilepath,"w") as json_target_file:
             json.dump(self.__inMemoryDatabase[dmuuid], json_target_file,indent=2);
+
+    def provide_decision_model_internal(self, uuid:str):
+        
+        if uuid in self.__inMemoryDatabase:
+            return self.__inMemoryDatabase[uuid]
+        else:
+            jsonfilepath = self.__datamodel_directory + uuid + '.json'
+            if os.path.isfile(jsonfilepath):
+                with open(jsonfilepath) as json_source_file:
+                    tmpDecisionModel = json.load(json_source_file)
+                    self.__inMemoryDatabase[uuid] = tmpDecisionModel
+                    return tmpDecisionModel
+            else:
+                return {"message":"no_such_persisted_model "}
 
 
     # TODO: implement the listing by crawling the keys of the Database and join it with the filenames of the directory.

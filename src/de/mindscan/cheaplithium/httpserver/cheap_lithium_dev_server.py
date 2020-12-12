@@ -82,24 +82,13 @@ def read_root():
 
 @app.get("/CheapLithium/rest/getDecisionModel/{uuid}")
 async def provide_decision_model( uuid:str='0518f24f-41a0-4f13-b5f6-94a015b5b04c'):
-    global decisionModelDatabase
     try:
         read_uuid = uid.UUID('{' + uuid + '}')
     except:
         return {"messsage":"invalid uuid"}
     
     if ( str(read_uuid) == uuid):
-        if uuid in decisionModelDatabase:
-            return decisionModelDatabase[uuid]
-        else:
-            jsonfilepath = DATAMODEL_DIR + str(read_uuid) + '.json'
-            if os.path.isfile(jsonfilepath):
-                with open(jsonfilepath) as json_source_file:
-                    tmpDecisionModel = json.load(json_source_file)
-                    decisionModelDatabase[uuid] = tmpDecisionModel
-                    return tmpDecisionModel
-            else:
-                return {"message":"no_such_persisted_model "}
+        return decisionModel.provide_decision_model_internal(uuid)
     else:
         return  {"message":"uuid doesn't match."}
     

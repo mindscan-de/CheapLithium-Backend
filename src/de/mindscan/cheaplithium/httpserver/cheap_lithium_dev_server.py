@@ -72,20 +72,6 @@ def strip_uuid(uuid):
     return uuid
 
 
-def insert_decision_node_into_decision_model(dn, dmuuid:str):
-    global decisionModelDatabase
-    
-    decisionModel = decisionModelDatabase[dmuuid]
-    nodes = decisionModel[DM_NODES]
-    nodes.append(dn)
-    #  sort decision nodes by name (good enough) 
-    sortednodes = sorted(nodes, key=lambda k: k['name'])
-    decisionModel[DM_NODES] = sortednodes
-     
-    decisionModelDatabase[dmuuid] = decisionModel
-    
-    return decisionModel, dmuuid
-
 
 def persist_decision_model_internal(dmuuid):
     global decisionModelDatabase
@@ -150,7 +136,7 @@ async def create_decision_node (name:str = Form(...), exectype:str = Form(...),
     dmuuid = strip_uuid(dmuuid)
     
     dnode, _ = decisionModel.create_decision_node_internal(name, exectype, kbarticle, [])
-    insert_decision_node_into_decision_model(dnode, dmuuid)
+    decisionModel.insert_decision_node_into_decision_model(dnode, dmuuid)
     
     # return back to model
     return create_successful_uuid_result(dmuuid)
@@ -166,7 +152,7 @@ async def persist_decision_model ( uuid: str = Form(...)):
 async def get_decision_model_list():
     return decisionModel.select_decision_models_from_backend()
     
-    
+
 @app.post("/CheapLithium/rest/insertDecisionNodeTransition")
 async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form(...), transition:str=Form(...)):
     global decisionModelDatabase
@@ -174,11 +160,8 @@ async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
     
     uuid = strip_uuid(uuid)
     
-    if uuid in decisionModelDatabase:
-        decisionModel = decisionModelDatabase[uuid]
-        for decisionNode in decisionModel[DM_NODES]:
-            if decisionNode[DN_UUID] == dnuuid:
-                decisionNode[DN_NEXTACTIONS].append(transitionObject)
+    if decisionModel.isInDatabase(uuid):
+        decisionModel.insert_decision_node_transition_internal(uuid, dnuuid,  transitionObject)
     else:
         print({"message", "uuid_not in database"})
         return {"message", "uuid_not in database"}

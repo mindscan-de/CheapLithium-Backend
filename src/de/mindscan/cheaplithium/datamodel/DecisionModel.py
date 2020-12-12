@@ -42,6 +42,7 @@ class DecisionModel(object):
         Constructor
         '''
         self.__datamodel_directory = datamodel_dir
+        self.__inMemoryDatabase = {}
         
         
     def create_decision_node_transition_internal(self, name, nextnodeuuid, template):
@@ -86,6 +87,29 @@ class DecisionModel(object):
             DM_NODES: [startnode, endnode]}
         
         return  decisionModel, dmUuid
+    
+    def insert_decision_node_into_decision_model(self, dn, dmuuid:str):
+        decisionModel = self.__inMemoryDatabase[dmuuid]
+        
+        nodes = decisionModel[DM_NODES]
+        nodes.append(dn)
+        #  sort decision nodes by name (good enough) 
+        sortednodes = sorted(nodes, key=lambda k: k['name'])
+        decisionModel[DM_NODES] = sortednodes
+         
+        self.__inMemoryDatabase[dmuuid] = decisionModel
+        
+        return decisionModel, dmuuid
+    
+    def isInDatabase(self, uuid):
+        return uuid in self.__inMemoryDatabase
+    
+    def insert_decision_node_transition_internal(self, uuid, dnuuid, transitionObject):
+        decisionModel = self.__inMemoryDatabase[uuid]
+        for decisionNode in decisionModel[DM_NODES]:
+            if decisionNode[DN_UUID] == dnuuid:
+                decisionNode[DN_NEXTACTIONS].append(transitionObject)
+    
     
     # TODO: refactor that into file backend (later).
     def persist_decision_model_internal(self, dmuuid, data):

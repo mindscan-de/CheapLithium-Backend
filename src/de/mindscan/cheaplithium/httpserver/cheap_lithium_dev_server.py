@@ -72,19 +72,6 @@ def strip_uuid(uuid):
     return uuid
 
 
-
-def persist_decision_model_internal(dmuuid):
-    try:
-        read_uuid = uid.UUID('{' + dmuuid + '}')
-    except:
-        return {"messsage":"invalid uuid"}
-    
-    if ( str(read_uuid) == dmuuid):
-        if decisionModel.isInDatabase(dmuuid):
-            decisionModel.persist_decision_model_internal(dmuuid)
-        
-    return dmuuid
-
 # --------------------------------------
 # API-Webserver "code" - 
 # --------------------------------------
@@ -142,10 +129,18 @@ async def create_decision_node (name:str = Form(...), exectype:str = Form(...),
 
 @app.post("/CheapLithium/rest/persistDecisionModel")
 async def persist_decision_model ( uuid: str = Form(...)):
-    uuid = strip_uuid(uuid)
-    persist_decision_model_internal(uuid)
+    dmuuid = strip_uuid(uuid)
     
-    return create_successful_uuid_result(uuid)
+    try:
+        read_uuid = uid.UUID('{' + dmuuid + '}')
+    except:
+        return {"messsage":"invalid uuid"}
+    
+    if ( str(read_uuid) == dmuuid):
+        if decisionModel.isInDatabase(dmuuid):
+            decisionModel.persist_decision_model_internal(dmuuid)
+        
+    return create_successful_uuid_result(dmuuid)
 
 @app.get("/CheapLithium/rest/getDecisionModelList")
 async def get_decision_model_list():

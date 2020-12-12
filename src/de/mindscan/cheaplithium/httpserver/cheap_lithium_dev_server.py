@@ -43,11 +43,13 @@ from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 # import the data tables / access to data on a amore abstract level 
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
+from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
 from de.mindscan.cheaplithium.datamodel.KnowledgeBaseArticles import KnowledgeBaseArticles
 from de.mindscan.cheaplithium.runtime.DecisionExecutionEngine import DecisionExecutionEngine
 
 DATAMODEL_DIR = DATA_BASE_DIR + '/cheaplithium/dm/'
 DATATHREAD_DIR = DATA_BASE_DIR + '/cheaplithium/threads/'
+DATATHREADENV_DIR = DATA_BASE_DIR + '/cheaplithium/threads/env/'
 KNOWLEDGE_DIR = DATA_BASE_DIR + '/cheaplithium/kb/';
 
 # -----------------------------------------
@@ -56,6 +58,7 @@ KNOWLEDGE_DIR = DATA_BASE_DIR + '/cheaplithium/kb/';
  
 decisionModels = DecisionModel(DATAMODEL_DIR)
 decisionThreads = DecisionThread(DATATHREAD_DIR)
+decisionThreadEnvironments = DecisionThreadEnvironments(DATATHREADENV_DIR)
 knowledgeArticles = KnowledgeBaseArticles(KNOWLEDGE_DIR) 
 
 # -----------------------------------------

@@ -126,6 +126,15 @@ class DecisionModel(object):
                 decisionNode[DN_NEXTACTIONS][index] = transitionObject
                 return
 
+    def update_decision_node_internal(self, uuid, dnuuid, name, exectype, kbarticle):
+        decisionModel = self.__inMemoryDatabase[uuid]
+        for decisionNode in decisionModel[DM_NODES]:
+            if decisionNode[DN_UUID] == dnuuid:
+                decisionNode[DN_NAME] = name
+                decisionNode[DN_TYPE] = exectype
+                decisionNode[DN_KBARTICLE] = kbarticle
+                return
+
     
     # TODO: refactor that into file backend (later).
     def persist_decision_model_internal(self, dmuuid):

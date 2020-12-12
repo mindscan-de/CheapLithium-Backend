@@ -164,18 +164,10 @@ async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
 
 @app.post("/CheapLithium/rest/updateDecisionNode")
 async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:str=Form(...), exectype:str=Form(...), kbarticle:str=Form("")):
-    global decisionModelDatabase
-    
     uuid = strip_uuid(uuid)
     
-    if uuid in decisionModelDatabase:
-        decisionModel = decisionModelDatabase[uuid]
-        for decisionNode in decisionModel[DM_NODES]:
-            if decisionNode[DN_UUID] == dnuuid:
-                decisionNode[DN_NAME] = name
-                decisionNode[DN_TYPE] = exectype
-                decisionNode[DN_KBARTICLE] = kbarticle
-                break;
+    if decisionModel.isInDatabase(uuid):
+        decisionModel.update_decision_node_internal(uuid, dnuuid, name, exectype, kbarticle)
     else:
         print({"message", "uuid_not in database"})
         return {"message", "uuid_not in database"}

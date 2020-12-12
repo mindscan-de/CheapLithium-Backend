@@ -135,6 +135,13 @@ class DecisionModel(object):
                 decisionNode[DN_KBARTICLE] = kbarticle
                 return
 
+    def update_decision_model_internal(self, uuid, name, displayname, description, version):
+        decisionModel = self.__inMemoryDatabase[uuid]
+        decisionModel[DM_NAME] = name
+        decisionModel[DM_DISPLAYNAME] = displayname
+        decisionModel[DM_DESCRIPTION] = description
+        decisionModel[DM_VERSION] = version
+
     
     # TODO: refactor that into file backend (later).
     def persist_decision_model_internal(self, dmuuid):

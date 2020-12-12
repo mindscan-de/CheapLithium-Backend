@@ -79,6 +79,7 @@ def strip_uuid(uuid):
 def read_root():
     return {"message":"Hello World! It works! But now, go away!"}
 
+
 @app.get("/CheapLithium/rest/getDecisionModel/{uuid}")
 async def provide_decision_model( uuid:str='0518f24f-41a0-4f13-b5f6-94a015b5b04c'):
     try:
@@ -93,6 +94,7 @@ async def provide_decision_model( uuid:str='0518f24f-41a0-4f13-b5f6-94a015b5b04c
     
     return {}
 
+
 @app.post("/CheapLithium/rest/createDecisionModel")
 async def create_decision_model( name:str = Form(...), displayname:str=Form(...), 
     description:str=Form(...), version:str = Form(...)):
@@ -100,6 +102,7 @@ async def create_decision_model( name:str = Form(...), displayname:str=Form(...)
     _, uuid  = decisionModel.create_decision_model_internal(name, displayname, description, version)
     
     return create_successful_uuid_result(uuid)
+
 
 @app.post("/CheapLithium/rest/createDecisionNode")
 async def create_decision_node (name:str = Form(...), exectype:str = Form(...), 
@@ -109,8 +112,8 @@ async def create_decision_node (name:str = Form(...), exectype:str = Form(...),
     dnode, _ = decisionModel.create_decision_node_internal(name, exectype, kbarticle, [])
     decisionModel.insert_decision_node_into_decision_model(dnode, dmuuid)
     
-    # return back to model
     return create_successful_uuid_result(dmuuid)
+
 
 @app.post("/CheapLithium/rest/persistDecisionModel")
 async def persist_decision_model ( uuid: str = Form(...)):
@@ -126,6 +129,7 @@ async def persist_decision_model ( uuid: str = Form(...)):
             decisionModel.persist_decision_model_internal(dmuuid)
         
     return create_successful_uuid_result(dmuuid)
+
 
 @app.get("/CheapLithium/rest/getDecisionModelList")
 async def get_decision_model_list():
@@ -145,6 +149,7 @@ async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
         return {"message", "uuid_not in database"}
     
     return create_successful_uuid_result(uuid)
+
 
 @app.post("/CheapLithium/rest/updateDecisionNodeTransition")
 async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form(...), index:int=Form(...), transition:str=Form(...)):

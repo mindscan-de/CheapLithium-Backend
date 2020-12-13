@@ -26,6 +26,7 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
+import os
 import json
 import uuid as uid 
 
@@ -69,6 +70,19 @@ class KnowledgeBaseArticles(object):
         with open(jsonfilepath,"w") as json_target_file:
             json.dump(self.__inMemoryDatabase[kba_uuid], json_target_file,indent=2)
 
+
+    # TODO: should be a separate backend
+    def _load_article_by_uuid(self, kba_uuid):
+        jsonfilepath = self.__datamodel_directory + kba_uuid + '.json'
+        
+        if os.path.isfile(jsonfilepath):
+            with open(jsonfilepath) as json_source_file:
+                tmp_article = json.load(json_source_file)
+                self.__inMemoryDatabase[kba_uuid] = tmp_article
+                return tmp_article
+        else:
+            return None
+        
     
     def insert_article(self, pagetitle:str, pagecontent:str, pagesummary:str):
         article, kba_uuid = self._create_article_internal(pagetitle, pagecontent, pagesummary)
@@ -81,14 +95,20 @@ class KnowledgeBaseArticles(object):
         
     def select_article_by_uuid(self, kba_uuid:str):
         if kba_uuid not in self.__inMemoryDatabase:
-            # TODO: try to laod article from disk, otherwise create an empty article
-            article, _ = self._create_article_internal("Unknown title / Unknown article", "This knowledgebase article doesn't exist. No such UUID in knowledge_base.", "Error retrieving article content")
-            return article
+            article = self._load_article_by_uuid(kba_uuid)
+            if article is not None:
+                return article
+            else:
+                article, _ = self._create_article_internal("Unknown title / Unknown article", "This knowledgebase article doesn't exist. No such UUID in knowledge_base.", "Error retrieving article content")
+                return article
         
         return self.__inMemoryDatabase[kba_uuid]
     
     
     def update_article_where_uuid(self, kba_uuid:str, pagetitle:str, pagecontent:str, pagesummary:str ):
+        # this mus exist either on disk or in memeory because otherwise an attack with random uuids numbers will fill 
+        # the disk space and the memory (Denial of Service) 
+        
         article = self.select_article_by_uuid(kba_uuid)
         
         article[KBA_PAGETITLE] = pagetitle

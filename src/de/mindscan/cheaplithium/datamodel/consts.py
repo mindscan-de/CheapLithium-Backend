@@ -60,6 +60,7 @@ KBA_UUID        = 'uuid'
 KBA_PAGETITLE   = 'pagetitle'
 KBA_PAGECONTENT = 'pagecontent'
 KBA_PAGESUMMARY = 'pagesummary'
+KBA_REVISION    = 'revision'
 
 #incternal Model of the Decision Thread
 DT_UUID          = 'uuid'

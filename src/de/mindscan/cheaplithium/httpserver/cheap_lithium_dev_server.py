@@ -59,7 +59,9 @@ KNOWLEDGE_DIR = DATA_BASE_DIR + '/cheaplithium/kb/';
 decisionModels = DecisionModel(DATAMODEL_DIR)
 decisionThreads = DecisionThread(DATATHREAD_DIR)
 decisionThreadEnvironments = DecisionThreadEnvironments(DATATHREADENV_DIR)
+
 knowledgeArticles = KnowledgeBaseArticles(KNOWLEDGE_DIR) 
+knowledgeArticles.load_all_acrticles()
 
 # -----------------------------------------
 # Decision Execution Engine

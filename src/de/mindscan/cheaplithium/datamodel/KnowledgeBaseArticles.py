@@ -26,6 +26,7 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
+import json
 import uuid as uid 
 
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
@@ -58,22 +59,34 @@ class KnowledgeBaseArticles(object):
         
         return article, kba_uuid
     
+    
+    # TODO: should be a separate backend
+    def _save_article_by_uuid(self, kba_uuid):
+        if kba_uuid not in self.__inMemoryDatabase:
+            return
+        
+        jsonfilepath = self.__datamodel_directory + kba_uuid + '.json'
+        with open(jsonfilepath,"w") as json_target_file:
+            json.dump(self.__inMemoryDatabase[kba_uuid], json_target_file,indent=2)
+
+    
     def insert_article(self, pagetitle:str, pagecontent:str, pagesummary:str):
         article, kba_uuid = self._create_article_internal(pagetitle, pagecontent, pagesummary)
         
         self.__inMemoryDatabase[kba_uuid] = article
-        
-        # TODO: save the article to disk
+        self._save_article_by_uuid(kba_uuid)
         
         return article, kba_uuid
+    
         
     def select_article_by_uuid(self, kba_uuid:str):
         if kba_uuid not in self.__inMemoryDatabase:
-            # TODO: try to laod article from disk, otherwise
+            # TODO: try to laod article from disk, otherwise create an empty article
             article, _ = self._create_article_internal("Unknown title / Unknown article", "This knowledgebase article doesn't exist. No such UUID in knowledge_base.", "Error retrieving article content")
             return article
         
         return self.__inMemoryDatabase[kba_uuid]
+    
     
     def update_article_where_uuid(self, kba_uuid:str, pagetitle:str, pagecontent:str, pagesummary:str ):
         article = self.select_article_by_uuid(kba_uuid)
@@ -84,10 +97,10 @@ class KnowledgeBaseArticles(object):
         article[KBA_REVISION] = 1 + article[KBA_REVISION]
         
         self.__inMemoryDatabase[kba_uuid] = article
-        
-        # TODO: save the article to disk
+        self._save_article_by_uuid(kba_uuid)
         
         return article, kba_uuid
+    
     
     def select_all_from_article(self):
         result_list = []

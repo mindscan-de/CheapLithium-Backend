@@ -232,7 +232,7 @@ async def provide_decision_thread(uuid: str='b5ef3ee2-e059-458f-b8a4-77ce7301fef
         return {"message":"invalid uuid"}
         
     if( str(read_uuid) == uuid):
-        return DecisionThread.provide_decision_thread_internal(uuid)
+        return decisionThreads.provide_decision_thread_internal(uuid)
     else:
         return {"message":"uuid doesn't match."}
 

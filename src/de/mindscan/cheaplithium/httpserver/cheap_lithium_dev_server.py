@@ -78,6 +78,9 @@ def create_successful_uuid_result(uuid:str):
 def strip_uuid(uuid):
     if(uuid.startswith("DM_") or uuid.startswith("DN_")) :
         return uuid[3:]
+    else:
+        if(uuid.startswith("KBA_")):
+            return uuid[4:]
     return uuid
 
 # --------------------------------------
@@ -232,13 +235,11 @@ async def provide_decision_thread(uuid: str='b5ef3ee2-e059-458f-b8a4-77ce7301fef
         return DecisionThread.provide_decision_thread_internal(uuid)
     else:
         return {"message":"uuid doesn't match."}
-     
-    return {}
 
 
 @app.get("/CheapLithium/rest/getDecisionThreadList")
 async def get_decision_thread_list():
-    return decisionThreads.select_all_from_decision_threads();
+    return decisionThreads.select_all_from_decision_threads()
 
 
 @app.post("/CheapLithium/rest/startDecisionThread")
@@ -251,4 +252,31 @@ async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form(
     decisionExecutionEngine.run(thread_uuid)
     
     return create_successful_uuid_result(thread_uuid)
+
+
+##
+##
+## KnowledgeBase-Articles
+##
+##
+
+@app.get("/CheapLithium/rest/getKBArticlesList")
+async def get_kb_articles_list():
+    return knowledgeArticles.select_all_from_article()
+
+@app.get("/CheapLithium/rest/getKBArticle/{uuid}")
+async def provide_kbarticle(uuid:str ='12345678-1234-4567-1234-7890ABCDEFFF'):
+    uuid = strip_uuid(uuid)
     
+    try:
+        read_uuid = uid.UUID('{' + uuid + '}')
+    except:
+        return {"message":"invalid uuid"}
+    
+    if( str(read_uuid) == uuid):
+        return knowledgeArticles.select_article_by_uuid(uuid)
+    else:
+        return {"message":"uuid doesn't match."}
+
+## TODO: CREATE Knowledge base Article
+## TODO: UPDATE Knowledge base Article

@@ -87,10 +87,9 @@ class KnowledgeBaseArticles(object):
     # TODO: should be a separate backend
     def load_all_acrticles(self):
         for file in os.listdir(self.__datamodel_directory):
-            if file.assertEndsWith(".json"):
+            if str(file).endswith(".json"):
                 uuid, _ = os.path.splitext(file)
                 self._load_article_by_uuid(uuid)
-                print("loaded artice:" + uuid)
     
     
     def insert_article(self, pagetitle:str, pagecontent:str, pagesummary:str):

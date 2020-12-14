@@ -278,5 +278,23 @@ async def provide_kbarticle(uuid:str ='12345678-1234-4567-1234-7890ABCDEFFF'):
     else:
         return {"message":"uuid doesn't match."}
 
-## TODO: CREATE Knowledge base Article
-## TODO: UPDATE Knowledge base Article
+@app.post("/CheapLithium/rest/insertKBArticle")
+async def create_kbarticle(pagetitle:str=Form(...), pagesummary:str=Form(""), pagecontent:str=Form(...)):
+    _, kba_uuid = knowledgeArticles.insert_article(pagetitle, pagecontent, pagesummary)
+    
+    return create_successful_uuid_result(kba_uuid)
+
+@app.post("/CheapLithium/rest/updateKBArticle")
+async def update_kbarticle(uuid:str=Form(...), pagetitle:str=Form(...), pagesummary:str=Form(""), pagecontent:str=Form(...)):
+    uuid = strip_uuid(uuid)
+
+    try:
+        read_uuid = uid.UUID('{' + uuid + '}')
+    except:
+        return {"message":"invalid uuid"}
+
+    if( str(read_uuid) == uuid):
+        knowledgeArticles.update_article_where_uuid(uuid, pagetitle, pagecontent, pagesummary)
+        return create_successful_uuid_result(uuid)
+    else:
+        return {"message":"uuid doesn't match."}

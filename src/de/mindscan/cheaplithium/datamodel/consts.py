@@ -75,3 +75,7 @@ DT_CREATED       = 'created'
 DT_MODIFIED      = 'modified'
 DT_FINALIZED     = 'finalized' 
 DT_OWNER         = 'owner'
+
+RT_STATE_STARTED    = 'STARTED'
+RT_STATE_STOPPED    = 'STOPPED'
+RT_STATE_TERMINATED = 'TERMINATED'

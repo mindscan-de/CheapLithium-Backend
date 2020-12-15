@@ -46,14 +46,93 @@ class DecisionExecutionEngine(object):
         self.__decisionModels = decisionModels
         self.__decisionThreads = decisionThreads
         
-     
-    # This is executing MIT, START and END nodes (MIT - machine intelligent task)
-    # if HIT node then suspend the thread
-    def run(self, thread_uuid:str):
+    
+    ##
+    ## Starts a new decision thread. There is no testing for any privileges, whether a model may be instantiated. 
+    ##
+    ## @thread_uuid if provided, the model will be instantiated within a thread, otherwise a new thread is created.
+    ## for the start we only have one thread, which contains one running model. For each model run, a new thread is
+    ## started.
+    ## ( thread_uuid:str=None ) currently omitted 
+    ##
+    ##
+    ##
+    ##
+    def start_decision_thread_by_model_uuid(self, dmuuid:str, ticketreference:str=''):
+        model = self.__decisionModels.select_decision_model_by_uuid(dmuuid)
+        
+        if model is None:
+            return None
+        
+        # TODO: read default environment from model, and unserialize it
+        # TODO: read special environment
+        # TODO: identify data to be filled out, combine model
+        # TODO: if error while model runtime data calculation, return without creating a thread
+        
+        # TODO: merge the defaultenvironment and the individual thread environment, special data wins
+        
+        # TODO: insert thread,
+        #   TODO: RUNTIME_ENVIRONMENT : the environment....
+        #   RUNTIMESTATE : STARTED
+        #   CURRENTMODELID : DMUUID
+        #   STATEID : model.startNodeUUID
+        
+        thread_uuid = self.__decisionThreads.create_decision_thread_internal(dmuuid, model[DM_STARTNODE], ticketreference)
+        
+        return thread_uuid
+
+    # ended according to the plan (e.g. end-node reached)
+    def stop_decision_thread(self, thread_uuid):
+        # is such process?
+        # get thread information
+        # set state to RT_STATE_STOPPED
+        # update the thread information
+        pass
+
+    # ended not to the plan (e.g. was terminated by someone
+    def terminate_decision_thread(self, thread_uuid):
+        # save thread to disk / archive
+        # delete from current database after archiving it
         pass
     
-    # This is executing HIT nodes (HIT - human intelligent task)
-    def run_hit(self, thread_uuid:str):
-        # process the HIT
-        # then continue with run?
+    ## TODO: get list of archived Threads?
+    ## TODO: read information of archived Thread?
+    
+    # Process the special cases, the HIT provides extra human calculated data to the thread
+    # HIT Human Itelligent Task
+    def process_HIT(self, thread_uuid):
         pass
+    
+    # Process the specuak cases, the SYNC needs extra data for thre thread
+    # SYNC - Synchronization Node, e.g. multiple HIT decisions requried, before it can continue 
+    def process_SYNC(self, thread_uuid):
+        pass
+    
+    # 
+    def process_single_decision_thread(self, thread_uuid):
+        # calls process_single_decision_node to process nodes one by one
+        pass
+     
+    def process_single_decision_node(self, thread_uuid):
+        # START
+        # HIT, 
+        # MIT, 
+        # SYNC, 
+        # END
+        pass
+     
+    # evaluated one decision node calculation 
+    def evaluate_decision_node_method(self):
+        pass
+
+    # evaluates one transition, and tells whether this applies... / First True wins
+    def evaluate_decision_node_transition_method(self):
+        pass
+    
+    # TODO: do the signature splitting and such?
+    # or get from a json array? instead of parsing signatures and stuff...
+    # have transition signatures
+    # have node sinatures
+    
+    ## TODO: also provide information on functions which are callable from the decision model
+    

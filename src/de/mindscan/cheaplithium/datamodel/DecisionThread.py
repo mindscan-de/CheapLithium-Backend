@@ -40,7 +40,7 @@ baseThreads = [
                             "log":[],
                             "nodehistory" : []
                         },
-                    DT_CURRENTSTATE : "STATE/WAIT/RUNNING/TERMINATED",
+                    DT_CURRENTSTATE : RT_STATE_STARTED,
                     DT_CURRENTMODEL : "0518f24f-41a0-4f13-b5f6-94a015b5b04c",
                     DT_CURRENTNODE : "DN_559e9bf8-242e-4887-86fa-f3427647f1cb",
                     DT_TICKETFERENCE : [
@@ -83,7 +83,7 @@ class DecisionThread(object):
         newThread = {
             DT_UUID:str(threadUuid), 
             DT_ENVIRONMENT:{}, 
-            DT_CURRENTSTATE:"START", 
+            DT_CURRENTSTATE:RT_STATE_STARTED, 
             DT_CURRENTMODEL:dmuuid, 
             DT_CURRENTNODE:startnode, 
             DT_TICKETFERENCE:[ticketreference], 

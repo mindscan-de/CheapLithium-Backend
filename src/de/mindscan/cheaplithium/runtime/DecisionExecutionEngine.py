@@ -134,5 +134,3 @@ class DecisionExecutionEngine(object):
     # have transition signatures
     # have node sinatures
     
-    ## TODO: also provide information on functions which are callable from the decision model
-    

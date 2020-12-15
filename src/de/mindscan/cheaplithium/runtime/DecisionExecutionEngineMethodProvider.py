@@ -16,6 +16,7 @@ class DecisionExecutionEngineMethodProvider(object):
         '''
         pass
     
+    ## TODO: also provide information on functions which are callable from the decision model
     
     # TODO. provide a list of transition methods (Decision Node Transition)
     # TODO: provide a list of node calculation methods (Decision Node)

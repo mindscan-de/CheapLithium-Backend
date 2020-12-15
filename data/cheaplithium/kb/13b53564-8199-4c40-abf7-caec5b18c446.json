@@ -3,5 +3,7 @@
 	"pagetitle":"My first knowledgebase article ever",
 	"pagecontent":"This is some long content for the knowledgebase article.",
 	"pagesummary":"This is s a short summary of the instructions in the knowledgebase article.",
-	"revision":1
+	"revision":1,
+	"created":"",
+	"modified":""
 }

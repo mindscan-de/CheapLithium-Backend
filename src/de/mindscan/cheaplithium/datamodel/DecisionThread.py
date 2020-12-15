@@ -27,6 +27,7 @@ SOFTWARE.
 '''
 import os
 import json
+import time
 import uuid as uid
 
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
@@ -86,7 +87,11 @@ class DecisionThread(object):
             DT_CURRENTMODEL:dmuuid, 
             DT_CURRENTNODE:startnode, 
             DT_TICKETFERENCE:[ticketreference], 
-            DT_OWNER:""}
+            DT_OWNER:"",
+            DT_CREATED: str(time.time()),
+            DT_MODIFIED: "",
+            DT_FINALIZED: ""
+            }
         
         self.__inMemoryDatabase[threadUuid] = newThread
         

@@ -28,6 +28,7 @@ SOFTWARE.
 
 import os
 import json
+import time
 import uuid as uid 
 
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
@@ -55,6 +56,7 @@ class KnowledgeBaseArticles(object):
             KBA_PAGETITLE: pagetitle,
             KBA_PAGESUMMARY: pagesummary,
             KBA_PAGECONTENT: pagecontent,
+            KBA_CREATED: str(time.time()),
             KBA_REVISION: 1
             }
         
@@ -123,6 +125,7 @@ class KnowledgeBaseArticles(object):
         article[KBA_PAGECONTENT] = pagecontent
         article[KBA_PAGESUMMARY] = pagesummary
         article[KBA_REVISION] = 1 + article[KBA_REVISION]
+        article[KBA_MODIFIED] = str(time.time())
         
         self.__inMemoryDatabase[kba_uuid] = article
         self._save_article_by_uuid(kba_uuid)
@@ -137,7 +140,9 @@ class KnowledgeBaseArticles(object):
                     KBA_UUID : key,
                     KBA_PAGETITLE : value[KBA_PAGETITLE],
                     KBA_REVISION : value[KBA_REVISION],
-                    KBA_PAGESUMMARY : value[KBA_PAGESUMMARY]
+                    KBA_PAGESUMMARY : value[KBA_PAGESUMMARY],
+                    KBA_CREATED : value[KBA_CREATED],
+                    KBA_MODIFIED : value[KBA_MODIFIED]
                 });
                 
         # TODO: order by pagetitle

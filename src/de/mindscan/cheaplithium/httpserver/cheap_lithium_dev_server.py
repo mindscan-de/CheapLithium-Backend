@@ -100,7 +100,11 @@ async def provide_decision_model( uuid:str='0518f24f-41a0-4f13-b5f6-94a015b5b04c
         return {"messsage":"invalid uuid"}
     
     if ( str(read_uuid) == uuid):
-        return decisionModels.provide_decision_model_internal(uuid)
+        model = decisionModels.select_decision_model_by_uuid(uuid)
+        if model is None:
+            return {"message":"no_such_persisted_model "}
+        else:
+            return model
     else:
         return  {"message":"uuid doesn't match."}
     
@@ -246,13 +250,22 @@ async def get_decision_thread_list():
 async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form("")):
     dmuuid = strip_uuid(uuid)
     
-    dm = decisionModels.provide_decision_model_internal(dmuuid)
-    thread_uuid = decisionThreads.create_decision_thread_internal(dmuuid, dm[DM_STARTNODE], ticketreference)
+    try:
+        read_uuid = uid.UUID('{' + dmuuid + '}')
+    except:
+        return {"message":"invalid uuid"}
     
-    decisionExecutionEngine.run(thread_uuid)
+    if( str(read_uuid) == dmuuid):
+        thread_uuid = decisionExecutionEngine.start_decision_thread_by_model_uuid(dmuuid)
     
-    return create_successful_uuid_result(thread_uuid)
-
+        if thread_uuid is None:
+            return {"message":"no such model or something else"}
+    
+        decisionExecutionEngine.process_single_decision_thread(thread_uuid)
+    
+        return create_successful_uuid_result(thread_uuid)
+    else:
+        return {"message":"uuid doesn't match."}
 
 ##
 ##

@@ -150,8 +150,7 @@ class DecisionModel(object):
         with open(jsonfilepath,"w") as json_target_file:
             json.dump(self.__inMemoryDatabase[dmuuid], json_target_file,indent=2);
 
-    def provide_decision_model_internal(self, uuid:str):
-        
+    def select_decision_model_by_uuid(self, uuid:str):
         if uuid in self.__inMemoryDatabase:
             return self.__inMemoryDatabase[uuid]
         else:
@@ -162,8 +161,7 @@ class DecisionModel(object):
                     self.__inMemoryDatabase[uuid] = tmpDecisionModel
                     return tmpDecisionModel
             else:
-                return {"message":"no_such_persisted_model "}
-
+                return None
 
     # TODO: implement the listing by crawling the keys of the Database and join it with the filenames of the directory.
     #       also skip files, which keys are already present in the list -> no deseialization needed.

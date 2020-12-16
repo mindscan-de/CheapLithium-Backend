@@ -88,7 +88,7 @@ class DecisionExecutionEngine(object):
 
     # ended not to the plan (e.g. was terminated by someone
     def terminate_decision_thread(self, thread_uuid):
-        # save thread to disk / archive
+        # save thread to disk / archive??
         # delete from current database after archiving it
         pass
 
@@ -98,7 +98,41 @@ class DecisionExecutionEngine(object):
     
     # Process the special cases, the HIT provides extra human calculated data to the thread
     # HIT Human Itelligent Task
-    def process_HIT(self, thread_uuid):
+    def process_HIT(self, thread_uuid, result):
+        thread_data = self.__decisionThreads.select_decision_thread_by_uuid(thread_uuid)
+
+        if thread_data is None:
+            return None
+        
+        current_model_uuid = thread_data[DT_CURRENTMODEL]
+        current_model_node = thread_data[DT_CURRENTNODE]
+        
+        model = self.__decisionModels.select_decision_model_by_uuid( current_model_uuid )
+        node = model[DM_NODES][current_model_node]
+        
+        if node[DN_TYPE] is not DN_TYPE_HIT:
+            return None
+        
+        ## TODO: get thread environment by uuid
+        ## check if environment is good / otherwise the thread must not be advanced
+        
+        if thread_data[DT_CURRENTSTATE] is RT_STATE_BLOCKED:
+            
+            ## TODO: calculate the method signature, so that the resultdata can be put in.
+            ## TODO: process result data
+            
+            thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_TRANSIT
+            # this whole thing shall be refactored when the main decision execution engine works
+            self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)
+        
+            
+                
+            ## TODO: transfer return data into the thread environment according to the signature data
+            
+            ## TODO: update thread environment
+            
+            pass
+        
         pass
     
     # Process the specuak cases, the SYNC needs extra data for thre thread

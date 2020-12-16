@@ -55,10 +55,8 @@ class DecisionExecutionEngine(object):
     ## started.
     ## ( thread_uuid:str=None ) currently omitted 
     ##
-    ##
-    ##
-    ##
     def start_decision_thread_by_model_uuid(self, dmuuid:str, ticketreference:str=''):
+        # read the model
         model = self.__decisionModels.select_decision_model_by_uuid(dmuuid)
         
         if model is None:
@@ -66,17 +64,12 @@ class DecisionExecutionEngine(object):
         
         # TODO: read default environment from model, and unserialize it
         # TODO: read special environment
-        # TODO: identify data to be filled out, combine model
+        # TODO: identify data to be filled out, and check completeness 
         # TODO: if error while model runtime data calculation, return without creating a thread
-        
         # TODO: merge the defaultenvironment and the individual thread environment, special data wins
+        # TODO: insert/create thread, TODO: RUNTIME_ENVIRONMENT : the environment....
         
-        # TODO: insert thread,
-        #   TODO: RUNTIME_ENVIRONMENT : the environment....
-        #   RUNTIMESTATE : STARTED
-        #   CURRENTMODELID : DMUUID
-        #   STATEID : model.startNodeUUID
-        
+        # create the thread
         thread_uuid = self.__decisionThreads.create_decision_thread_internal(dmuuid, model[DM_STARTNODE], ticketreference)
         
         return thread_uuid

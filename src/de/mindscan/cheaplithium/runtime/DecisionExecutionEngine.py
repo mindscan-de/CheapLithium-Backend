@@ -71,22 +71,27 @@ class DecisionExecutionEngine(object):
         
         # create the thread
         thread_uuid = self.__decisionThreads.create_decision_thread_internal(dmuuid, model[DM_STARTNODE], ticketreference)
-        
         return thread_uuid
 
     # ended according to the plan (e.g. end-node reached)
     def stop_decision_thread(self, thread_uuid):
-        # is such process?
-        # get thread information
-        # set state to RT_STATE_STOPPED
-        # update the thread information
-        pass
+        thread_data = self.__decisionThreads.select_decision_thread_by_uuid(thread_uuid)
+
+        if thread_data is None:
+            return None
+        
+        thread_data[DT_CURRENTSTATE] = RT_STATE_STOPPED
+
+        # this whole thing shall be refactored when the main decision execution engine works
+        self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)
+
 
     # ended not to the plan (e.g. was terminated by someone
     def terminate_decision_thread(self, thread_uuid):
         # save thread to disk / archive
         # delete from current database after archiving it
         pass
+
     
     ## TODO: get list of archived Threads?
     ## TODO: read information of archived Thread?

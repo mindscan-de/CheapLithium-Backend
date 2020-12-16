@@ -97,6 +97,12 @@ class DecisionThread(object):
         
         return threadUuid
     
+    ## ATTENTION this is not for public use, i will refactor it 
+    ## when the decision engine workd
+    def update_decision_thread_by_uuid_iternal(self, thread_uuid:str, thread_data):
+        self.__inMemoryDatabase[thread_uuid] = thread_data
+        
+        
     # TODO: implement the decisionlist by crawling the keys of the Database and join it with the filenames of the directory.
 
     def select_all_from_decision_threads(self):

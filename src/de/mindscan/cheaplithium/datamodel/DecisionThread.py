@@ -64,7 +64,7 @@ class DecisionThread(object):
         self.__datathread_directory = datathread_dir
         self.__inMemoryDatabase = {}
         
-    def provide_decision_thread_internal(self,uuid:str):
+    def select_decision_thread_by_uuid(self,uuid:str):
         if uuid in self.__inMemoryDatabase:
             return self.__inMemoryDatabase[uuid]
         else:
@@ -75,7 +75,7 @@ class DecisionThread(object):
                     self.__inMemoryDatabase[uuid] = tmpDecisionThread
                     return tmpDecisionThread
             else:
-                return {"message":"no_such_persisted_thread"}
+                return None
 
     def create_decision_thread_internal(self, dmuuid, startnode, ticketreference):
         threadUuid = str(uid.uuid4())

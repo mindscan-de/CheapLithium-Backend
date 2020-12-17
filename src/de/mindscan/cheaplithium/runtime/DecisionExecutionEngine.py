@@ -136,14 +136,53 @@ class DecisionExecutionEngine(object):
         pass
     
     # Process the specuak cases, the SYNC needs extra data for thre thread
-    # SYNC - Synchronization Node, e.g. multiple HIT decisions requried, before it can continue 
+    # SYNC - Synchronization Node, e.g. multiple HIT decisions requried, before it can continue
+    # NOT YET 
     def process_SYNC(self, thread_uuid):
         pass
+
     
-    # 
+    # will compute one thread forward 
     def process_single_decision_thread(self, thread_uuid):
-        # calls process_single_decision_node to process nodes one by one
+        # if no thread_uuid given 
+        if not thread_uuid:
+            return
+        
+        thread_data = self.__decisionThreads.select_decision_thread_by_uuid(thread_uuid)
+
+        # if there is no thread data, we can stop here
+        if thread_data is None:
+            return
+
+        # if the current state is blocked, that means it can not be processed further,
+        # so we can stop here
+        if thread_data[DT_CURRENTSTATE] is RT_STATE_BLOCKED:
+            return
+        
+        
+        running = True
+        while running is True:
+            # run the current node
+            self.process_single_decision_node(thread_uuid)
+            
+            # reload the thread_data (information)
+            thread_data = self.__decisionThreads.select_decision_thread_by_uuid(thread_uuid)
+            
+            if thread_data is None:
+                running = False
+                break;
+            
+            # check if the current state is Blocked or waiting for Transit
+            # Waiting for transit means, that there might be an external event, 
+            # which will make one of the ransitions true, but none of them evaluate
+            # to true YET
+            if (thread_data[DT_CURRENTSTATE] is RT_STATE_BLOCKED) or \
+               (thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_TRANSIT) :
+                running = False
+                break;
+            pass
         pass
+
      
     def process_single_decision_node(self, thread_uuid):
         # START

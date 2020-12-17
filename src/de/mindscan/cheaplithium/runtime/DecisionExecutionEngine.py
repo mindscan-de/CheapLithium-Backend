@@ -283,12 +283,47 @@ class DecisionExecutionEngine(object):
             pass
         
         
-        # ok this node is maybe waiting for a transition 
+        # ok this node is waiting for a transition 
         if thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_TRANSIT:
+            model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
+
+            # get curent node from model
+            current_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
+            
+            transitions = current_node[DN_NEXTACTIONS]
+            
             # ok we have to check each follownode and compute
             # whether we can do the transition
+            for transition in transitions:
+                #TODO: 
+                # self.evaluate_decision_node_transition_method()
+                # * Method
+                # * Methodparameters
+                # * thread runtime environment
+                # * thread_data
+                result = False
+                
+                if result is True:
+                    follow_node_data = model[DM_NODES][transition[DNT_NEXT]]
+                    
+                    if follow_node_data[DN_TYPE] is DN_TYPE_HIT:
+                        thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
+                        thread_data[DT_CURRENTSTATE] = RT_STATE_BLOCKED
+                    elif follow_node_data[DN_TYPE] is DN_TYPE_SYNC:
+                        thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
+                        thread_data[DT_CURRENTSTATE] = RT_STATE_BLOCKED
+                    elif follow_node_data[DN_TYPE] is DN_TYPE_MIT:
+                        thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
+                        thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_COMPUTE
+                    elif follow_node_data[DN_TYPE] is DN_TYPE_END:
+                        thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
+                        thread_data[DT_CURRENTSTATE] = RT_STATE_STOPPED
+                    
+                    # TODO: save Threadenvironment to disk
+                    # TODO: save current Decision Thread information to disk  
+                    pass
+                pass
             pass
-
         # done
         pass
      

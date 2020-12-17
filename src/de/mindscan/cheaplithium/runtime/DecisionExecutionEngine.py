@@ -98,6 +98,8 @@ class DecisionExecutionEngine(object):
     
     # Process the special cases, the HIT provides extra human calculated data to the thread
     # HIT Human Itelligent Task
+    # after a hit is invoked, the thread should be granted compute by calling 
+    # process_single_decision_thread on that thread after a HIT node result and content was computed
     def process_HIT(self, thread_uuid, result):
         thread_data = self.__decisionThreads.select_decision_thread_by_uuid(thread_uuid)
 
@@ -172,10 +174,9 @@ class DecisionExecutionEngine(object):
                 running = False
                 break;
             
-            # check if the current state is Blocked or waiting for Transit
-            # Waiting for transit means, that there might be an external event, 
-            # which will make one of the ransitions true, but none of them evaluate
-            # to true YET
+            # check if the current state is Blocked or Waiting for Transit (after being advanced forward)
+            # Waiting for transit means, that there might be an external event, which will make one of 
+            # the transitions true, but none of them evaluate to true YET
             if (thread_data[DT_CURRENTSTATE] is RT_STATE_BLOCKED) or \
                (thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_TRANSIT) :
                 running = False

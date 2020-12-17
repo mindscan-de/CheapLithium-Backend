@@ -184,8 +184,51 @@ class DecisionExecutionEngine(object):
             pass
         pass
 
-     
+    # will compute one state forward 
     def process_single_decision_node(self, thread_uuid):
+        if not thread_uuid:
+            return
+        
+        thread_data = self.__decisionThreads.select_decision_thread_by_uuid(thread_uuid)
+
+        # if there is no thread data, we can stop here
+        if thread_data is None:
+            return
+        
+        # we can stop, because it needs a human or sync interaction
+        if thread_data[DT_CURRENTSTATE] is RT_STATE_BLOCKED:
+            return
+        
+        #
+        # The next is a switch case, but some states can affect the following
+        # if's, therefore it is not really a switch case construction. 
+        #
+        
+        
+        # check if the current state is stopped
+        if thread_data[DT_CURRENTSTATE] is RT_STATE_STOPPED:
+            # TODO: calculate the childprocesses
+            child_processes = []
+            
+            # if there are child processes
+            if len(child_processes) > 0:
+                # stop each one of them.
+                for child_process in child_processes:
+                    # set the streadstate to RT_STATE_STOPPED
+                    pass
+                # stop here, this can be collected next time, 
+                # when compute is available
+                return
+            
+            # if no child processes,
+            # then kill it purge it, archive it
+            self.terminate_decision_thread(thread_uuid)
+            return
+        
+        # prepare node processing, if thread was just started.
+        if  thread_data[DT_CURRENTSTATE] is RT_STATE_STARTED:
+            pass
+        
         # START
         # HIT, 
         # MIT, 

@@ -257,6 +257,29 @@ class DecisionExecutionEngine(object):
         # so lets execute the methods and its signature and then update the
         # thread and the thread_environment, since we computed some data for tthe thread to advance forward
         if thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_COMPUTE:
+            model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
+
+            # get curent node from model
+            current_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
+
+            #TODO: retrieve thread environment
+            
+            #TODO: self.evaluate_decision_node_method()
+            # * Method
+            # * Methodparameters
+            # * thread runtime environment
+            # * thread_data
+            
+            #TODO: thread_data should get a column 'lastcompute' having a timestamp
+            #  fill lastcompute
+            
+            #TODO: update threadenvironment
+            
+            # advance runtime state
+            thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_TRANSIT
+            
+            # TODO: save/persist current thread_data / thread state 
+            
             pass
         
         

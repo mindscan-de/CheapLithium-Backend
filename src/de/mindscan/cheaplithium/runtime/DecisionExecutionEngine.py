@@ -253,11 +253,20 @@ class DecisionExecutionEngine(object):
             # TODO: Updae the current thread data on disk and in memory
             pass
         
-        # START
-        # HIT, 
-        # MIT, 
-        # SYNC, 
-        # END
+        # ok this node is maybe waiting for execution time,
+        # so lets execute the methods and its signature and then update the
+        # thread and the thread_environment, since we computed some data for tthe thread to advance forward
+        if thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_COMPUTE:
+            pass
+        
+        
+        # ok this node is maybe waiting for a transition 
+        if thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_TRANSIT:
+            # ok we have to check each follownode and compute
+            # whether we can do the transition
+            pass
+
+        # done
         pass
      
     # evaluated one decision node calculation 

@@ -225,8 +225,32 @@ class DecisionExecutionEngine(object):
             self.terminate_decision_thread(thread_uuid)
             return
         
+        # setup runtime state
         # prepare node processing, if thread was just started.
         if  thread_data[DT_CURRENTSTATE] is RT_STATE_STARTED:
+            # peek into the start state, actually we don't need an attributed start state
+            # maybe I should remove the start state alltogether / since it provides not much value
+            model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
+
+            # get curent node from model            
+            current_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
+            
+            if current_node[DN_TYPE] is DN_TYPE_HIT :
+                thread_data[DT_CURRENTSTATE] = RT_STATE_BLOCKED
+                
+            elif current_node[DN_TYPE] is DN_TYPE_SYNC :
+                thread_data[DT_CURRENTSTATE] = RT_STATE_BLOCKED
+                
+            elif current_node[DN_TYPE] is DN_TYPE_MIT :
+                thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_COMPUTE
+                
+            elif current_node[DN_TYPE] is DN_TYPE_START :
+                thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_COMPUTE
+                
+            elif current_node[DN_TYPE] is DN_TYPE_END :
+                thread_data[DT_CURRENTSTATE] = RT_STATE_STOPPED
+                
+            # TODO: Updae the current thread data on disk and in memory
             pass
         
         # START

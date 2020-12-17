@@ -329,10 +329,28 @@ class DecisionExecutionEngine(object):
      
     # evaluated one decision node calculation 
     def evaluate_decision_node_method(self):
+        # TODO: calculate the signature of the method to invoke
+        
+        # TODO: use the trhead eviromnent to prepare the proper method call
+        # TODO: import stuff and such...
+        # TODO: check method existence
+        # TODO: invoke methods / a.k.a. eval
+        
+        # TODO: check the result value for existence otherwise return neutral value 
         pass
 
     # evaluates one transition, and tells whether this applies... / First True wins
     def evaluate_decision_node_transition_method(self):
+        # TODO: calculate the signature of the transition method to invoke
+        
+        # TODO: use the trhead eviromnent to prepare the proper method call
+        # TODO: import stuff and such...
+        # TODO: check method existence
+        # TODO: invoke methods / a.k.a. eval
+        
+        # update environment according to collected signature references
+        # return the apiresult and the api data
+
         pass
     
     # TODO: do the signature splitting and such?

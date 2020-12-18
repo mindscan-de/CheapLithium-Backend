@@ -50,11 +50,15 @@ DN_TYPE_MIT    = 'mit'
 DN_TYPE_SYNC   = 'sync'
 DN_KBARTICLE   = 'kbarticle'
 DN_NEXTACTIONS = 'nextactions'
+#TODO:
+# DN_MIT_SIGNATURE = 'method' 
 
 # Internal Model of the Decision Node Transition
 DNT_NAME       = 'name'
 DNT_NEXT       = 'next'
 DNT_TEMPLATE   = 'template'
+# TODO:
+# DNT_TRANSITION_SIGNATURE = 'method'
 
 # internal Model of the Knowledge Base 
 KBA_UUID        = 'uuid'

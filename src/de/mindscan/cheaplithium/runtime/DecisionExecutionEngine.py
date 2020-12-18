@@ -265,8 +265,6 @@ class DecisionExecutionEngine(object):
             # so lets execute the methods and its signature and then update the
             # thread and the thread_environment, since we computed some data for tthe thread to advance forward
 
-            #TODO: retrieve thread environment
-            
             #TODO: self.evaluate_decision_node_method()
             # * Method
             # * Methodparameters
@@ -303,7 +301,7 @@ class DecisionExecutionEngine(object):
                 # * Methodparameters
                 # * thread runtime environment
                 # * thread_data
-                result = False
+                result = self.evaluate_decision_node_transition_method()
                 
                 if result is True:
                     follow_node_data = model[DM_NODES][transition[DNT_NEXT]]
@@ -356,7 +354,8 @@ class DecisionExecutionEngine(object):
         # update environment according to collected signature references
         # return the apiresult and the api data
 
-        pass
+        # ATTN: this will let the decision model always take the first transition 
+        return True
     
     # TODO: do the signature splitting and such?
     # or get from a json array? instead of parsing signatures and stuff...

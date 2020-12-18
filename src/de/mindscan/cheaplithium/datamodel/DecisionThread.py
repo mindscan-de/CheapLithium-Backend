@@ -80,9 +80,12 @@ class DecisionThread(object):
     def create_decision_thread_internal(self, dmuuid, startnode, ticketreference):
         threadUuid = str(uid.uuid4())
         
+        # TODO: create an empty decision Thread environment... and use its UUID here...
         newThread = {
             DT_UUID:str(threadUuid), 
-            DT_ENVIRONMENT:{}, 
+            DT_ENVIRONMENT:{
+                DT_ENVIRONMENT_UUID:""
+                }, 
             DT_CURRENTSTATE:RT_STATE_STARTED, 
             DT_CURRENTMODEL:dmuuid, 
             DT_CURRENTNODE:startnode, 

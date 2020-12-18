@@ -302,7 +302,7 @@ class DecisionExecutionEngine(object):
                 result = self.evaluate_decision_node_transition_method()
                 
                 if result is True:
-                    follow_node_data = model[DM_NODES][transition[DNT_NEXT]]
+                    follow_node_data = self.__decisionModels.select_decision_node_from_decision_model(model, transition[DNT_NEXT])
                     
                     if follow_node_data[DN_TYPE] == DN_TYPE_HIT:
                         thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]

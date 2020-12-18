@@ -38,3 +38,14 @@ class DecisionThreadEnvironments(object):
         '''
         self.__datamodel_directory = datamodel_dir
         self.__inMemoryDatabase = {}
+        
+        
+    def select_thread_environment_by_uuid(self, environment_uuid:str):
+        if environment_uuid is None:
+            return {}
+        
+        return {}
+    
+    def update_decision_environment_by_uuid(self, environment_uuid:str, environment_data:dict):
+        pass
+        

@@ -32,8 +32,13 @@ from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 
+# TODO: will keep that runtimeenvironment out of scope for some time.
+# Marked as M.100 - Milestone 100
+# from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
+
 
 ## TODO: work though all the other TODO tags - it will work right away I promise...
+
 class DecisionExecutionEngine(object):
     '''
     classdocs
@@ -63,12 +68,12 @@ class DecisionExecutionEngine(object):
         if model is None:
             return None
         
-        # TODO: read default environment from model, and unserialize it
-        # TODO: read special environment
-        # TODO: identify data to be filled out, and check completeness 
-        # TODO: if error while model runtime data calculation, return without creating a thread
-        # TODO: merge the defaultenvironment and the individual thread environment, special data wins
-        # TODO: insert/create thread, TODO: RUNTIME_ENVIRONMENT : the environment....
+        # TODO: M.100 read default environment from model, and unserialize it
+        # TODO: M.100 read special environment
+        # TODO: M.100 identify data to be filled out, and check completeness 
+        # TODO: M.100 if error while model runtime data calculation, return without creating a thread
+        # TODO: M.100 merge the defaultenvironment and the individual thread environment, special data wins
+        # TODO: M.100 insert/create thread, TODO: RUNTIME_ENVIRONMENT : the environment....
         
         # create the thread
         thread_uuid = self.__decisionThreads.create_decision_thread_internal(dmuuid, model[DM_STARTNODE], ticketreference)
@@ -89,6 +94,7 @@ class DecisionExecutionEngine(object):
 
     # ended not to the plan (e.g. was terminated by someone
     def terminate_decision_thread(self, thread_uuid):
+        # TODO: M.150: this stuff can be deleted manually for a while / also option to continue thread with another decision model
         # save thread to disk / archive??
         # delete from current database after archiving it
         pass
@@ -200,58 +206,58 @@ class DecisionExecutionEngine(object):
         if thread_data[DT_CURRENTSTATE] is RT_STATE_BLOCKED:
             return
         
-        #
-        # The next is a switch case, but some states can affect the following
-        # if's, therefore it is not really a switch case construction. 
-        #
-        
-        
-        # check if the current state is stopped
+     
+        ### -----------------
+        ### Thread is stopped
+        ### -----------------
         if thread_data[DT_CURRENTSTATE] is RT_STATE_STOPPED:
-            # TODO: calculate the childprocesses
-            child_processes = []
+            # TODO: M.200 - calculate the number of child threads (direct) and subthreads 
+            #               (indirect - will be collected, through all stopped childthreads)
+            num_child_processes = 0
             
-            # if there are child processes
-            if len(child_processes) > 0:
+            if num_child_processes > 0:
+                # TODO: M.200 - collect the direct sub threads and stop them only, they get 
+                child_threads = []
+                
                 # stop each one of them.
-                for child_process in child_processes:
-                    # set the streadstate to RT_STATE_STOPPED
-                    pass
-                # stop here, this can be collected next time, 
-                # when compute is available
+                for child_thread in child_threads:
+                    if child_thread[DT_CURRENTSTATE ] is not RT_STATE_STOPPED:
+                        self.stop_decision_thread(child_thread[DT_UUID])
                 return
-            
-            # if no child processes,
-            # then kill it purge it, archive it
-            self.terminate_decision_thread(thread_uuid)
-            return
+            else:
+                # kill it purge it, archive it, but only after all child threads are away 
+                self.terminate_decision_thread(thread_uuid)
+                return
+
         
-        # setup runtime state
-        # prepare node processing, if thread was just started.
+        ### -----------------
+        ### Thread is started
+        ### -----------------
         if  thread_data[DT_CURRENTSTATE] is RT_STATE_STARTED:
             # peek into the start state, actually we don't need an attributed start state
-            # maybe I should remove the start state alltogether / since it provides not much value
             model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
 
-            # get curent node from model            
-            current_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
+            # get start node from model            
+            start_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
             
-            if current_node[DN_TYPE] is DN_TYPE_HIT :
+            # setup runtime state / prepare node processing, if thread was just started.
+            if start_node[DN_TYPE] is DN_TYPE_HIT :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_BLOCKED
                 
-            elif current_node[DN_TYPE] is DN_TYPE_SYNC :
+            elif start_node[DN_TYPE] is DN_TYPE_SYNC :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_BLOCKED
                 
-            elif current_node[DN_TYPE] is DN_TYPE_MIT :
+            elif start_node[DN_TYPE] is DN_TYPE_MIT :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_COMPUTE
                 
-            elif current_node[DN_TYPE] is DN_TYPE_START :
+            # maybe I should remove the start state alltogether / since it provides not much value
+            elif start_node[DN_TYPE] is DN_TYPE_START :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_COMPUTE
                 
-            elif current_node[DN_TYPE] is DN_TYPE_END :
+            elif start_node[DN_TYPE] is DN_TYPE_END :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_STOPPED
                 
-            # TODO: Updae the current thread data on disk and in memory
+            # TODO: Update the current thread data on disk and in memory
             pass
         
         # ok this node is maybe waiting for execution time,

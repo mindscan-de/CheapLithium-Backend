@@ -226,11 +226,13 @@ class DecisionExecutionEngine(object):
                 return
 
         
+        model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
+        
         ### -----------------
         ### Thread is started
         ### -----------------
         if  thread_data[DT_CURRENTSTATE] is RT_STATE_STARTED:
-            model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
+            ## FIXME, the array is not a dictionary....
             start_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
             
             # setup runtime state / prepare node processing, if thread was just started.
@@ -259,7 +261,7 @@ class DecisionExecutionEngine(object):
         ### Thread is waiting for compute time
         ### ----------------------------------
         if thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_COMPUTE:
-            model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
+            ## FIXME, the array is not a dictionary....
             curent_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
 
             # so lets execute the methods and its signature and then update the
@@ -285,9 +287,8 @@ class DecisionExecutionEngine(object):
         
         # ok this node is waiting for a transition 
         if thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_TRANSIT:
-            model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
-
             # get curent node from model
+            ## FIXME, the array is not a dictionary....
             current_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
             
             transitions = current_node[DN_NEXTACTIONS]

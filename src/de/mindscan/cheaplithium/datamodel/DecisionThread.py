@@ -107,7 +107,7 @@ class DecisionThread(object):
         #TODO: SAVE to disk...
         
     def save_to_disk(self, thread_uuid):
-        jsonfilepath = self.__datamodel_directory + thread_uuid + '.json'
+        jsonfilepath = self.__datathread_directory + thread_uuid + '.json'
         
         with open(jsonfilepath,"w") as json_target_file:
             json.dump(self.__inMemoryDatabase[thread_uuid], json_target_file,indent=2);

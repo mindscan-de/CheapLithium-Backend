@@ -234,10 +234,7 @@ class DecisionExecutionEngine(object):
         ### Thread is started
         ### -----------------
         if  thread_data[DT_CURRENTSTATE] is RT_STATE_STARTED:
-            # peek into the start state, actually we don't need an attributed start state
             model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
-
-            # get start node from model            
             start_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
             
             # setup runtime state / prepare node processing, if thread was just started.
@@ -257,17 +254,18 @@ class DecisionExecutionEngine(object):
             elif start_node[DN_TYPE] is DN_TYPE_END :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_STOPPED
                 
-            # TODO: Update the current thread data on disk and in memory
-            pass
+            self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)
         
-        # ok this node is maybe waiting for execution time,
-        # so lets execute the methods and its signature and then update the
-        # thread and the thread_environment, since we computed some data for tthe thread to advance forward
+        
+        ### ----------------------------------
+        ### Thread is waiting for compute time
+        ### ----------------------------------
         if thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_COMPUTE:
             model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
+            curent_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
 
-            # get curent node from model
-            current_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
+            # so lets execute the methods and its signature and then update the
+            # thread and the thread_environment, since we computed some data for tthe thread to advance forward
 
             #TODO: retrieve thread environment
             

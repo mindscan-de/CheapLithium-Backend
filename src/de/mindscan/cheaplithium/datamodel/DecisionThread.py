@@ -94,6 +94,7 @@ class DecisionThread(object):
             }
         
         self.__inMemoryDatabase[threadUuid] = newThread
+        self.save_to_disk(threadUuid)
         
         return threadUuid
     
@@ -102,8 +103,16 @@ class DecisionThread(object):
     ## TODO: add update modified date...
     def update_decision_thread_by_uuid_iternal(self, thread_uuid:str, thread_data):
         self.__inMemoryDatabase[thread_uuid] = thread_data
+        self.save_to_disk(thread_uuid)
+        #TODO: SAVE to disk...
         
+    def save_to_disk(self, thread_uuid):
+        jsonfilepath = self.__datamodel_directory + thread_uuid + '.json'
         
+        with open(jsonfilepath,"w") as json_target_file:
+            json.dump(self.__inMemoryDatabase[thread_uuid], json_target_file,indent=2);
+
+    
     # TODO: implement the decisionlist by crawling the keys of the Database and join it with the filenames of the directory.
     
     # TODO: M.200 - calculate the number of child threads (direct) and subthreads 

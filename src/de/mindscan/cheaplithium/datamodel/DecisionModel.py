@@ -163,6 +163,14 @@ class DecisionModel(object):
             else:
                 return None
 
+    def select_decision_node_from_decision_model(self, model, node_uuid:str):
+        # highly inefficient, but even for small models it is not worth
+        # doing something else...?
+        for node in model[DM_NODES]:
+            if node[DN_UUID] == node_uuid:
+                return node
+        return None
+        
     # TODO: implement the listing by crawling the keys of the Database and join it with the filenames of the directory.
     #       also skip files, which keys are already present in the list -> no deseialization needed.
     #       in future use a database and use SQL and/or NOSQL, but for this approach, we really don't need a database at this stage.

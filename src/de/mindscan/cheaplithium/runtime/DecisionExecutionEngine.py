@@ -117,13 +117,13 @@ class DecisionExecutionEngine(object):
         model = self.__decisionModels.select_decision_model_by_uuid( current_model_uuid )
         node = model[DM_NODES][current_model_node]
         
-        if node[DN_TYPE] is not DN_TYPE_HIT:
+        if not (node[DN_TYPE] == DN_TYPE_HIT):
             return None
         
         ## TODO: get thread environment by uuid
         ## check if environment is good / otherwise the thread must not be advanced
         
-        if thread_data[DT_CURRENTSTATE] is RT_STATE_BLOCKED:
+        if thread_data[DT_CURRENTSTATE] == RT_STATE_BLOCKED:
             
             ## TODO: calculate the method signature, so that the resultdata can be put in.
             ## TODO: process result data
@@ -163,7 +163,7 @@ class DecisionExecutionEngine(object):
 
         # if the current state is blocked, that means it can not be processed further,
         # so we can stop here
-        if thread_data[DT_CURRENTSTATE] is RT_STATE_BLOCKED:
+        if thread_data[DT_CURRENTSTATE] == RT_STATE_BLOCKED:
             return
         
         
@@ -182,8 +182,8 @@ class DecisionExecutionEngine(object):
             # check if the current state is Blocked or Waiting for Transit (after being advanced forward)
             # Waiting for transit means, that there might be an external event, which will make one of 
             # the transitions true, but none of them evaluate to true YET
-            if (thread_data[DT_CURRENTSTATE] is RT_STATE_BLOCKED) or \
-               (thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_TRANSIT) :
+            if (thread_data[DT_CURRENTSTATE] == RT_STATE_BLOCKED) or \
+               (thread_data[DT_CURRENTSTATE] == RT_STATE_WAIT_FOR_TRANSIT) :
                 running = False
                 break;
             pass
@@ -201,14 +201,14 @@ class DecisionExecutionEngine(object):
             return
         
         # we can stop, because it needs a human or sync interaction
-        if thread_data[DT_CURRENTSTATE] is RT_STATE_BLOCKED:
+        if thread_data[DT_CURRENTSTATE] == RT_STATE_BLOCKED:
             return
         
      
         ### -----------------
         ### Thread is stopped
         ### -----------------
-        if thread_data[DT_CURRENTSTATE] is RT_STATE_STOPPED:
+        if thread_data[DT_CURRENTSTATE] == RT_STATE_STOPPED:
             # calculate number of direct childs. indirect - will be collected, through all stopped childthreads
             num_child_processes = self.__decisionThreads.select_count_child_decision_thread_by_uuid(thread_uuid)
             
@@ -217,7 +217,7 @@ class DecisionExecutionEngine(object):
                 
                 # stop each one of them.
                 for child_thread in child_threads:
-                    if child_thread[DT_CURRENTSTATE ] is not RT_STATE_STOPPED:
+                    if not (child_thread[DT_CURRENTSTATE ] == RT_STATE_STOPPED):
                         self.stop_decision_thread(child_thread[DT_UUID])
                 return
             else:
@@ -227,29 +227,28 @@ class DecisionExecutionEngine(object):
 
         
         model = self.__decisionModels.select_decision_model_by_uuid(thread_data[DT_CURRENTMODEL])
-        
+        print(thread_data)
         ### -----------------
         ### Thread is started
         ### -----------------
-        if  thread_data[DT_CURRENTSTATE] is RT_STATE_STARTED:
-            ## FIXME, the array is not a dictionary....
-            start_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
+        if  thread_data[DT_CURRENTSTATE] == RT_STATE_STARTED:
+            start_node = self.__decisionModels.select_decision_node_from_decision_model(model, thread_data[DT_CURRENTNODE])
             
             # setup runtime state / prepare node processing, if thread was just started.
-            if start_node[DN_TYPE] is DN_TYPE_HIT :
+            if start_node[DN_TYPE] == DN_TYPE_HIT :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_BLOCKED
                 
-            elif start_node[DN_TYPE] is DN_TYPE_SYNC :
+            elif start_node[DN_TYPE] == DN_TYPE_SYNC :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_BLOCKED
                 
-            elif start_node[DN_TYPE] is DN_TYPE_MIT :
+            elif start_node[DN_TYPE] == DN_TYPE_MIT :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_COMPUTE
                 
             # maybe I should remove the start state alltogether / since it provides not much value
-            elif start_node[DN_TYPE] is DN_TYPE_START :
+            elif start_node[DN_TYPE] == DN_TYPE_START :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_COMPUTE
                 
-            elif start_node[DN_TYPE] is DN_TYPE_END :
+            elif start_node[DN_TYPE] == DN_TYPE_END :
                 thread_data[DT_CURRENTSTATE] = RT_STATE_STOPPED
                 
             self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)
@@ -260,9 +259,8 @@ class DecisionExecutionEngine(object):
         ### ----------------------------------
         ### Thread is waiting for compute time
         ### ----------------------------------
-        if thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_COMPUTE:
-            ## FIXME, the array is not a dictionary....
-            curent_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
+        if thread_data[DT_CURRENTSTATE] == RT_STATE_WAIT_FOR_COMPUTE:
+            curent_node = self.__decisionModels.select_decision_node_from_decision_model(model, thread_data[DT_CURRENTNODE])
 
             # so lets execute the methods and its signature and then update the
             # thread and the thread_environment, since we computed some data for tthe thread to advance forward
@@ -286,10 +284,9 @@ class DecisionExecutionEngine(object):
         
         
         # ok this node is waiting for a transition 
-        if thread_data[DT_CURRENTSTATE] is RT_STATE_WAIT_FOR_TRANSIT:
+        if thread_data[DT_CURRENTSTATE] == RT_STATE_WAIT_FOR_TRANSIT:
             # get curent node from model
-            ## FIXME, the array is not a dictionary....
-            current_node = model[DM_NODES][thread_data[DT_CURRENTNODE]]
+            current_node = self.__decisionModels.select_decision_node_from_decision_model(model, thread_data[DT_CURRENTNODE])
             
             transitions = current_node[DN_NEXTACTIONS]
             
@@ -307,16 +304,16 @@ class DecisionExecutionEngine(object):
                 if result is True:
                     follow_node_data = model[DM_NODES][transition[DNT_NEXT]]
                     
-                    if follow_node_data[DN_TYPE] is DN_TYPE_HIT:
+                    if follow_node_data[DN_TYPE] == DN_TYPE_HIT:
                         thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
                         thread_data[DT_CURRENTSTATE] = RT_STATE_BLOCKED
-                    elif follow_node_data[DN_TYPE] is DN_TYPE_SYNC:
+                    elif follow_node_data[DN_TYPE] == DN_TYPE_SYNC:
                         thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
                         thread_data[DT_CURRENTSTATE] = RT_STATE_BLOCKED
-                    elif follow_node_data[DN_TYPE] is DN_TYPE_MIT:
+                    elif follow_node_data[DN_TYPE] == DN_TYPE_MIT:
                         thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
                         thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_COMPUTE
-                    elif follow_node_data[DN_TYPE] is DN_TYPE_END:
+                    elif follow_node_data[DN_TYPE] == DN_TYPE_END:
                         thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
                         thread_data[DT_CURRENTSTATE] = RT_STATE_STOPPED
                     

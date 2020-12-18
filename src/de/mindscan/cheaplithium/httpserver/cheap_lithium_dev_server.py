@@ -67,7 +67,7 @@ knowledgeArticles.load_all_acrticles()
 # Decision Execution Engine
 # -----------------------------------------
 
-decisionExecutionEngine = DecisionExecutionEngine(decisionModels, decisionThreads)
+decisionExecutionEngine = DecisionExecutionEngine(decisionModels, decisionThreads, decisionThreadEnvironments)
 
 # -----------------------------------------
 # Later extract the decision modelling code

@@ -31,10 +31,7 @@ from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 # import the data tables / access to data on a amore abstract level
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
-
-# TODO: will keep that runtimeenvironment out of scope for some time.
-# Marked as M.100 - Milestone 100
-# from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
+from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
 
 
 ## TODO: work though all the other TODO tags - it will work right away I promise...
@@ -45,12 +42,13 @@ class DecisionExecutionEngine(object):
     '''
 
 
-    def __init__(self, decisionModels: DecisionModel, decisionThreads: DecisionThread):
+    def __init__(self, decisionModels: DecisionModel, decisionThreads: DecisionThread, decisionThreadEnvironments:DecisionThreadEnvironments):
         '''
         Constructor
         '''
         self.__decisionModels = decisionModels
         self.__decisionThreads = decisionThreads
+        self.__decisionThreadEnvironments = decisionThreadEnvironments
         
     
     ##
@@ -256,6 +254,8 @@ class DecisionExecutionEngine(object):
                 
             self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)
         
+        environment_uuid = thread_data[DT_ENVIRONMENT][DT_ENVIRONMENT_UUID]
+        thread_environment = self.__decisionThreadEnvironments.select_thread_environment_by_uuid(environment_uuid)
         
         ### ----------------------------------
         ### Thread is waiting for compute time
@@ -278,14 +278,13 @@ class DecisionExecutionEngine(object):
             #TODO: thread_data should get a column 'lastcompute' having a timestamp
             #  fill lastcompute
             
-            #TODO: update threadenvironment
+            #TODO: update contents of the threadenvironment
+            
+            self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
             
             # advance runtime state
             thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_TRANSIT
-            
-            # TODO: save/persist current thread_data / thread state 
-            
-            pass
+            self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data) 
         
         
         # ok this node is waiting for a transition 
@@ -324,12 +323,15 @@ class DecisionExecutionEngine(object):
                         thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
                         thread_data[DT_CURRENTSTATE] = RT_STATE_STOPPED
                     
-                    # TODO: save Threadenvironment to disk
-                    # TODO: save current Decision Thread information to disk  
-                    pass
-                pass
+                    # TODO: Transitions should not write back to the environment other than 
+                    #       logging for the reports - but it is undecided where this goes...
+                    self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
+                    
+                    self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)
+            
+            # endfor transitions
             pass
-        # done
+        # endif wait for transit
         pass
      
     # evaluated one decision node calculation 

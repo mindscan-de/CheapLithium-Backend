@@ -68,6 +68,7 @@ KBA_MODIFIED    = 'modified'
 #incternal Model of the Decision Thread
 DT_UUID          = 'uuid'
 DT_ENVIRONMENT   = 'environment'
+DT_ENVIRONMENT_UUID   = 'uuid'
 DT_CURRENTSTATE  = 'currentstate'
 DT_CURRENTMODEL  = 'currentmodel'
 DT_CURRENTNODE   = 'currentnode' 

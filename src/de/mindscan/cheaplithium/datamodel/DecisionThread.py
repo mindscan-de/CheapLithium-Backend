@@ -105,6 +105,15 @@ class DecisionThread(object):
         
         
     # TODO: implement the decisionlist by crawling the keys of the Database and join it with the filenames of the directory.
+    
+    # TODO: M.200 - calculate the number of child threads (direct) and subthreads 
+    #               (indirect - will be collected, through all stopped childthreads)
+    def select_count_child_decision_thread_by_uuid(self, thread_uuid):
+        return 0
+    
+    # TODO: M.200 - collect the direct sub threads 
+    def select_child_decision_threads_by_uuid(self, thread_uuid):
+        return []
 
     def select_all_from_decision_threads(self):
         global baseThreads

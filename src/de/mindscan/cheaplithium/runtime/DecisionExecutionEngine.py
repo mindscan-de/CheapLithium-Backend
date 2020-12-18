@@ -209,13 +209,11 @@ class DecisionExecutionEngine(object):
         ### Thread is stopped
         ### -----------------
         if thread_data[DT_CURRENTSTATE] is RT_STATE_STOPPED:
-            # TODO: M.200 - calculate the number of child threads (direct) and subthreads 
-            #               (indirect - will be collected, through all stopped childthreads)
-            num_child_processes = 0
+            # calculate number of direct childs. indirect - will be collected, through all stopped childthreads
+            num_child_processes = self.__decisionThreads.select_count_child_decision_thread_by_uuid(thread_uuid)
             
             if num_child_processes > 0:
-                # TODO: M.200 - collect the direct sub threads and stop them only, they get 
-                child_threads = []
+                child_threads = self.__decisionThreads.select_child_decision_threads_by_uuid(thread_uuid)
                 
                 # stop each one of them.
                 for child_thread in child_threads:

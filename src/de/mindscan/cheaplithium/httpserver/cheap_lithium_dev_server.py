@@ -97,7 +97,7 @@ def read_root():
 
 
 @app.get("/CheapLithium/rest/getDecisionModel/{uuid}")
-async def provide_decision_model( uuid:str='0518f24f-41a0-4f13-b5f6-94a015b5b04c'):
+async def provide_decision_model( uuid:str):
     try:
         read_uuid = uid.UUID('{' + uuid + '}')
     except:
@@ -233,7 +233,7 @@ async def clone_decision_model(uuid: str = Form(...)):
 ##
 
 @app.get("/CheapLithium/rest/getDecisionThread/{uuid}")
-async def provide_decision_thread(uuid: str='b5ef3ee2-e059-458f-b8a4-77ce7301fef0'):
+async def provide_decision_thread(uuid: str):
     try:
         read_uuid = uid.UUID('{' + uuid + '}')
     except:
@@ -286,7 +286,7 @@ async def get_kb_articles_list():
     return knowledgeArticles.select_all_from_article()
 
 @app.get("/CheapLithium/rest/getKBArticle/{uuid}")
-async def provide_kbarticle(uuid:str ='12345678-1234-4567-1234-7890ABCDEFFF'):
+async def provide_kbarticle(uuid:str):
     uuid = strip_uuid(uuid)
     
     try:

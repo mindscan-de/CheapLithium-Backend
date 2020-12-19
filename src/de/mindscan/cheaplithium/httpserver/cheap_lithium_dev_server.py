@@ -57,6 +57,8 @@ KNOWLEDGE_DIR = DATA_BASE_DIR + '/cheaplithium/kb/';
 # -----------------------------------------
  
 decisionModels = DecisionModel(DATAMODEL_DIR)
+decisionModels.load_all_models()
+
 decisionThreads = DecisionThread(DATATHREAD_DIR)
 decisionThreadEnvironments = DecisionThreadEnvironments(DATATHREADENV_DIR)
 

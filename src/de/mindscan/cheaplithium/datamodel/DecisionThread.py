@@ -32,25 +32,6 @@ import uuid as uid
 
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 
-baseThreads = [
-                {
-                    DT_UUID : "b5ef3ee2-e059-458f-b8a4-77ce7301fef0",
-                    DT_ENVIRONMENT : {
-                            "uuid":"2a33075e-4677-4f98-b1fb-c87dd6437263",
-                            "log":[],
-                            "nodehistory" : []
-                        },
-                    DT_CURRENTSTATE : RT_STATE_STARTED,
-                    DT_CURRENTMODEL : "0518f24f-41a0-4f13-b5f6-94a015b5b04c",
-                    DT_CURRENTNODE : "DN_559e9bf8-242e-4887-86fa-f3427647f1cb",
-                    DT_TICKETFERENCE : [
-                        "NSSXMI-26940","NSSXMI-17262"
-                        ],
-                    DT_OWNER: ""
-                }
-            ]
-
-
 class DecisionThread(object):
     '''
     classdocs
@@ -76,6 +57,13 @@ class DecisionThread(object):
                     return tmpDecisionThread
             else:
                 return None
+
+    def load_all_threads(self):
+        for file in os.listdir(self.__datathread_directory):
+            if str(file).endswith(".json"):
+                uuid, _ = os.path.splitext(file)
+                self.select_decision_thread_by_uuid(uuid)
+    
 
     def create_decision_thread_internal(self, dmuuid, startnode, ticketreference):
         threadUuid = str(uid.uuid4())
@@ -128,11 +116,18 @@ class DecisionThread(object):
         return []
 
     def select_all_from_decision_threads(self):
-        global baseThreads
-        threads = baseThreads.copy()
-        
-        for _,value in self.__inMemoryDatabase.items():
-            threads.append( value );
+        threads = []
+        for key,value in self.__inMemoryDatabase.items():
+            threads.append( {
+                    DT_UUID: key,
+                    DT_CURRENTSTATE: value[DT_CURRENTSTATE],
+                    DT_CURRENTMODEL: value[DT_CURRENTMODEL],
+                    DT_CURRENTNODE: value[DT_CURRENTNODE],
+                    DT_TICKETFERENCE: value[DT_TICKETFERENCE],
+                    DT_CREATED: value[DT_CREATED],
+                    DT_MODIFIED: value[DT_MODIFIED],
+                    DT_FINALIZED: value[DT_FINALIZED]
+                } );
             
         return {
             "threads" : threads 

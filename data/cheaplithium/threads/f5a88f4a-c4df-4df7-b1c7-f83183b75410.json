@@ -1,0 +1,16 @@
+{
+  "uuid": "f5a88f4a-c4df-4df7-b1c7-f83183b75410",
+  "environment": {
+    "uuid": ""
+  },
+  "currentstate": "BLOCKED",
+  "currentmodel": "db60a6a3-97c6-4f51-8513-b4751c650eb4",
+  "currentnode": "DN_cefacc87-4d5f-48c9-9d85-9e64f829b570",
+  "ticketreference": [
+    ""
+  ],
+  "owner": "",
+  "created": "1608329494.5303338",
+  "modified": "",
+  "finalized": ""
+}

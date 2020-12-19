@@ -60,6 +60,8 @@ decisionModels = DecisionModel(DATAMODEL_DIR)
 decisionModels.load_all_models()
 
 decisionThreads = DecisionThread(DATATHREAD_DIR)
+decisionThreads.load_all_threads()
+
 decisionThreadEnvironments = DecisionThreadEnvironments(DATATHREADENV_DIR)
 
 knowledgeArticles = KnowledgeBaseArticles(KNOWLEDGE_DIR) 

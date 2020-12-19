@@ -5,12 +5,12 @@
         "log":[],
         "nodehistory" : []
 	},
-	"currentstate" : "STATE/WAIT/RUNNING/TERMINATED",
+	"currentstate" : "STARTED",
 	"currentmodel" : "0518f24f-41a0-4f13-b5f6-94a015b5b04c",
 	"currentnode" : "DN_559e9bf8-242e-4887-86fa-f3427647f1cb",
-	"ticketreference" : ["NSSXMI-26940"],
+	"ticketreference" : ["NSSXMI-26940","NSSXMI-17262"],
 	"owner": "",
 	"created":"",
 	"modified":"",
-	"finalized":"",
+	"finalized":""
 }

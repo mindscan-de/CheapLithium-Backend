@@ -264,7 +264,7 @@ async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form(
         return {"message":"invalid uuid"}
     
     if( str(read_uuid) == dmuuid):
-        thread_uuid = decisionExecutionEngine.start_decision_thread_by_model_uuid(dmuuid)
+        thread_uuid = decisionExecutionEngine.start_decision_thread_by_model_uuid(dmuuid, ticketreference)
     
         if thread_uuid is None:
             return {"message":"no such model or something else"}

@@ -49,7 +49,9 @@ class DecisionModel(object):
         '''
         self.__datamodel_directory = datamodel_dir
         self.__inMemoryDatabase = {}
-        
+    
+    def get_data_model_directory(self):
+        return self.__datamodel_directory
         
     def create_decision_node_transition_internal(self, name, nextnodeuuid, template):
         return { 
@@ -190,3 +192,4 @@ class DecisionModel(object):
                 });
         
         return {'items':result_list}
+

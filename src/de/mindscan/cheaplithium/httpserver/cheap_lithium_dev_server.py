@@ -31,10 +31,13 @@ DATA_BASE_DIR = '../../../../../data'
 import sys
 sys.path.insert(0,SRC_BASE_DIR)
 
+import os
 import json
 import uuid as uid
 
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, HTTPException
+from starlette.responses import FileResponse
+
 
 app = FastAPI()
 
@@ -45,6 +48,7 @@ from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
 from de.mindscan.cheaplithium.datamodel.KnowledgeBaseArticles import KnowledgeBaseArticles
+from de.mindscan.cheaplithium.generator.ExportModelGenerator import ExportModelGenerator
 from de.mindscan.cheaplithium.runtime.DecisionExecutionEngine import DecisionExecutionEngine
 
 DATAMODEL_DIR = DATA_BASE_DIR + '/cheaplithium/dm/'
@@ -213,6 +217,19 @@ async def update_decision_model(uuid: str = Form(...), name:str = Form(...),  di
     
     return create_successful_uuid_result(uuid)
 
+@app.get("/CheapLithium/rest/exportModelXGML/{uuid}")
+def export_model_as_xgml(uuid:str):
+    uuid = strip_uuid(uuid)
+    
+    if decisionModels.isInDatabase(uuid):
+        generator = ExportModelGenerator(decisionModels)
+        fullpath = generator.exportAsYEDML(uuid)
+        if os.path.isfile(fullpath):
+            _, file_name = os.path.split(fullpath)
+            return FileResponse(fullpath,media_type='application/octet-stream',filename=file_name)
+    
+    raise HTTPException(status_code=404, detail="Item not found")
+    
 ##
 ## Unfinished yet
 ##

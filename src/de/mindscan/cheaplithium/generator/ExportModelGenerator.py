@@ -82,9 +82,9 @@ class ExportModelGenerator(object):
         document.write('        <attribute key="directed" type="int">1</attribute>')
         
         # write nodes
-        self._write_nodes(self, document, model)
+        self._write_nodes(document, model)
         # write transitions
-        self._write_edges(self, document, model)
+        self._write_edges(document, model)
         
         document.write('    </section>')
             

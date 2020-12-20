@@ -105,7 +105,7 @@ class ExportModelGenerator(object):
         document.write('                <attribute key="x" type="double">250.0</attribute>')
         document.write('                <attribute key="y" type="double">{}</attribute>'.format(100 + 100*index))
         # TODO: calculate/extimate width / height of box
-        document.write('                <attribute key="w" type="double">200.0</attribute>')
+        document.write('                <attribute key="w" type="double">250.0</attribute>')
         document.write('                <attribute key="h" type="double">50.0</attribute>')
         document.write('                <attribute key="type" type="String">rectangle</attribute>')
         document.write('                <attribute key="raisedBorder" type="boolean">false</attribute>')
@@ -122,13 +122,31 @@ class ExportModelGenerator(object):
         document.write('        </section>')
     
     def _write_edges(self, document, model, node_translation):
-        # TODO: foreach node, foreach transiton in each node
-        for idx, node in enumerate(model[DM_NODES], start=0):
-            #write_edge
-            pass
+        for _, node in enumerate(model[DM_NODES], start=0):
+            for _, edge in enumerate(node[DN_NEXTACTIONS]):
+                self._write_single_edge(document, node, edge, node_translation)
         pass
     
-    def _write_single_edge(self, document, data):
+    def _write_single_edge(self, document, node, edge, node_translation):
         document.write('        <section name="edge">')
-        # TODO: source, target, label, section:graphics section, section:LabelGraphics
+        document.write('            <attribute key="source" type="int">{}</attribute>'.format(node_translation[node[DN_UUID]]))
+        document.write('            <attribute key="target" type="int">{}</attribute>'.format(node_translation[edge[DNT_NEXT]]))
+        document.write('            <attribute key="label" type="String">{}</attribute>'.format(edge[DNT_NAME]))        
+        document.write('            <section name="graphics">')
+        # document.write('                <attribute key="type" type="String">spline</attribute>') # nice for small, but unradable for midsize and larger models 
+        document.write('                <attribute key="type" type="String">line</attribute>')
+        document.write('                <attribute key="fill" type="String">#000000</attribute>')
+        document.write('                <attribute key="targetArrow" type="String">standard</attribute>')
+        document.write('            </section>')
+        document.write('            <section name="LabelGraphics">')
+        document.write('                <attribute key="text" type="String">{}</attribute>'.format(edge[DNT_NAME]))
+        document.write('                <attribute key="fontSize" type="int">12</attribute>')
+        document.write('                <attribute key="fontName" type="String">Dialog</attribute>')
+        document.write('                <attribute key="configuration" type="String">AutoFlippingLabel</attribute>')
+        # TDOO: calcuöcate/estimate/approximate the contentWidth in pixel
+        document.write('                <attribute key="contentWidth" type="double">120</attribute>')
+        document.write('                <attribute key="contentHeight" type="double">25.0</attribute>')
+        document.write('                <attribute key="model"/>')
+        document.write('                <attribute key="position"/>')
+        document.write('            </section>')
         document.write('        </section>')

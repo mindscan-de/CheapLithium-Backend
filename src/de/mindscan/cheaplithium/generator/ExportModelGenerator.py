@@ -82,25 +82,59 @@ class ExportModelGenerator(object):
         document.write('        <attribute key="directed" type="int">1</attribute>')
         
         # write nodes
-        self._write_nodes(document, model)
+        node_translation = self._write_nodes(document, model)
         # write transitions
-        self._write_edges(document, model)
+        self._write_edges(document, model, node_translation)
         
         document.write('    </section>')
+
             
-    def _write_nodes(self, document, data):
-        # TODO: foreach node
-        # node id is zero based
-        #          write node
-        #          collect transition
-        pass
+    def _write_nodes(self, document, model):
+        node_translation = {}
+        for idx, node in enumerate(model[DM_NODES], start=0):
+            # add this particular node to the translation table
+            node_translation[node[DN_UUID]] = idx
+            # write single node
+            self._write_single_node(document, node, idx)
+            
+            # debug
+            print("\n{} -> {}".format(idx, node))
+        # return a dictionary for node-uuids to index translations
+        return node_translation
+
     
-    def _write_single_node(self, document, data):
+    def _write_single_node(self, document, node, index):
+        # preamble of node
         document.write('        <section name="node">')
-        # TODO: id, label, section:label, section:LabelGraphics
+        document.write('            <attribute key="id" type="int">{}</attribute>'.format(index));
+        document.write('            <attribute key="label" type="String">{}</attribute>'.format(node[DN_NAME]))
+        
+        # write box data
+        document.write('            <section name="graphics">')
+        # TODO: simple layout and stuch stuff x,y
+        document.write('                <attribute key="x" type="double">250.0</attribute>')
+        document.write('                <attribute key="y" type="double">{}</attribute>'.format(100 + 100*index))
+        # TODO: calculate/extimate width / height of box
+        document.write('                <attribute key="w" type="double">200.0</attribute>')
+        document.write('                <attribute key="h" type="double">50.0</attribute>')
+        document.write('                <attribute key="type" type="String">rectangle</attribute>')
+        document.write('                <attribute key="raisedBorder" type="boolean">false</attribute>')
+        # TODO use colorcoded boxes for hit, mit, sync, start, end, etc nodes
+        document.write('                <attribute key="fill" type="String">#FF6600</attribute>')
+        document.write('                <attribute key="outline" type="String">#000000</attribute>')
+        document.write('            </section>')
+        
+        # write text data
+        document.write('            <section name="LabelGraphics">')
+        document.write('                <attribute key="text" type="String">{}</attribute>'.format(node[DN_NAME]))
+        document.write('                <attribute key="fontSize" type="int">12</attribute>')
+        document.write('                <attribute key="fontName" type="String">Dialog</attribute>')
+        document.write('                <attribute key="model"/>')
+        document.write('            </section>')
+        # end of node
         document.write('        </section>')
     
-    def _write_edges(self, document, data):
+    def _write_edges(self, document, data, node_translation):
         # TODO: foreach node, foreach transiton in each node
         #          write_edge
         pass

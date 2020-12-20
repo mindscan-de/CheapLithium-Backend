@@ -25,6 +25,10 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+
+import os
+
+
 # import the data model column names / property names
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 # import the data tables / access to data on a amore abstract level
@@ -49,36 +53,40 @@ class ExportModelGenerator(object):
     # * then let the webserver serve that file for download 
     def exportAsYEDML(self, dmUUID:str):
         exportPath = self.__modelDataProvider.get_data_model_directory()
+        filename = dmUUID + ".export.xgml"
         
-        # collect nodes from the model
-        # write document header (preamble)
+        joinedPath = os.path.join(exportPath,filename)
+        with open(joinedPath,'w') as document:
+            # collect nodes from the model
+            model = self.__modelDataProvider.select_decision_model_by_uuid(dmUUID)
+            self._write_document(document, model)
+            document.flush()
+        
+        return joinedPath
+    
+    def _write_document(self, document, model):
+        # don't know whether i should support utf-8 or something, but this is Windows Codepage 1252 for now
+        document.write('<?xml version="1.0" encoding="Cp1252"?>')
+        document.write('<section name="xgml">')
+        document.write('    <attribute key="Creator" type="String">yFiles</attribute>')
+        document.write('    <attribute key="Version" type="String">2.17</attribute>')
+
+        self._write_graph_section(document, model)
+        
+        document.write('</section>')
+    
+    def _write_graph_section(self, document, model):
+        document.write('    <section name="graph">')
+        document.write('        <attribute key="hierarchic" type="int">1</attribute>')
+        document.write('        <attribute key="label" type="String"></attribute>')
+        document.write('        <attribute key="directed" type="int">1</attribute>')
+        
         # write nodes
+        self._write_nodes(self, document, model)
         # write transitions
-        # write document end (postamble)
+        self._write_edges(self, document, model)
         
-        # TODO: return the full file path.
-        pass
-    
-    def _write_document(self, document, data):
-        with document:
-            document.write('<?xml version="1.0" encoding="Cp1252"?>')
-            document.write('<section name="xgml">')
-            document.write('    <attribute key="Creator" type="String">yFiles</attribute>')
-            document.write('    <attribute key="Version" type="String">2.17</attribute>')
-            self._write_graph_section(document, data)
-            document.write('</section>')
-    
-    def _write_graph_section(self, document, data):
-        with document:
-            document.write('    <section name="graph">')
-            document.write('        <attribute key="hierarchic" type="int">1</attribute>')
-            document.write('        <attribute key="label" type="String"></attribute>')
-            document.write('        <attribute key="directed" type="int">1</attribute>')
-            
-            self._write_nodes(self, document, data)
-            self._write_edges(self, document, data)
-            
-            document.write('    </section>')
+        document.write('    </section>')
             
     def _write_nodes(self, document, data):
         # TODO: foreach node
@@ -88,11 +96,9 @@ class ExportModelGenerator(object):
         pass
     
     def _write_single_node(self, document, data):
-        with document:
-            document.write('        <section name="node">')
-            # TODO: id, label, section:label, section:LabelGraphics
-            document.write('        </section>')
-        pass
+        document.write('        <section name="node">')
+        # TODO: id, label, section:label, section:LabelGraphics
+        document.write('        </section>')
     
     def _write_edges(self, document, data):
         # TODO: foreach node, foreach transiton in each node
@@ -100,8 +106,6 @@ class ExportModelGenerator(object):
         pass
     
     def _write_single_edge(self, document, data):
-        with document:
-            document.write('        <section name="edge">')
-            # TODO: source, target, label, section:graphics section, section:LabelGraphics
-            document.write('        </section>')
-        pass
+        document.write('        <section name="edge">')
+        # TODO: source, target, label, section:graphics section, section:LabelGraphics
+        document.write('        </section>')

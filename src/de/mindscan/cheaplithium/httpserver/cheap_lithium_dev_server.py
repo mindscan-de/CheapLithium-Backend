@@ -49,6 +49,7 @@ from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
 from de.mindscan.cheaplithium.datamodel.KnowledgeBaseArticles import KnowledgeBaseArticles
 from de.mindscan.cheaplithium.generator.ExportModelGenerator import ExportModelGenerator
+from de.mindscan.cheaplithium.generator.ThreadReportGenerator import ThreadReportGenerator
 from de.mindscan.cheaplithium.runtime.DecisionExecutionEngine import DecisionExecutionEngine
 
 DATAMODEL_DIR = DATA_BASE_DIR + '/cheaplithium/dm/'
@@ -292,6 +293,25 @@ async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form(
     else:
         return {"message":"uuid doesn't match."}
 
+
+@app.get("/CheapLithium/rest/getDecisionThreadReport/{uuid}")
+async def get_decision_thread_report(uuid:str):
+    thread_uuid = strip_uuid(uuid)
+    
+    try:
+        read_uuid = uid.UUID('{' + thread_uuid + '}')
+    except:
+        return {"message":"invalid uuid"}
+    
+    if(str(read_uuid) == thread_uuid):
+        reportGenerator = ThreadReportGenerator(decisionThreads, decisionModels, decisionThreadEnvironments)
+        result = reportGenerator.generate_thread_report(thread_uuid);
+        if result is not None:
+            return result 
+    else:
+        return {"message":"uuid doesn't match."}
+    
+    return {"message":"Not yet implemented"}
 ##
 ##
 ## KnowledgeBase-Articles

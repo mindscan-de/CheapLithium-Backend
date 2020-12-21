@@ -25,8 +25,10 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
-from de.mindscan.cheaplithium.datamodel import DecisionModel, DecisionThread, DecisionThreadEnvironments
 
+from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
+from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
+from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
 
 
 class ThreadReportGenerator(object):
@@ -56,6 +58,6 @@ class ThreadReportGenerator(object):
         # the result is a dictionary of 'reportitems' => [{},{}]
         # the user can then select the reportitems for the report
         
-        pass
+        return None
     
     

@@ -46,6 +46,8 @@ class ThreadReportGenerator(object):
         self.__environmentProvider = threadEnvironments
         
     def generate_thread_report(self, thread_uuid):
+        reported_transitions = []
+        
         # load thread from thread_uuid using threadProvider
         # read environment uuid from thread
         # load environment from environment_uuid using environmentProvider
@@ -58,6 +60,13 @@ class ThreadReportGenerator(object):
         # the result is a dictionary of 'reportitems' => [{},{}]
         # the user can then select the reportitems for the report
         
-        return None
+        reported_transitions.append({'template':"h4. Preliminary Analysis\n\n", 'data':{}})
+        reported_transitions.append({'template':"h5. Reproduce in Simulator\n\nWe could reproduce that problem using a simulated environmnt. Therefore we could investigate the context even more. ", 'data':{}})
+        reported_transitions.append({'template':"h5. Analysis of Stacktraces\n\nThe Stacktraces show a common pattern, which is related to memory allocation. Therefore the most likely cause is a memory exhaustion due to memory leaks.", 'data':{}})
+        reported_transitions.append({'template':"h5. Investigation of Leak\n\nWe could identify a pattern, when the test is executed more often. After using the Memory Analysis tool, we could identify, that the instances are not removed because they are still accessible though a HashMap. ", 'data':{}})        
+        reported_transitions.append({'template':"h5. Analysis of Rootcause\n\nBecause of the analysis, we could identify an error in the associated framework component.", 'data':{}})
+        reported_transitions.append({'template':"h4. Suggested Action\n\nThis problem is high risk and high effort. Since the usecase must be performed at least 1000 times or more until this issue might occur, and the normal use pattern will not invoke this scenario more than once per day, we suggest to *not fix* that issue.", 'data':{}})
+        
+        return {'reportitems' : reported_transitions}
     
     

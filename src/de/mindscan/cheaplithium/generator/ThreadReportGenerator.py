@@ -29,8 +29,8 @@ SOFTWARE.
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
-from de.mindscan.cheaplithium.datamodel.consts import DT_ENVIRONMENT, DT_ENVIRONMENT_UUID
 
+from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 
 class ThreadReportGenerator(object):
     '''
@@ -47,23 +47,39 @@ class ThreadReportGenerator(object):
         self.__environmentProvider = threadEnvironments
         
 
-    def build_report_items_from_transitions(self):
-        return []
+    def locate_decision_node_transition(self, node_identifier):
+        # load model uuid from nodeidentifier
+        # load model from model_uuid using modelProvider
+        # find node, by node uuid
+        # find transition by index or name
+        
+        return 'node','transition'
+    
+    
+    def build_report_items_from_transitions(self, environment:dict):
+        transition_report = []
+        
+        # collect execution report from thread_environment
+        for transition in environment[DTE_TRANSITION_HISTORY]:
+            node_identifier = transition[DTE_TH_ITEM_NODEIDENTIFIER]
+            node_data = transition[DTE_TH_ITEM_DATA]
+            node_timestamp = transition[DTE_TH_ITEM_TIMESTAMP]
+            
+            node, transition = self.locate_decision_node_transition(node_identifier)
+
+            # now use model, report, environment(?), and thread(?) to generate a report
+            # the result report contains a list of detailreports for each node/transition
+            
+            # create a mini report, by filling the transition template using all the other data
+            # append the mini report to the transition report list             
+        return transition_report
     
     
     def generate_thread_report(self, thread_uuid):
         thread = self.__threadProvider.select_decision_thread_by_uuid(thread_uuid)
-        
         environment = self.__environmentProvider.select_thread_environment_by_uuid(thread[DT_ENVIRONMENT][DT_ENVIRONMENT_UUID])
         
-        # collect execution report from thread_environment
-        # laod model uuid from thread
-        # load model from model_uuid using modelProvider
-        
-        # now use model, report, environment(?), and thread(?) to generate a report
-        # the result report contains a list of detailreports for each node/transition
-        
-        reported_transitions = self.build_report_items_from_transitions()
+        reported_transitions = self.build_report_items_from_environment(environment)
         
         # the result is a dictionary of 'reportitems' => [{},{}]
         # the user can then select the reportitems for the report

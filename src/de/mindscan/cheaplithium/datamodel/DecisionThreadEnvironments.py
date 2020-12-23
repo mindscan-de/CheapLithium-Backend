@@ -25,6 +25,7 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+import time
 
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 
@@ -46,7 +47,11 @@ class DecisionThreadEnvironments(object):
         if environment_uuid is None:
             return {}
         
-        return {
+        if environment_uuid in self.__inMemoryDatabase:
+            return self.__inMemoryDatabase[environment_uuid]
+        else:
+            # TODO return that from disk if known, if unknown create some random environment...
+            return {
                 DTE_UUID : "",
                 DTE_TRANSITION_HISTORY : [
                     {
@@ -56,6 +61,27 @@ class DecisionThreadEnvironments(object):
                         }
                     ]
                 }
+    
+    def split_node_identifier(self, node_identifier):
+        return node_identifier.split("::", maxsplit=3)
+        
+    def append_transition_log_entry(self, environment_uuid: str, dm_uuid:str, dn_uuid:str, outcome:str, transition_data:dict):
+        environment = self.select_thread_environment_by_uuid(environment_uuid)
+        
+        environment[DTE_TRANSITION_HISTORY].append(
+            {
+                DTE_TH_ITEM_NODEIDENTIFIER:"{}::{}::{}".format(dm_uuid,dn_uuid,outcome),
+                DTE_TH_ITEM_TIMESTAMP:time.time(),
+                DTE_TH_ITEM_DATA:transition_data
+            
+            });
+        
+        self.__inMemoryDatabase[environment_uuid] = environment
+        
+        # TODO: update decision environment information on disk / serialize
+        self.update_decision_environment_by_uuid(environment_uuid, environment);
+        pass
+    
     
     def update_decision_environment_by_uuid(self, environment_uuid:str, environment_data:dict):
         pass

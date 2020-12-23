@@ -138,6 +138,11 @@ class ThreadReportGenerator(object):
         # load model from model_uuid using modelProvider
         model = self.__modelProvider.select_decision_model_by_uuid(dm_uuid);
         
+        # TODO: temporary, until data is fixed.
+        if model is None:
+            return None, None
+        
+        
         # find node, by node uuid
         node = self.__modelProvider.select_decision_node_from_decision_model(model, dn_uuid)
         

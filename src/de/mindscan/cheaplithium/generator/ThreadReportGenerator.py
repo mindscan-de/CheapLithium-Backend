@@ -45,18 +45,40 @@ class ThreadReportGenerator(object):
         self.__threadProvider = decisionThreads
         self.__modelProvider = decisionModels
         self.__environmentProvider = threadEnvironments
-        
 
-    def locate_decision_node_transition(self, node_identifier):
-        # load model uuid from nodeidentifier
-        # load model from model_uuid using modelProvider
-        # find node, by node uuid
-        # find transition by index or name
-        return None, None
     
-    
-    def render_mini_report(self, template, node_data:dict):
-        return template
+    def generate_thread_report(self, thread_uuid):
+        thread = self.__threadProvider.select_decision_thread_by_uuid(thread_uuid)
+        environment = self.__environmentProvider.select_thread_environment_by_uuid(thread[DT_ENVIRONMENT][DT_ENVIRONMENT_UUID])
+        
+        reported_transitions = self.build_report_items_from_environment(environment)
+        
+        # the result is a dictionary of 'reportitems' => [{},{}]
+        # the user can then select the reportitems for the report
+        reported_transitions.append({
+            'nodereport':"h4. Preliminary Analysis\n\n", 
+            'data':{}
+            })
+        reported_transitions.append({
+            'nodereport':"h5. Reproduce in Simulator Environment\n\nWe could reproduce that problem using a simulated environmnt. Therefore we could investigate the context even more. ", 
+            'data':{}
+            })
+        reported_transitions.append({
+            'nodereport':"h5. Analysis of Stacktraces\n\nThe Stacktraces show a common pattern, which is related to memory allocation. Therefore the most likely cause is a memory exhaustion due to memory leaks.", 
+            'data':{}
+            })
+        reported_transitions.append({
+            'nodereport':"h5. Investigation of Leak\n\nWe could identify a pattern, when the test is executed more often. After using the Memory Analysis tool, we could identify, that the instances are not removed because they are still accessible though a HashMap. ", 
+            'data':{}
+            })        
+        reported_transitions.append({
+            'nodereport':"h5. Analysis of Rootcause\n\nBecause of the analysis, we could identify an error in the associated framework component.", 
+            'data':{}})
+        reported_transitions.append({
+            'nodereport':"h4. Suggested Action\n\nThis problem is high risk and high effort. Since the usecase must be performed at least 1000 times or more until this issue might occur, and the normal use pattern will not invoke this scenario more than once per day, we suggest to *not fix* that issue.", 
+            'data':{}})
+        
+        return {'reportitems' : reported_transitions}
     
     
     def build_report_items_from_environment(self, environment:dict):
@@ -108,39 +130,18 @@ class ThreadReportGenerator(object):
             transition_report.append(reportitem)
                          
         return transition_report
+
+
+    def locate_decision_node_transition(self, node_identifier):
+        # load model uuid from nodeidentifier
+        # load model from model_uuid using modelProvider
+        # find node, by node uuid
+        # find transition by index or name
+        return None, None
     
     
-    def generate_thread_report(self, thread_uuid):
-        thread = self.__threadProvider.select_decision_thread_by_uuid(thread_uuid)
-        environment = self.__environmentProvider.select_thread_environment_by_uuid(thread[DT_ENVIRONMENT][DT_ENVIRONMENT_UUID])
-        
-        reported_transitions = self.build_report_items_from_environment(environment)
-        
-        # the result is a dictionary of 'reportitems' => [{},{}]
-        # the user can then select the reportitems for the report
-        reported_transitions.append({
-            'nodereport':"h4. Preliminary Analysis\n\n", 
-            'data':{}
-            })
-        reported_transitions.append({
-            'nodereport':"h5. Reproduce in Simulator Environment\n\nWe could reproduce that problem using a simulated environmnt. Therefore we could investigate the context even more. ", 
-            'data':{}
-            })
-        reported_transitions.append({
-            'nodereport':"h5. Analysis of Stacktraces\n\nThe Stacktraces show a common pattern, which is related to memory allocation. Therefore the most likely cause is a memory exhaustion due to memory leaks.", 
-            'data':{}
-            })
-        reported_transitions.append({
-            'nodereport':"h5. Investigation of Leak\n\nWe could identify a pattern, when the test is executed more often. After using the Memory Analysis tool, we could identify, that the instances are not removed because they are still accessible though a HashMap. ", 
-            'data':{}
-            })        
-        reported_transitions.append({
-            'nodereport':"h5. Analysis of Rootcause\n\nBecause of the analysis, we could identify an error in the associated framework component.", 
-            'data':{}})
-        reported_transitions.append({
-            'nodereport':"h4. Suggested Action\n\nThis problem is high risk and high effort. Since the usecase must be performed at least 1000 times or more until this issue might occur, and the normal use pattern will not invoke this scenario more than once per day, we suggest to *not fix* that issue.", 
-            'data':{}})
-        
-        return {'reportitems' : reported_transitions}
+    def render_mini_report(self, template, node_data:dict):
+        return template
+    
     
     

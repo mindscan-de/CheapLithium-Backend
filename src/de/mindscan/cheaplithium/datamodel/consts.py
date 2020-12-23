@@ -91,6 +91,7 @@ RT_STATE_TERMINATED = 'TERMINATED'
 
 # Decision Thread Environment
 DTE_UUID                 = 'uuid'
+DTE_DT_UUID              = 'thread_uuid'
 DTE_TRANSITION_HISTORY   = 'transitiondata'
 
 # Decision Thread Environment / Transition History Item

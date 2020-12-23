@@ -48,12 +48,17 @@ class ThreadReportGenerator(object):
         
 
     def locate_decision_node_transition(self, node_identifier):
+        
         # load model uuid from nodeidentifier
         # load model from model_uuid using modelProvider
         # find node, by node uuid
         # find transition by index or name
         
-        return 'node','transition'
+        return None, None
+    
+    
+    def render_mini_report(self, template, node_data:dict):
+        return template
     
     
     def build_report_items_from_transitions(self, environment:dict):
@@ -66,12 +71,47 @@ class ThreadReportGenerator(object):
             node_timestamp = transition[DTE_TH_ITEM_TIMESTAMP]
             
             node, transition = self.locate_decision_node_transition(node_identifier)
+            
+            if transition is None:
+                # TODO: 
+                # that means we could not find the node any more, maybe the outcome was renamed,
+                # but then we must look into the next node, which it transited into, so
+                # we can then identify the transition
+                # But this can be ignored/postponed until it happens and until this problem needs a solution.
+                continue
+            
+            if node is None:
+                # this node doesn't exist any more?
+                # let's ignore this for now
+                continue
 
             # now use model, report, environment(?), and thread(?) to generate a report
             # the result report contains a list of detailreports for each node/transition
             
+            # node contains node name, and probably useful signature information, which need to be transferred from runtime environment
+            # node data, should be extended with more data... 
+
             # create a mini report, by filling the transition template using all the other data
-            # append the mini report to the transition report list             
+            mini_report = self.render_mini_report(transition[DNT_TEMPLATE], node_data)
+            
+            if mini_report is None:
+                # if the report is rendered empty, then there is no reason to add this report item, since
+                # the renderer can output None intentionally if template is "" or starts with something like this: "__EMPTY__" 
+                continue
+            
+            reportitem = {
+                    'nodereport': mini_report,
+                    # 'modelname'
+                    # 'transitionname'
+                    # model uuid - for navigation in the result page?
+                    # node uuid - for navigation in the result page?
+                    'nodename' : node[DN_NAME],
+                    'timestamp': node_timestamp,
+                    'data':node_data
+                }
+            # currently split for reasons, will be inlined later.
+            transition_report.append(reportitem)
+                         
         return transition_report
     
     

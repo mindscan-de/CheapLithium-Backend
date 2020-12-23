@@ -29,6 +29,7 @@ SOFTWARE.
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
+from de.mindscan.cheaplithium.datamodel.consts import DT_ENVIRONMENT, DT_ENVIRONMENT_UUID
 
 
 class ThreadReportGenerator(object):
@@ -45,27 +46,49 @@ class ThreadReportGenerator(object):
         self.__modelProvider = decisionModels
         self.__environmentProvider = threadEnvironments
         
+
+    def build_report_items_from_transitions(self):
+        return []
+    
+    
     def generate_thread_report(self, thread_uuid):
-        reported_transitions = []
+        thread = self.__threadProvider.select_decision_thread_by_uuid(thread_uuid)
         
-        # load thread from thread_uuid using threadProvider
-        # read environment uuid from thread
-        # load environment from environment_uuid using environmentProvider
+        environment = self.__environmentProvider.select_thread_environment_by_uuid(thread[DT_ENVIRONMENT][DT_ENVIRONMENT_UUID])
+        
         # collect execution report from thread_environment
         # laod model uuid from thread
         # load model from model_uuid using modelProvider
         
         # now use model, report, environment(?), and thread(?) to generate a report
         # the result report contains a list of detailreports for each node/transition
+        
+        reported_transitions = self.build_report_items_from_transitions()
+        
         # the result is a dictionary of 'reportitems' => [{},{}]
         # the user can then select the reportitems for the report
-        
-        reported_transitions.append({'template':"h4. Preliminary Analysis\n\n", 'data':{}})
-        reported_transitions.append({'template':"h5. Reproduce in Simulator Environment\n\nWe could reproduce that problem using a simulated environmnt. Therefore we could investigate the context even more. ", 'data':{}})
-        reported_transitions.append({'template':"h5. Analysis of Stacktraces\n\nThe Stacktraces show a common pattern, which is related to memory allocation. Therefore the most likely cause is a memory exhaustion due to memory leaks.", 'data':{}})
-        reported_transitions.append({'template':"h5. Investigation of Leak\n\nWe could identify a pattern, when the test is executed more often. After using the Memory Analysis tool, we could identify, that the instances are not removed because they are still accessible though a HashMap. ", 'data':{}})        
-        reported_transitions.append({'template':"h5. Analysis of Rootcause\n\nBecause of the analysis, we could identify an error in the associated framework component.", 'data':{}})
-        reported_transitions.append({'template':"h4. Suggested Action\n\nThis problem is high risk and high effort. Since the usecase must be performed at least 1000 times or more until this issue might occur, and the normal use pattern will not invoke this scenario more than once per day, we suggest to *not fix* that issue.", 'data':{}})
+        reported_transitions.append({
+            'template':"h4. Preliminary Analysis\n\n", 
+            'data':{}
+            })
+        reported_transitions.append({
+            'template':"h5. Reproduce in Simulator Environment\n\nWe could reproduce that problem using a simulated environmnt. Therefore we could investigate the context even more. ", 
+            'data':{}
+            })
+        reported_transitions.append({
+            'template':"h5. Analysis of Stacktraces\n\nThe Stacktraces show a common pattern, which is related to memory allocation. Therefore the most likely cause is a memory exhaustion due to memory leaks.", 
+            'data':{}
+            })
+        reported_transitions.append({
+            'template':"h5. Investigation of Leak\n\nWe could identify a pattern, when the test is executed more often. After using the Memory Analysis tool, we could identify, that the instances are not removed because they are still accessible though a HashMap. ", 
+            'data':{}
+            })        
+        reported_transitions.append({
+            'template':"h5. Analysis of Rootcause\n\nBecause of the analysis, we could identify an error in the associated framework component.", 
+            'data':{}})
+        reported_transitions.append({
+            'template':"h4. Suggested Action\n\nThis problem is high risk and high effort. Since the usecase must be performed at least 1000 times or more until this issue might occur, and the normal use pattern will not invoke this scenario more than once per day, we suggest to *not fix* that issue.", 
+            'data':{}})
         
         return {'reportitems' : reported_transitions}
     

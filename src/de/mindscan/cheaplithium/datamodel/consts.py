@@ -88,3 +88,12 @@ RT_STATE_BLOCKED    = 'BLOCKED'
 RT_STATE_WAIT_FOR_TRANSIT = 'WAITFORTRANSIT'
 RT_STATE_WAIT_FOR_COMPUTE = 'WAITFORCOMPUTE'
 RT_STATE_TERMINATED = 'TERMINATED'
+
+# Decision Thread Environment
+DTE_UUID                 = 'uuid'
+DTE_TRANSITION_HISTORY   = 'transitiondata'
+
+# Decision Thread Environment / Transition History Item
+DTE_TH_ITEM_NODEIDENTIFIER = 'transition'
+DTE_TH_ITEM_TIMESTAMP = 'timestamp'
+DTE_TH_ITEM_DATA = 'data'

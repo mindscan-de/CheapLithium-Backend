@@ -85,17 +85,14 @@ class ThreadReportGenerator(object):
                 # let's ignore this for now
                 continue
 
-            # now use model, report, environment(?), and thread(?) to generate a report
-            # the result report contains a list of detailreports for each node/transition
-            
-            # node contains node name, and probably useful signature information, which need to be transferred from runtime environment
-            # node data, should be extended with more data... 
+            # TODO: now use model, report, environment(?), and thread(?) to generate a report
+            # TODO: node contains node name, and probably useful signature information, which need to be transferred from runtime environment
 
             # create a mini report, by filling the transition template using all the other data
             mini_report = self.render_mini_report(transition[DNT_TEMPLATE], node_data)
             
             if mini_report is None:
-                # if the report is rendered empty, then there is no reason to add this report item, since
+                # if the report is rendered empty, then there is no reason to add this report item
                 # the renderer can output None intentionally if template is "" or starts with something like this: "__EMPTY__" 
                 continue
             

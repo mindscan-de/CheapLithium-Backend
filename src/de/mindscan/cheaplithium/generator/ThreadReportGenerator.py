@@ -133,11 +133,18 @@ class ThreadReportGenerator(object):
 
 
     def locate_decision_node_transition(self, node_identifier):
-        # load model uuid from nodeidentifier
+        dm_uuid, dn_uuid, transitioname = self.__environmentProvider.split_node_identifier(node_identifier)
+        
         # load model from model_uuid using modelProvider
+        model = self.__modelProvider.select_decision_model_by_uuid(dm_uuid);
+        
         # find node, by node uuid
-        # find transition by index or name
-        return None, None
+        node = self.__modelProvider.select_decision_node_from_decision_model(model, dn_uuid)
+        
+        # TODO: find transition by transition name
+        
+        
+        return node, None
     
     
     def render_mini_report(self, template, node_data:dict):

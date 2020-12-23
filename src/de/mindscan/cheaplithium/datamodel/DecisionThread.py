@@ -133,3 +133,8 @@ class DecisionThread(object):
             "threads" : threads 
             }
     
+    def set_fk_environment_uuid_for_thread_uuid(self, thread_uuid, environment_uuid):
+        thread = self.select_decision_thread_by_uuid(thread_uuid)
+        thread[DT_ENVIRONMENT][DT_ENVIRONMENT_UUID] = environment_uuid
+        self.update_decision_thread_by_uuid_iternal(thread_uuid, thread)
+        

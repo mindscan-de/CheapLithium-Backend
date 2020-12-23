@@ -75,6 +75,9 @@ class DecisionExecutionEngine(object):
         
         # create the thread
         thread_uuid = self.__decisionThreads.create_decision_thread_internal(dmuuid, model[DM_STARTNODE], ticketreference)
+        thread_environment_uuid = self.__decisionThreadEnvironments.create_thread_environment({}, thread_uuid)
+        self.__decisionThreads.set_fk_environment_uuid_for_thread_uuid(thread_uuid, thread_environment_uuid)
+        
         return thread_uuid
 
     # ended according to the plan (e.g. end-node reached)
@@ -275,7 +278,7 @@ class DecisionExecutionEngine(object):
             #  fill lastcompute
             
             #TODO: update contents of the threadenvironment
-            
+            #TODO: maybe we have to rethink that... we should not override the environment this way.
             self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
             
             # advance runtime state
@@ -319,6 +322,7 @@ class DecisionExecutionEngine(object):
                     
                     # TODO: Transitions should not write back to the environment other than 
                     #       logging for the reports - but it is undecided where this goes...
+                    # TODO: maybe we have to rethink this, we should not work this way on the environment
                     self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
                     
                     self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)

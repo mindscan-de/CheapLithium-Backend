@@ -59,7 +59,7 @@ class ThreadReportGenerator(object):
         return template
     
     
-    def build_report_items_from_transitions(self, environment:dict):
+    def build_report_items_from_environment(self, environment:dict):
         transition_report = []
         
         # collect execution report from thread_environment

@@ -25,6 +25,8 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+import os
+import json
 import time
 import uuid as uid
 
@@ -51,33 +53,38 @@ class DecisionThreadEnvironments(object):
         if environment_uuid in self.__inMemoryDatabase:
             return self.__inMemoryDatabase[environment_uuid]
         else:
-            # TODO return that from disk if known, if unknown create some random environment...
-            return {
-                DTE_UUID : "",
-                DTE_TRANSITION_HISTORY : [
-                    {
-                        DTE_TH_ITEM_NODEIDENTIFIER : self.build_node_identifier("MODEL_UUID", "NODE_UUID", "Outcome"),
-                        DTE_TH_ITEM_TIMESTAMP      : "",
-                        DTE_TH_ITEM_DATA           : {}
-                        }
-                    ]
-                }
+            jsonfilepath = self.__datamodel_directory + environment_uuid + '.json'
+            if os.path.isfile(jsonfilepath):
+                with open(jsonfilepath) as json_source_file:
+                    tmpDecisionThread = json.load(json_source_file)
+                    self.__inMemoryDatabase[environment_uuid] = tmpDecisionThread
+                    return tmpDecisionThread
+            else:
+                return None
     
     
-    def create_thread_environment(self, default_environment_data):
+    def create_thread_environment(self, default_environment_data, thread_uuid):
         environment_uuid = str(uid.uuid4())
         
         # TODO: processs the default environment when we are more sure about the future api 
         
         environment = {
                 DTE_UUID : environment_uuid,
+                DTE_DT_UUID : thread_uuid,
                 DTE_TRANSITION_HISTORY : []
             }
         
         self.__inMemoryDatabase[environment_uuid] = environment
+        self.save_to_disk(environment_uuid)
         
-        self.update_decision_environment_by_uuid(environment_uuid, environment);
         return environment_uuid
+    
+    def save_to_disk(self, environment_uuid):
+        jsonfilepath = self.__datamodel_directory + environment_uuid + '.json'
+        
+        with open(jsonfilepath,"w") as json_target_file:
+            json.dump(self.__inMemoryDatabase[environment_uuid], json_target_file,indent=2);
+
     
     
     def split_node_identifier(self, node_identifier):
@@ -99,11 +106,12 @@ class DecisionThreadEnvironments(object):
             });
         
         self.__inMemoryDatabase[environment_uuid] = environment
-        self.update_decision_environment_by_uuid(environment_uuid, environment);
+        self.save_to_disk(environment_uuid)
+        
         pass
     
     
     def update_decision_environment_by_uuid(self, environment_uuid:str, environment_data:dict):
-        # TODO: update decision environment information on disk / serialize
-        pass
+        self.__inMemoryDatabase[environment_uuid] = environment_data
+        self.save_to_disk(environment_uuid)
         

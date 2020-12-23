@@ -26,6 +26,8 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
+from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
+
 class DecisionThreadEnvironments(object):
     '''
     classdocs
@@ -44,7 +46,16 @@ class DecisionThreadEnvironments(object):
         if environment_uuid is None:
             return {}
         
-        return {}
+        return {
+                DTE_UUID : "",
+                DTE_TRANSITION_HISTORY : [
+                    {
+                        DTE_TH_ITEM_NODEIDENTIFIER : "MODEL_UUID::NODE_UUID::TransitionNumberOrTransitioName",
+                        DTE_TH_ITEM_TIMESTAMP : "",
+                        DTE_TH_ITEM_DATA : {}
+                        }
+                    ]
+                }
     
     def update_decision_environment_by_uuid(self, environment_uuid:str, environment_data:dict):
         pass

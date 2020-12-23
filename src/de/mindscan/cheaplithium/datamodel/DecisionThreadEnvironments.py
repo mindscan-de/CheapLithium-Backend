@@ -26,6 +26,7 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 import time
+import uuid as uid
 
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 
@@ -55,34 +56,54 @@ class DecisionThreadEnvironments(object):
                 DTE_UUID : "",
                 DTE_TRANSITION_HISTORY : [
                     {
-                        DTE_TH_ITEM_NODEIDENTIFIER : "MODEL_UUID::NODE_UUID::TransitionNumberOrTransitioName",
-                        DTE_TH_ITEM_TIMESTAMP : "",
-                        DTE_TH_ITEM_DATA : {}
+                        DTE_TH_ITEM_NODEIDENTIFIER : self.build_node_identifier("MODEL_UUID", "NODE_UUID", "Outcome"),
+                        DTE_TH_ITEM_TIMESTAMP      : "",
+                        DTE_TH_ITEM_DATA           : {}
                         }
                     ]
                 }
     
+    
+    def create_thread_environment(self, default_environment_data):
+        environment_uuid = str(uid.uuid4())
+        
+        # TODO: processs the default environment when we are more sure about the future api 
+        
+        environment = {
+                DTE_UUID : environment_uuid,
+                DTE_TRANSITION_HISTORY : []
+            }
+        
+        self.__inMemoryDatabase[environment_uuid] = environment
+        
+        self.update_decision_environment_by_uuid(environment_uuid, environment);
+        return environment_uuid
+    
+    
     def split_node_identifier(self, node_identifier):
         return node_identifier.split("::", maxsplit=3)
+    
+    
+    def build_node_identifier(self, dm_uuid:str, dn_uuid:str, outcome:str):
+        return "{}::{}::{}".format(dm_uuid,dn_uuid,outcome)
+    
         
     def append_transition_log_entry(self, environment_uuid: str, dm_uuid:str, dn_uuid:str, outcome:str, transition_data:dict):
         environment = self.select_thread_environment_by_uuid(environment_uuid)
         
         environment[DTE_TRANSITION_HISTORY].append(
             {
-                DTE_TH_ITEM_NODEIDENTIFIER:"{}::{}::{}".format(dm_uuid,dn_uuid,outcome),
-                DTE_TH_ITEM_TIMESTAMP:time.time(),
-                DTE_TH_ITEM_DATA:transition_data
-            
+                DTE_TH_ITEM_NODEIDENTIFIER : self.build_node_identifier(dm_uuid, dn_uuid, outcome),
+                DTE_TH_ITEM_TIMESTAMP      : time.time(),
+                DTE_TH_ITEM_DATA           : transition_data
             });
         
         self.__inMemoryDatabase[environment_uuid] = environment
-        
-        # TODO: update decision environment information on disk / serialize
         self.update_decision_environment_by_uuid(environment_uuid, environment);
         pass
     
     
     def update_decision_environment_by_uuid(self, environment_uuid:str, environment_data:dict):
+        # TODO: update decision environment information on disk / serialize
         pass
         

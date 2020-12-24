@@ -325,7 +325,7 @@ class DecisionExecutionEngine(object):
                     # TODO: maybe we have to rethink this, we should not work this way on the environment
                     self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
                     
-                    self.__decisionThreadEnvironments.append_transition_log_entry(environment_uuid, model[DM_UUID], current_node[DN_UUID], transition[DNT_NAME], {})
+                    self.__decisionThreadEnvironments.append_transition_log_entry(environment_uuid, self.strip_uuid(model[DM_UUID]), current_node[DN_UUID], transition[DNT_NAME], {})
                     
                     self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)
             
@@ -333,6 +333,15 @@ class DecisionExecutionEngine(object):
             pass
         # endif wait for transit
         pass
+    
+    def strip_uuid(self, uuid):
+        if(uuid.startswith("DM_") or uuid.startswith("DN_")) :
+            return uuid[3:]
+        else:
+            if(uuid.startswith("KBA_")):
+                return uuid[4:]
+        return uuid
+
      
     # evaluated one decision node calculation 
     def evaluate_decision_node_method(self):

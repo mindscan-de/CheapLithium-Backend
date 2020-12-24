@@ -111,7 +111,7 @@ async def provide_decision_model( uuid:str):
     if ( str(read_uuid) == uuid):
         model = decisionModels.select_decision_model_by_uuid(uuid)
         if model is None:
-            return {"message":"no_such_persisted_model "}
+            raise HTTPException(status_code=404, detail="UUID not in database")
         else:
             return model
     else:
@@ -170,8 +170,7 @@ async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
     if decisionModels.isInDatabase(uuid):
         decisionModels.insert_decision_node_transition_internal(uuid, dnuuid,  transitionObject)
     else:
-        print({"message", "uuid_not in database"})
-        return {"message", "uuid_not in database"}
+        raise HTTPException(status_code=404, detail="UUID not in database")
     
     return create_successful_uuid_result(uuid)
 
@@ -185,8 +184,7 @@ async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
     if decisionModels.isInDatabase(uuid):
         decisionModels.update_decision_node_transitrion_internal(uuid, dnuuid, index, transitionObject)
     else:
-        print({"message", "uuid_not in database"})
-        return {"message", "uuid_not in database"}
+        raise HTTPException(status_code=404, detail="UUID not in database")
     
     return create_successful_uuid_result(uuid)
           
@@ -198,9 +196,8 @@ async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:s
     if decisionModels.isInDatabase(uuid):
         decisionModels.update_decision_node_internal(uuid, dnuuid, name, exectype, kbarticle)
     else:
-        print({"message", "uuid_not in database"})
-        return {"message", "uuid_not in database"}
-    
+        raise HTTPException(status_code=404, detail="UUID not in database")
+        
     return create_successful_uuid_result(uuid)
 
 
@@ -213,8 +210,7 @@ async def update_decision_model(uuid: str = Form(...), name:str = Form(...),  di
     if decisionModels.isInDatabase(uuid):
         decisionModels.update_decision_model_internal(uuid, name, displayname, description, version)
     else:
-        print({"message", "uuid_not in database"})
-        return {"message", "uuid_not in database"}
+        raise HTTPException(status_code=404, detail="UUID not in database")
     
     return create_successful_uuid_result(uuid)
 

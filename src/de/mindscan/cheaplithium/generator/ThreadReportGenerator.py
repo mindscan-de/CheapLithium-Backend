@@ -90,7 +90,7 @@ class ThreadReportGenerator(object):
             node_data = transition[DTE_TH_ITEM_DATA]
             node_timestamp = transition[DTE_TH_ITEM_TIMESTAMP]
             
-            node, transition = self.locate_decision_node_transition(node_identifier)
+            model, node, transition = self.locate_decision_node_transition(node_identifier)
             
             if transition is None:
                 # TODO: 
@@ -118,11 +118,11 @@ class ThreadReportGenerator(object):
             
             reportitem = {
                     'nodereport': mini_report,
-                    # 'modelname'
-                    # 'transitionname'
-                    # model uuid - for navigation in the result page?
-                    # node uuid - for navigation in the result page?
+                    'modelname': model[DM_NAME],
+                    'modeluuid': model[DM_UUID],
+                    'transitionname': transition[DNT_NAME],
                     'nodename' : node[DN_NAME],
+                    'nodeuuid' : node[DN_UUID],
                     'timestamp': node_timestamp,
                     'data':node_data
                 }
@@ -139,7 +139,7 @@ class ThreadReportGenerator(object):
         
         # TODO: temporary, until data is fixed.
         if model is None:
-            return None, None
+            return None, None, None
         
         
         # find node, by node uuid
@@ -148,7 +148,7 @@ class ThreadReportGenerator(object):
         transition = self.__modelProvider.select_transition_from_node(node, transition_name)
         
         
-        return node, transition
+        return model, node, transition
     
     
     def render_mini_report(self, template, node_data:dict):

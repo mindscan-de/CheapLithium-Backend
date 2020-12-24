@@ -193,3 +193,12 @@ class DecisionModel(object):
         
         return {'items':result_list}
 
+
+    def select_transition_from_node(self, node, transition_name):
+        for transition in node[DN_NEXTACTIONS]:
+            if transition[DNT_NAME] == transition_name:
+                return transition
+        return None
+
+
+

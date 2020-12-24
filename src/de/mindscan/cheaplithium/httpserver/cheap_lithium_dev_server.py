@@ -99,9 +99,10 @@ def strip_uuid(uuid):
 def validate_uuid(uuid):
     try:
         read_uuid = str(uid.UUID('{' + uuid + '}'))
-        if str(read_uuid) != uuid:
+        if read_uuid == uuid:
+            return read_uuid
+        else:
             raise HTTPException(status_code=404, detail="Invalid uuid")
-        return read_uuid
     except:
         raise HTTPException(status_code=404, detail="Invalid uuid")
 
@@ -148,9 +149,7 @@ async def create_decision_node (name:str = Form(...), exectype:str = Form(...),
 
 @app.post("/CheapLithium/rest/persistDecisionModel")
 async def persist_decision_model ( uuid: str = Form(...)):
-    dmuuid = strip_uuid(uuid)
-    
-    dmuuid = validate_uuid(dmuuid)
+    dmuuid = validate_uuid( strip_uuid(uuid) )
     
     if decisionModels.isInDatabase(dmuuid):
         decisionModels.persist_decision_model_internal(dmuuid)
@@ -256,7 +255,7 @@ async def provide_decision_thread(uuid: str):
         
     thread = decisionThreads.select_decision_thread_by_uuid(uuid)
     if thread is None:
-        return {"message":"no_such_persisted_thread"}
+        raise HTTPException(status_code=404, detail="Thread not found")
     else:
         return thread
 
@@ -268,9 +267,8 @@ async def get_decision_thread_list():
 
 @app.post("/CheapLithium/rest/startDecisionThread")
 async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form("")):
-    dmuuid = strip_uuid(uuid)
+    dmuuid = validate_uuid( strip_uuid(uuid) )
     
-    dmuuid = validate_uuid(dmuuid)
     thread_uuid = decisionExecutionEngine.start_decision_thread_by_model_uuid(dmuuid, ticketreference)
 
     if thread_uuid is None:
@@ -283,9 +281,7 @@ async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form(
 
 @app.get("/CheapLithium/rest/getDecisionThreadReport/{uuid}")
 async def get_decision_thread_report(uuid:str):
-    thread_uuid = strip_uuid(uuid)
-    
-    thread_uuid = validate_uuid(thread_uuid)
+    thread_uuid = validate_uuid( strip_uuid(uuid) )
     
     reportGenerator = ThreadReportGenerator(decisionThreads, decisionModels, decisionThreadEnvironments)
     result = reportGenerator.generate_thread_report(thread_uuid);
@@ -305,9 +301,7 @@ async def get_kb_articles_list():
 
 @app.get("/CheapLithium/rest/getKBArticle/{uuid}")
 async def provide_kbarticle(uuid:str):
-    uuid = strip_uuid(uuid)
-    
-    uuid = validate_uuid(uuid)
+    uuid = validate_uuid( strip_uuid(uuid) )
     
     return knowledgeArticles.select_article_by_uuid(uuid)
 
@@ -319,9 +313,7 @@ async def create_kbarticle(pagetitle:str=Form(...), pagesummary:str=Form(""), pa
 
 @app.post("/CheapLithium/rest/updateKBArticle")
 async def update_kbarticle(uuid:str=Form(...), pagetitle:str=Form(...), pagesummary:str=Form(""), pagecontent:str=Form(...)):
-    uuid = strip_uuid(uuid)
-
-    uuid = validate_uuid(uuid)
+    uuid = validate_uuid( strip_uuid(uuid) )
 
     knowledgeArticles.update_article_where_uuid(uuid, pagetitle, pagecontent, pagesummary)
     return create_successful_uuid_result(uuid)

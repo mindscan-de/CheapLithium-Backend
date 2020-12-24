@@ -325,6 +325,8 @@ class DecisionExecutionEngine(object):
                     # TODO: maybe we have to rethink this, we should not work this way on the environment
                     self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
                     
+                    self.__decisionThreadEnvironments.append_transition_log_entry(environment_uuid, model[DM_UUID], current_node[DN_UUID], transition[DNT_NAME], {})
+                    
                     self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)
             
             # endfor transitions

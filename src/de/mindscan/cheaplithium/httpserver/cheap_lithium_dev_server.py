@@ -168,7 +168,7 @@ async def get_decision_model_list():
 async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form(...), transition:str=Form(...)):
     transitionObject = json.loads(transition)
     
-    uuid = strip_uuid(uuid)
+    uuid = validate_uuid( strip_uuid(uuid) )
     
     if decisionModels.isInDatabase(uuid):
         decisionModels.insert_decision_node_transition_internal(uuid, dnuuid,  transitionObject)
@@ -182,7 +182,7 @@ async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
 async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form(...), index:int=Form(...), transition:str=Form(...)):
     transitionObject = json.loads(transition)
 
-    uuid = strip_uuid(uuid)
+    uuid = validate_uuid( strip_uuid(uuid) )
     
     if decisionModels.isInDatabase(uuid):
         decisionModels.update_decision_node_transitrion_internal(uuid, dnuuid, index, transitionObject)
@@ -194,7 +194,7 @@ async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
 
 @app.post("/CheapLithium/rest/updateDecisionNode")
 async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:str=Form(...), exectype:str=Form(...), kbarticle:str=Form("")):
-    uuid = strip_uuid(uuid)
+    uuid = validate_uuid( strip_uuid(uuid) )
     
     if decisionModels.isInDatabase(uuid):
         decisionModels.update_decision_node_internal(uuid, dnuuid, name, exectype, kbarticle)
@@ -208,7 +208,7 @@ async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:s
 async def update_decision_model(uuid: str = Form(...), name:str = Form(...),  displayname:str=Form(...), 
     description:str=Form(...), version:str = Form(...)):
     
-    uuid = strip_uuid(uuid)
+    uuid = validate_uuid( strip_uuid(uuid) )
     
     if decisionModels.isInDatabase(uuid):
         decisionModels.update_decision_model_internal(uuid, name, displayname, description, version)
@@ -219,7 +219,7 @@ async def update_decision_model(uuid: str = Form(...), name:str = Form(...),  di
 
 @app.get("/CheapLithium/rest/exportModelXGML/{uuid}")
 def export_model_as_xgml(uuid:str):
-    uuid = strip_uuid(uuid)
+    uuid = validate_uuid( strip_uuid(uuid) )
     
     if decisionModels.isInDatabase(uuid):
         generator = ExportModelGenerator(decisionModels)

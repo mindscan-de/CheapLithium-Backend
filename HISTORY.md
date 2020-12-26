@@ -25,26 +25,44 @@ will execute a graph. This graph should be able to edit, so the Editor came even
 ready. As of the engine speaking, it is not ready yet, since it can't execute the decision node
 evaluation functions / signatures nor the decision node transition functions yet.
 
-# Second Epoch (Outlook)
+# Second Epoch (Done)
 
 * starting 2020, December 21st
-* finishing approx. 2021, second half of January
+* finished 2020, December 27th
 
-The second epochs goal is to create a ThreadReportGenerator, which will basically summarize what
-decision were made during the decision process. I will collect requirements during that phase and
-the "make it work" approach to identify the logging needs for the runtime engine to fulfil - to 
-create a good report at the end of the execution of one decision tree.
+As of 2020, december 26th speaking, 
 
-So basically the idea is to make the ThreadReportGenerator work, with as little effort as possible,
-and evolve the current code base to meet these new requirements. I threw all current requirements
-out from the board, and decided for most of them to implement them later or never. Because i want
-this report generator right now to work as convincing as possible.
+The second epochs goal was to create a ThreadReportGenerator, which basically summarizes and collects 
+what decision were made during processing the decision process. The main objective was to create the
+report "make it work" from whichever data is available, if it wasn't it was added to the project on 
+the backend side. I added a execution log as well as a "parser" for the execution log.
 
-Maybe I can implement most of the DecisionThreadEnvironment model and use its contents to create 
-the reports. Most probably I will fake most of the DecisionThreadEnvironment at the start and then
-implement the most urgent things in the DecisionExecutionEngine. Since I'm undecided how all these
-automated signatures and evaluation functions will look like yet.
+The whole system now supports a decision thread environmnent which is referenced from the decision 
+thread. The decision thread environment is generated on start, and transitions between decision nodes 
+are logged into the thread environment.  
 
-Also one major concern is the integration of the knowledge base into the modelling of the decision 
-nodes, as well as integrating them into the interface for making the decision - but maybe, this will
-be postponed untile the third epoch.
+Why does this matter? The main goal is to automatically create a report at the end of the execution
+of the decision tree. 
+
+So basically the idea was also to make the ThreadReportGenerator work, with as little effort as possible,
+and evolve the current code base to meet these new requirements. I archived all current requirements
+and decided for most of them to implement them later or never.
+
+Also one major concern was the integration of the knowledge base into the modelling of the decision 
+nodes, as well as integrating it into the interface for making the decision and make the knowledge
+base more accessible to be used.
+
+# Third Epoch (Outlook)
+
+* starting 2020, December 28th
+* finishing approximately 2021, late January
+
+The goal of the third epoch is to finish the decision execution engine. What does this mean? Develop a
+proof-of-concept for the manipulation of the thread environment data and use it for making automated 
+decisions on transitions from one node to the next node.
+
+Also develop the interfaces required to not only automatically process the transitions, but also everything 
+what is required to process machine intelligent decision nodes, as well as human intelligent decision 
+nodes.
+
+ 

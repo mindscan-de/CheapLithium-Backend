@@ -370,6 +370,9 @@ class DecisionExecutionEngine(object):
 
     # evaluates one transition, and tells whether this applies... / First True wins
     def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
+        if not DNT_TRANSITION_SIGNATURE in transition:
+            return  False
+        
         method_signature = transition[DNT_TRANSITION_SIGNATURE]
 
         # TODO: calculate the methods to invoke and their parameters 

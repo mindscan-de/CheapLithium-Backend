@@ -32,6 +32,7 @@ from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
+import importlib
 
 
 ## TODO: work though all the other TODO tags - it will work right away I promise...
@@ -186,6 +187,7 @@ class DecisionExecutionEngine(object):
             # Waiting for transit means, that there might be an external event, which will make one of 
             # the transitions true, but none of them evaluate to true YET
             if (thread_data[DT_CURRENTSTATE] == RT_STATE_BLOCKED) or \
+               (thread_data[DT_CURRENTSTATE] == RT_STATE_STOPPED) or \
                (thread_data[DT_CURRENTSTATE] == RT_STATE_WAIT_FOR_TRANSIT) :
                 running = False
                 break;
@@ -304,6 +306,9 @@ class DecisionExecutionEngine(object):
                 # * thread_data
                 result = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment)
                 
+                if result is False:
+                    continue
+                
                 if result is True:
                     follow_node_data = self.__decisionModels.select_decision_node_from_decision_model(model, transition[DNT_NEXT])
                     
@@ -341,6 +346,9 @@ class DecisionExecutionEngine(object):
                     self.__decisionThreads.update_decision_thread_by_uuid_iternal(
                         thread_uuid, 
                         thread_data)
+                    
+                    # break the transition search, after we found a successful node.
+                    break
             
             # endfor transitions
             pass
@@ -372,8 +380,17 @@ class DecisionExecutionEngine(object):
     def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
         if not DNT_TRANSITION_SIGNATURE in transition:
             return  False
-        
+
         method_signature = transition[DNT_TRANSITION_SIGNATURE]
+
+        # idea is to use something like this... we load a predefined package + module then find the function and call it
+        value = False
+        vm_transitions_module = importlib.import_module('.transitions', package='de.mindscan.cheaplithium.vm')
+        print("module: {}".format(vm_transitions_module))
+        func = getattr(vm_transitions_module,'isFalse')
+        print("func: {}".format(func))
+        result = func(value)
+        print("result: {}".format(result))
 
         # TODO: calculate the methods to invoke and their parameters 
         
@@ -381,6 +398,7 @@ class DecisionExecutionEngine(object):
         # TODO: import stuff and such...
         # TODO: check method existence
         # TODO: invoke methods / a.k.a. eval
+        # TODO: also check if the template contains required data.
         
         # update environment according to collected signature references
         # return the apiresult and the api data

@@ -302,7 +302,7 @@ class DecisionExecutionEngine(object):
                 # * Methodparameters
                 # * thread runtime environment
                 # * thread_data
-                result = self.evaluate_decision_node_transition_method()
+                result = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment)
                 
                 if result is True:
                     follow_node_data = self.__decisionModels.select_decision_node_from_decision_model(model, transition[DNT_NEXT])
@@ -320,14 +320,27 @@ class DecisionExecutionEngine(object):
                         thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
                         thread_data[DT_CURRENTSTATE] = RT_STATE_STOPPED
                     
+                    # TODO: copy the current environment data, which is required for the decision node
+                    # TODO: copy the current environment data, which is required for the decision transition 
+                    self.__decisionThreadEnvironments.append_transition_log_entry(
+                        environment_uuid, 
+                        self.strip_uuid(model[DM_UUID]), 
+                        current_node[DN_UUID], 
+                        transition[DNT_NAME], 
+                        {})
+
                     # TODO: Transitions should not write back to the environment other than 
                     #       logging for the reports - but it is undecided where this goes...
                     # TODO: maybe we have to rethink this, we should not work this way on the environment
-                    self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
+                    self.__decisionThreadEnvironments.update_decision_environment_by_uuid(
+                        environment_uuid, 
+                        thread_environment )
+
                     
-                    self.__decisionThreadEnvironments.append_transition_log_entry(environment_uuid, self.strip_uuid(model[DM_UUID]), current_node[DN_UUID], transition[DNT_NAME], {})
-                    
-                    self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)
+                    # contains the new current state and the new current node 
+                    self.__decisionThreads.update_decision_thread_by_uuid_iternal(
+                        thread_uuid, 
+                        thread_data)
             
             # endfor transitions
             pass
@@ -356,8 +369,10 @@ class DecisionExecutionEngine(object):
         pass
 
     # evaluates one transition, and tells whether this applies... / First True wins
-    def evaluate_decision_node_transition_method(self):
-        # TODO: calculate the signature of the transition method to invoke
+    def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
+        method_signature = transition[DNT_TRANSITION_SIGNATURE]
+
+        # TODO: calculate the methods to invoke and their parameters 
         
         # TODO: use the trhead eviromnent to prepare the proper method call
         # TODO: import stuff and such...

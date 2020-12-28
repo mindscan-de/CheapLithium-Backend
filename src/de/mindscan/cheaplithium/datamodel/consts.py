@@ -57,8 +57,7 @@ DN_NEXTACTIONS = 'nextactions'
 DNT_NAME       = 'name'
 DNT_NEXT       = 'next'
 DNT_TEMPLATE   = 'template'
-# TODO:
-# DNT_TRANSITION_SIGNATURE = 'method'
+DNT_TRANSITION_SIGNATURE = 'method'
 
 # internal Model of the Knowledge Base 
 KBA_UUID        = 'uuid'
@@ -93,6 +92,7 @@ RT_STATE_TERMINATED = 'TERMINATED'
 DTE_UUID                 = 'uuid'
 DTE_DT_UUID              = 'thread_uuid'
 DTE_TRANSITION_HISTORY   = 'transitiondata'
+DTE_RTE_DATA             = 'data'
 
 # Decision Thread Environment / Transition History Item
 DTE_TH_ITEM_NODEIDENTIFIER = 'transition'

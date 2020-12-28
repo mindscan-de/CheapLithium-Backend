@@ -16,7 +16,7 @@
           "name": "_",
           "next": "DN_b9f67ac9-17ff-443f-8af9-48457b83ccaf",
           "template": "h4. Start Analysis",
-          "method":"isTrue(True)"
+          "guard":"isTrue(True)"
         }
       ]
     },
@@ -30,13 +30,13 @@
           "name": "outcome1",
           "next": "DN_a9507347-a3dc-41ce-bf55-6378898d30ab",
           "template": "We could find that {text}...",
-          "method":"isTrue(True)"
+          "guard":"isTrue(True)"
         },
         {
           "name": "outcome2",
           "next": "DN_2f50f8f1-46f9-4682-a43a-2b65a59f638e",
           "template": "We could not find that {operation} happened.",
-          "method":"isFalse(True)"
+          "guard":"isFalse(True)"
         }
       ]
     },

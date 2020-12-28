@@ -57,7 +57,7 @@ DN_NEXTACTIONS = 'nextactions'
 DNT_NAME       = 'name'
 DNT_NEXT       = 'next'
 DNT_TEMPLATE   = 'template'
-DNT_TRANSITION_SIGNATURE = 'method'
+DNT_GUARD_SIGNATURE = 'guard'
 
 # internal Model of the Knowledge Base 
 KBA_UUID        = 'uuid'

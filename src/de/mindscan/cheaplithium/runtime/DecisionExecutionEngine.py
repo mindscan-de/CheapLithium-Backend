@@ -378,10 +378,10 @@ class DecisionExecutionEngine(object):
 
     # evaluates one transition, and tells whether this applies... / First True wins
     def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
-        if not DNT_TRANSITION_SIGNATURE in transition:
+        if not DNT_GUARD_SIGNATURE in transition:
             return  False
 
-        method_signature = transition[DNT_TRANSITION_SIGNATURE]
+        method_signature = transition[DNT_GUARD_SIGNATURE]
 
         # idea is to use something like this... we load a predefined package + module then find the function and call it
         value = False

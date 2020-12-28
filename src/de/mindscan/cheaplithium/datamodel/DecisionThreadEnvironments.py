@@ -66,12 +66,28 @@ class DecisionThreadEnvironments(object):
     def create_thread_environment(self, default_environment_data, thread_uuid):
         environment_uuid = str(uid.uuid4())
         
-        # TODO: processs the default environment when we are more sure about the future api 
+        # TODO: processs the default environment when we are more sure about the future api
+        fake_rte_environment = {
+                'thread_uuid' : thread_uuid,
+                'environment_uuid' : environment_uuid,
+                # We will use some of this data to implement some of the ideas and solutions 
+                # TODO: anyway this code should not be here.
+                'result' : True,
+                'theOtherResult' : True,
+                'stringresultyes' : 'yes',
+                'stringresultno' : 'no'
+            }
+        
+        # mix the both environments, this will be rewritten later to rte_data = 
+        rte_data = default_environment_data.copy();
+        rte_data.update( fake_rte_environment )
         
         environment = {
                 DTE_UUID : environment_uuid,
                 DTE_DT_UUID : thread_uuid,
-                DTE_TRANSITION_HISTORY : []
+                DTE_TRANSITION_HISTORY : [],
+                # 
+                DTE_RTE_DATA: rte_data
             }
         
         self.__inMemoryDatabase[environment_uuid] = environment

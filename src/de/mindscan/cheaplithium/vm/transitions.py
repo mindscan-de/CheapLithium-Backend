@@ -26,6 +26,14 @@ SOFTWARE.
 @autor: Maxim Gansert
 '''
 
+def always():
+    '''
+    This transition guard will always evaluate to True. That means that this transition 
+    will be be taken every time, if this transition is the first to be successful in a 
+    series of guard checks. 
+    '''
+    return True
+
 def isTrue(value):
     return value==True or str(value).lower()=="true"
 
@@ -33,7 +41,8 @@ def isFalse(value):
     return value==False or str(value).lower()=="false"
 
 def isYes(value):
-    return value.lowercase()=="yes"
+    return value.lower()=="yes"
 
 def isNo(value):
-    return value.lowercase()=="no"
+    return value.lower()=="no"
+

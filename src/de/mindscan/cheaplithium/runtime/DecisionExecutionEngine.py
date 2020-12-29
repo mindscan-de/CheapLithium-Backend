@@ -25,6 +25,8 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+import re
+import importlib
 
 # import the data model column names / property names
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
@@ -32,7 +34,6 @@ from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
-import importlib
 
 
 ## TODO: work though all the other TODO tags - it will work right away I promise...
@@ -377,20 +378,28 @@ class DecisionExecutionEngine(object):
         pass
 
     # evaluates one transition, and tells whether this applies... / First True wins
+        
+    
     def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
         if not DNT_GUARD_SIGNATURE in transition:
             return  False
 
-        method_signature = transition[DNT_GUARD_SIGNATURE]
+        guard_signature = transition[DNT_GUARD_SIGNATURE]
 
+        # TODO: use the parsed guard signeture to execute the guard.
+        # TODO: maybe this will be an AST in future, but fror now it is okay to have it like this.
+        method_name, method_parameters = self.parse_guard_signature(guard_signature)
+        
+        if method_name is None:
+            return False
+        
         # idea is to use something like this... we load a predefined package + module then find the function and call it
-        value = False
         vm_transitions_module = importlib.import_module('.transitions', package='de.mindscan.cheaplithium.vm')
-        print("module: {}".format(vm_transitions_module))
-        func = getattr(vm_transitions_module,'isFalse')
-        print("func: {}".format(func))
-        result = func(value)
-        print("result: {}".format(result))
+        print("\nmodule: {}".format(vm_transitions_module))
+        func = getattr(vm_transitions_module,method_name)
+        print("\nfunc: {}".format(func))
+        result = func( *method_parameters )
+        print("\nresult: {}".format(result))
 
         # TODO: calculate the methods to invoke and their parameters 
         
@@ -404,9 +413,33 @@ class DecisionExecutionEngine(object):
         # return the apiresult and the api data
 
         # ATTN: this will let the decision model always take the first transition 
-        return True
+        return result
     
-    # TODO: do the signature splitting and such?
+
+    # transition.isTrue(env.XXY) { data: IN:OUT SIGNATURE_DATA, ...}
+    # transition.isEqual(env.XYY, 50) { data: IN:OUT SIGNATURE, }
+    # transition.isGreaterOrEqual(a,b ) { }
+    # transition.isLessOrEqual(a,b) {}
+    # transition.isGreater(a,b) {}
+    # transition.isLess(a,b) {}
+    def parse_guard_signature(self, guard_signature:str):
+        # TODO: do the signature splitting and such?
+        
+        # we only need something simple right now.
+        result = re.match("(.*)\((.*)\).*", guard_signature)
+        if result is None:
+            return None, None
+        
+        transition_method = result.group(1)
+        transition_ethod_parameters = result.group(2)
+        
+        print("\ntransition method: {}".format(transition_method))
+        print("\ntransition parameters: {}".format(transition_ethod_parameters))
+        
+        
+        return transition_method, [ transition_ethod_parameters ]
+    
+    
     # or get from a json array? instead of parsing signatures and stuff...
     # have transition signatures
     # have node sinatures

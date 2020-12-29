@@ -40,23 +40,24 @@ DM_STARTNODE   = 'startnode'
 DM_VERSION     = 'version'
 
 # Internal Model of the Decision Node
-DN_UUID        = 'uuid'
-DN_NAME        = 'name'
-DN_TYPE        = 'type'
-DN_TYPE_END    = 'end'
-DN_TYPE_START  = 'start'
-DN_TYPE_HIT    = 'hit'
-DN_TYPE_MIT    = 'mit'
-DN_TYPE_SYNC   = 'sync'
-DN_KBARTICLE   = 'kbarticle'
-DN_NEXTACTIONS = 'nextactions'
-#TODO:
-# DN_MIT_SIGNATURE = 'method' 
+DN_UUID             = 'uuid'
+DN_NAME             = 'name'
+DN_TYPE             = 'type'
+DN_TYPE_END         = 'end'
+DN_TYPE_START       = 'start'
+DN_TYPE_HIT         = 'hit'
+DN_TYPE_MIT         = 'mit'
+DN_TYPE_SYNC        = 'sync'
+DN_KBARTICLE        = 'kbarticle'
+DN_NEXTACTIONS      = 'nextactions'
+# ??? maybe this maybe otherway around - let's see later
+DN_MIT_SIGNATURE    = 'mitaction'
+DN_HIT_SIGNATURE    = 'hitaction' 
 
 # Internal Model of the Decision Node Transition
-DNT_NAME       = 'name'
-DNT_NEXT       = 'next'
-DNT_TEMPLATE   = 'template'
+DNT_NAME            = 'name'
+DNT_NEXT            = 'next'
+DNT_TEMPLATE        = 'template'
 DNT_GUARD_SIGNATURE = 'guard'
 
 # internal Model of the Knowledge Base 

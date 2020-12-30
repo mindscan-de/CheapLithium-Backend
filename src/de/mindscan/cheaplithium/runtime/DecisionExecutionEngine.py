@@ -367,13 +367,13 @@ class DecisionExecutionEngine(object):
             return None, None
         
         # calculate the signature of the method to invoke
-        method_name, method_parameters = self.parse_node_mit_signature(decision_node[DN_MIT_SIGNATURE])
+        method_name, method_parameters_info = self.parse_node_mit_signature(decision_node[DN_MIT_SIGNATURE])
         
         if method_name is None:
             # problem is for a MIT Node, there should be a real signature, even when it is nop() or so.
             return None, None
         
-        # TODO: use the trhead eviromnent to prepare the proper method call - update method_parameters
+        method_parameters = self.convert_method_parameter_info(method_parameters_info, thread_environment)
         
         result, result_data = self.invoke_mit_method(self, method_name, method_parameters)
         
@@ -402,18 +402,19 @@ class DecisionExecutionEngine(object):
     # Transition Handling
     # ################################
     
+    
     def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
         if not DNT_GUARD_SIGNATURE in transition:
             return  False
 
         # calculate the method to invoke and their parameters 
-        method_name, method_parameters = self.parse_guard_signature(transition[DNT_GUARD_SIGNATURE])
+        method_name, method_parameters_info = self.parse_guard_signature(transition[DNT_GUARD_SIGNATURE])
         
         if method_name is None:
             return False
         
-        # TODO: convert the parameters to their correct type and such
-        # TODO: use the thread data and thread evironment to prepare the proper method call
+        # convert the parameters to their correct type and such
+        method_parameters = self.convert_method_parameter_info(method_parameters_info, thread_environment)
         
         # invoke the calculated method
         result = self.invoke_transition_method(method_name, method_parameters)
@@ -460,6 +461,40 @@ class DecisionExecutionEngine(object):
         #       be taken over to the template content for the thread report.
         
         return transition_method, [ transition_method_parameters ]
+    
+    
+    def convert_method_parameter_info(self, method_parameters_info, thread_environment):
+        if method_parameters_info is None:
+            return []
+        
+        result = []
+        for parameter_info in method_parameters_info:
+            result.append(self.convert_single_method_parameter(parameter_info, thread_environment))
+        
+        return result
+    
+    
+    def convert_single_method_parameter(self, parameter_info:str, thread_environment:dict):
+        parameter_info = parameter_info.strip();
+        
+        # match true
+        if   parameter_info.lower() == "true" : 
+            return True 
+        # match false
+        elif parameter_info.lower() == "false":
+            return False
+        # match none type
+        elif parameter_info.lower() == "none":
+            return None
+        # match numbers
+        elif re.match("[-+]?\d+", parameter_info):
+            return int(parameter_info)
+        
+        # TODO: use the thread data and thread evironment as source of truth...
+        
+        # just keep that as a string for now.
+        return parameter_info
+
     
     
     def invoke_transition_method(self, method_name, method_parameters):

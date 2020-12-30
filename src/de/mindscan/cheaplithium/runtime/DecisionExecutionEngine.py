@@ -27,6 +27,7 @@ SOFTWARE.
 '''
 import re
 import importlib
+import sys
 
 # import the data model column names / property names
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
@@ -302,12 +303,16 @@ class DecisionExecutionEngine(object):
                 try:
                     result, result_data = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment)
                 except:
-                    # TODO:
-                    # if the method doesnt exist, we assume the result is now false and we evaluate other transitions.
-                    # maybe this should be logged for reasons in some kind of 
-                    # * error log
-                    # * thread error log
-                    # * recent errors log
+                    e = sys.exc_info()[0]
+                    # ATTN: will update the thread_environment
+                    thread_environment = \
+                        self.__decisionThreadEnvironments.append_error_log_entry(
+                            environment_uuid, 
+                            'error', 
+                            'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]), 
+                            { 
+                                'exception':e
+                            })
                     continue
                 
                 if result is False:
@@ -489,16 +494,15 @@ class DecisionExecutionEngine(object):
         # match numbers
         elif re.match("[-+]?\d+", parameter_info):
             return int(parameter_info)
-        # use the thread environment and thread evironment as source of truth...
+        # use the thread environment as source of truth...
         elif parameter_info.startswith("env."):
-            # TODO: we can curently not subindex, but this should be possible in future 
+            # we can currently not subindex, but this should be possible in future (ato de) 
             key = parameter_info[len("env."):]
             return thread_environment[DTE_RTE_DATA][key]
-        
-        # TODO: Thread Data, is there something interesting? 
-        #elif parameter_info.startswith("thread."):
-        #    pass
-            
+        # thread data, is there something interesting ? 
+        elif parameter_info.startswith("thread."):
+            # maybe later implement access to thread data (ato de)
+            pass
         
         # just keep that as a string for now.
         return parameter_info

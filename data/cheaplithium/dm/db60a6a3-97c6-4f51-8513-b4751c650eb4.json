@@ -30,13 +30,13 @@
           "name": "less_than_or_equal_to_50_samples",
           "next": "DN_c18f5206-d5aa-4c83-91ad-d41fa8e3d897",
           "template": "",
-          "guard": "isLessThanOrEqual(44,50)"
+          "guard": "isLessThanOrEqual( env.samplesize, 50 )"
         },
         {
           "name": "more_than_50_samples",
           "next": "DN_d2d5eacc-3dba-456c-b8dc-62b58afd0e68",
           "template": "",
-          "guard": "isGreaterThan(44,50)"
+          "guard": "isGreaterThan( env.samplesize , 50 )"
         }
       ]
     },

@@ -387,16 +387,17 @@ class DecisionExecutionEngine(object):
         return None, None
     
     
-    # TODO: parse node HIT signature    
-    def parse_node_hit_signature(self, node_hit_signature:str):
-        return
-        
-    
     def invoke_mit_method(self, method_name, method_parameters, ):
         # TODO: import stuff and such...
         # TODO: check method existence
         # TODO: invoke methods / a.k.a. eval
         return None, None
+        
+    
+    # TODO: parse node HIT signature    
+    def parse_node_hit_signature(self, node_hit_signature:str):
+        return
+    
     
     # ################################
     # Transition Handling
@@ -488,8 +489,16 @@ class DecisionExecutionEngine(object):
         # match numbers
         elif re.match("[-+]?\d+", parameter_info):
             return int(parameter_info)
+        # use the thread environment and thread evironment as source of truth...
+        elif parameter_info.startswith("env."):
+            # TODO: we can curently not subindex, but this should be possible in future 
+            key = parameter_info[len("env."):]
+            return thread_environment[DTE_RTE_DATA][key]
         
-        # TODO: use the thread data and thread evironment as source of truth...
+        # TODO: Thread Data, is there something interesting? 
+        #elif parameter_info.startswith("thread."):
+        #    pass
+            
         
         # just keep that as a string for now.
         return parameter_info

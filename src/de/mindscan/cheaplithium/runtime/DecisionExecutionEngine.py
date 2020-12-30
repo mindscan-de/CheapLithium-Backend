@@ -457,11 +457,10 @@ class DecisionExecutionEngine(object):
     
     # invoke the transition methd by name and paramaters
     def invoke_transition_method(self, method_name, method_parameters):
-        # idea is to use something like this... we load a predefined package + module then find the function and call it
+        # load a predefined package + module 
         vm_transitions_module = importlib.import_module('.transitions', package='de.mindscan.cheaplithium.vm')
-        # print("\nmodule: {}".format(vm_transitions_module))
         
-        # will raise an exception if method_name doesn't exist
+        # find the function - it will raise an exception if method_name doesn't exist
         func = getattr(vm_transitions_module, method_name)
         # print("\nfunc: {}".format(func))
         

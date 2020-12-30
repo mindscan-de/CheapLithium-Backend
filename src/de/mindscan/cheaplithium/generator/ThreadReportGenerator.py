@@ -111,7 +111,7 @@ class ThreadReportGenerator(object):
             # create a mini report, by filling the transition template using all the other data
             mini_report = self.render_mini_report(transition[DNT_TEMPLATE], node_data)
             
-            if mini_report is None:
+            if not mini_report:
                 # if the report is rendered empty, then there is no reason to add this report item
                 # the renderer can output None intentionally if template is "" or starts with something like this: "__EMPTY__" 
                 continue

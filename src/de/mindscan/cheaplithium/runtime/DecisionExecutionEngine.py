@@ -297,15 +297,19 @@ class DecisionExecutionEngine(object):
             transitions = current_node[DN_NEXTACTIONS]
             
             # ok we have to check each follownode and compute
-            # whether we can do the transition
+            # whether we can follow the transition
             for transition in transitions:
-                #TODO: 
-                # self.evaluate_decision_node_transition_method()
-                # * Method
-                # * Methodparameters
-                # * thread runtime environment
-                # * thread_data
-                result = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment)
+                result = False
+                try:
+                    result, result_data = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment)
+                except:
+                    # TODO:
+                    # if the method doesnt exist, we assume the result is now false and we evaluate other transitions.
+                    # maybe this should be logged for reasons in some kind of 
+                    # * error log
+                    # * thread error log
+                    # * recent errors log
+                    continue
                 
                 if result is False:
                     continue
@@ -326,29 +330,19 @@ class DecisionExecutionEngine(object):
                         thread_data[DT_CURRENTNODE] = follow_node_data[DN_UUID]
                         thread_data[DT_CURRENTSTATE] = RT_STATE_STOPPED
                     
-                    # TODO: copy the current environment data, which is required for the decision node
-                    # TODO: copy the current environment data, which is required for the decision transition 
                     self.__decisionThreadEnvironments.append_transition_log_entry(
                         environment_uuid, 
                         self.strip_uuid(model[DM_UUID]), 
                         current_node[DN_UUID], 
                         transition[DNT_NAME], 
-                        {})
+                        result_data)
 
-                    # TODO: Transitions should not write back to the environment other than 
-                    #       logging for the reports - but it is undecided where this goes...
-                    # TODO: maybe we have to rethink this, we should not work this way on the environment
-                    self.__decisionThreadEnvironments.update_decision_environment_by_uuid(
-                        environment_uuid, 
-                        thread_environment )
-
-                    
                     # contains the new current state and the new current node 
                     self.__decisionThreads.update_decision_thread_by_uuid_iternal(
                         thread_uuid, 
                         thread_data)
                     
-                    # break the transition search, after we found a successful node.
+                    # break transition search, after we found a successful node.
                     break
             
             # endfor transitions
@@ -387,41 +381,33 @@ class DecisionExecutionEngine(object):
         return    
         
     
-    # evaluates one transition, and tells whether this applies
+    # ################################
+    # Transition Handling
+    # ################################
+    
     def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
         if not DNT_GUARD_SIGNATURE in transition:
             return  False
 
-        guard_signature = transition[DNT_GUARD_SIGNATURE]
-
-        # TODO: use the parsed guard signeture to execute the guard.
-        # TODO: maybe this will be an AST in future, but fror now it is okay to have it like this.
-        method_name, method_parameters = self.parse_guard_signature(guard_signature)
+        # calculate the method to invoke and their parameters 
+        method_name, method_parameters = self.parse_guard_signature(transition[DNT_GUARD_SIGNATURE])
         
         if method_name is None:
             return False
         
-        # idea is to use something like this... we load a predefined package + module then find the function and call it
-        vm_transitions_module = importlib.import_module('.transitions', package='de.mindscan.cheaplithium.vm')
-        print("\nmodule: {}".format(vm_transitions_module))
-        func = getattr(vm_transitions_module,method_name)
-        print("\nfunc: {}".format(func))
-        result = func( *method_parameters )
-        print("\nresult: {}".format(result))
-
-        # TODO: calculate the methods to invoke and their parameters 
+        # TODO: convert the parameters to their correct type and such
+        # TODO: use the thread data and thread evironment to prepare the proper method call
         
-        # TODO: use the trhead eviromnent to prepare the proper method call
-        # TODO: import stuff and such...
-        # TODO: check method existence
-        # TODO: invoke methods / a.k.a. eval
-        # TODO: also check if the template contains required data.
-        
-        # update environment according to collected signature references
-        # return the apiresult and the api data
+        # invoke the calculated method
+        result = self.invoke_transition_method(method_name, method_parameters)
 
-        # ATTN: this will let the decision model always take the first transition 
-        return result
+        transition_data = {}
+        if result is True:
+            # TODO: evaluate "method_body" and calculate transition_data
+            # also check if the method body template contains required data - should be calculated if result is true
+            pass
+        
+        return result, transition_data
     
 
     # transition.isTrue(env.XXY) { data: IN:OUT SIGNATURE_DATA, ...}
@@ -459,3 +445,16 @@ class DecisionExecutionEngine(object):
         return transition_method, [ transition_method_parameters ]
     
     
+    # invoke the transition methd by name and paramaters
+    def invoke_transition_method(self, method_name, method_parameters):
+        # idea is to use something like this... we load a predefined package + module then find the function and call it
+        vm_transitions_module = importlib.import_module('.transitions', package='de.mindscan.cheaplithium.vm')
+        # print("\nmodule: {}".format(vm_transitions_module))
+        
+        # will raise an exception if method_name doesn't exist
+        func = getattr(vm_transitions_module, method_name)
+        # print("\nfunc: {}".format(func))
+        
+        # invoke method / a.k.a. eval
+        result = func(*method_parameters)
+        return result

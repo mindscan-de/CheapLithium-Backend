@@ -373,23 +373,30 @@ class DecisionExecutionEngine(object):
             # problem is for a MIT Node, there should be a real signature, even when it is nop() or so.
             return None, None
         
-        # TODO: use the trhead eviromnent to prepare the proper method call
-        # TODO: import stuff and such...
-        # TODO: check method existence
-        # TODO: invoke methods / a.k.a. eval
+        # TODO: use the trhead eviromnent to prepare the proper method call - update method_parameters
         
-        # TODO: check the result value for existence otherwise return neutral value 
-        return None, None
+        result, result_data = self.invoke_mit_method(self, method_name, method_parameters)
+        
+        # TODO: evaluate the "method body" of the MIT-signature
+        # TODO: We might now return also an update packet wor the environment? 
+        return result, result_data
 
     
     # TODO: parse node MIT signature 
     def parse_node_mit_signature(self, node_mit_signature:str):
         return None, None
     
+    
     # TODO: parse node HIT signature    
     def parse_node_hit_signature(self, node_hit_signature:str):
-        return    
+        return
         
+    
+    def invoke_mit_method(self, method_name, method_parameters, ):
+        # TODO: import stuff and such...
+        # TODO: check method existence
+        # TODO: invoke methods / a.k.a. eval
+        return None, None
     
     # ################################
     # Transition Handling
@@ -455,7 +462,6 @@ class DecisionExecutionEngine(object):
         return transition_method, [ transition_method_parameters ]
     
     
-    # invoke the transition methd by name and paramaters
     def invoke_transition_method(self, method_name, method_parameters):
         # load a predefined package + module 
         vm_transitions_module = importlib.import_module('.transitions', package='de.mindscan.cheaplithium.vm')
@@ -464,6 +470,6 @@ class DecisionExecutionEngine(object):
         func = getattr(vm_transitions_module, method_name)
         # print("\nfunc: {}".format(func))
         
-        # invoke method / a.k.a. eval
+        # invoke method
         result = func(*method_parameters)
         return result

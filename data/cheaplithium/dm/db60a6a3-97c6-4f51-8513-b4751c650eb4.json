@@ -13,29 +13,30 @@
       "kbarticle": "",
       "nextactions": [
         {
-          "name": "default",
+          "name": "always",
           "next": "DN_cefacc87-4d5f-48c9-9d85-9e64f829b570",
-          "template": ""
+          "template": "",
+          "guard": "always()"
         }
       ]
     },
     {
       "uuid": "DN_cefacc87-4d5f-48c9-9d85-9e64f829b570",
       "name": "001.decide_small_sample_size",
-      "type": "hit",
+      "type": "mit",
       "kbarticle": "",
       "nextactions": [
         {
           "name": "less_than_or_equal_to_50_samples",
           "next": "DN_c18f5206-d5aa-4c83-91ad-d41fa8e3d897",
           "template": "",
-          "transitif": ""
+          "guard": "isLessThanOrEqual(44,50)"
         },
         {
           "name": "more_than_50_samples",
           "next": "DN_d2d5eacc-3dba-456c-b8dc-62b58afd0e68",
           "template": "",
-          "transitif": ""
+          "guard": "isGreaterThan(44,50)"
         }
       ]
     },
@@ -630,8 +631,8 @@
         {
           "name": "always",
           "next": "DN_614b16a9-68f2-42cb-8a9b-14537a764d5b",
-          "template": "",
-          "transitif": ""
+          "template": "h4. Conclusion\n\nThe number of samples is far to few. A machine learning approach is not meaningful with so few samples.",
+          "guard": "always()"
         }
       ]
     },

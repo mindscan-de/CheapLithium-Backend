@@ -374,20 +374,20 @@
     {
       "uuid": "DN_4f891b9b-d07a-4a7f-93e2-8d82ad68a90b",
       "name": "205.clustering.decide_is_mid_size",
-      "type": "hit",
+      "type": "mit",
       "kbarticle": "",
       "nextactions": [
         {
           "name": "less_than_10k_samples",
           "next": "DN_86a4ab23-86b0-49e1-881e-0c40350c41cf",
           "template": "",
-          "transitif": ""
+          "guard": "isLessThan(env.samplesize, 10000)"
         },
         {
           "name": "more_than_10k_samples",
           "next": "DN_50621e0e-1d61-415f-925a-2f36d2377788",
           "template": "",
-          "transitif": ""
+          "guard": "isGreaterOrEqualTo(env.samplesize, 10000)"
         }
       ]
     },

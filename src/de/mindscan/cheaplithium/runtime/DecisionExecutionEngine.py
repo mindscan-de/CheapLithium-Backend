@@ -453,14 +453,13 @@ class DecisionExecutionEngine(object):
         if not transition_method_parameters :
             return transition_method, []
         
-        # TODO: now split parameters, and trim them, left, and right, (what about hard coded strings?)
-        # TODO: convert the parameters... but conversion can be done at a different stage / different method (reuse)
+        splitted_transition_method_parameters = transition_method_parameters.split(",")
         
         # TODO: also parse the method "body", consider this as a data conversion layer, 
         #       which is important for the data field of the transition, so data fields from the node calculation can
         #       be taken over to the template content for the thread report.
         
-        return transition_method, [ transition_method_parameters ]
+        return transition_method, splitted_transition_method_parameters
     
     
     def convert_method_parameter_info(self, method_parameters_info, thread_environment):

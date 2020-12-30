@@ -21,4 +21,7 @@ class DecisionExecutionEngineMethodProvider(object):
     # TODO. provide a list of transition methods (Decision Node Transition)
     # TODO: provide a list of node calculation methods (Decision Node)
     
+    # TODO: use the docstring of the method to provde help to the user.
+    # inspect.getdoc(function) - 
+    
     

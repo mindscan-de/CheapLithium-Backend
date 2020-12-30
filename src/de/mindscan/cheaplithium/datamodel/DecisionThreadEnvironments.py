@@ -87,8 +87,8 @@ class DecisionThreadEnvironments(object):
                 DTE_UUID : environment_uuid,
                 DTE_DT_UUID : thread_uuid,
                 DTE_TRANSITION_HISTORY : [],
-                # 
-                DTE_RTE_DATA: rte_data
+                DTE_RTE_DATA: rte_data,
+                DTE_ERROR_LOG: []
             }
         
         self.__inMemoryDatabase[environment_uuid] = environment
@@ -120,12 +120,28 @@ class DecisionThreadEnvironments(object):
                 DTE_TH_ITEM_NODEIDENTIFIER : self.build_node_identifier(dm_uuid, dn_uuid, outcome),
                 DTE_TH_ITEM_TIMESTAMP      : time.time(),
                 DTE_TH_ITEM_DATA           : transition_data
-            });
+            })
         
         self.__inMemoryDatabase[environment_uuid] = environment
         self.save_to_disk(environment_uuid)
         
-        pass
+        return environment
+    
+    def append_error_log_entry(self, environment_uuid, log_level: str, log_message: str, log_data:dict):
+        environment = self.select_thread_environment_by_uuid(environment_uuid)
+        
+        environment[DTE_ERROR_LOG].append(
+            {
+                DTE_ERROR_LOG_TIMESTAMP : time.time(),
+                DTE_ERROR_LOG_LOGLEVEL : log_level,
+                DTE_ERROR_LOG_LOGMESSAGE : log_message,
+                DTE_ERROR_LOG_DATA : log_data                
+            })
+        
+        self.__inMemoryDatabase[environment_uuid] = environment
+        self.save_to_disk(environment_uuid)
+
+        return environment
     
     
     def update_decision_environment_by_uuid(self, environment_uuid:str, environment_data:dict):

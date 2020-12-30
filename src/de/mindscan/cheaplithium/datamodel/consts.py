@@ -94,6 +94,13 @@ DTE_UUID                 = 'uuid'
 DTE_DT_UUID              = 'thread_uuid'
 DTE_TRANSITION_HISTORY   = 'transitiondata'
 DTE_RTE_DATA             = 'data'
+DTE_ERROR_LOG            = 'errorlog'
+
+DTE_ERROR_LOG_TIMESTAMP  = 'timestamp'
+DTE_ERROR_LOG_DATA       = 'data'
+DTE_ERROR_LOG_LOGLEVEL   = 'level'
+DTE_ERROR_LOG_LOGMESSAGE = 'message'
+DTE_ERROR_LOG_DATA       = 'data'
 
 # Decision Thread Environment / Transition History Item
 DTE_TH_ITEM_NODEIDENTIFIER = 'transition'

@@ -30,7 +30,11 @@ def always():
     '''
     This transition guard will always evaluate to True. That means that this transition 
     will be be taken every time, if this transition is the first to be successful in a 
-    series of guard checks. 
+    series of guard checks.
+    
+    You can always ise it as an if then else path, where the else part is always, if the
+    first condition is not met. That means, the transitions must be executed in order of 
+    definition, if this feature should be "standard".
     '''
     return True
 

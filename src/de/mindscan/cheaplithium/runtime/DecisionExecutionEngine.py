@@ -377,9 +377,17 @@ class DecisionExecutionEngine(object):
         # TODO: check the result value for existence otherwise return neutral value 
         pass
 
-    # evaluates one transition, and tells whether this applies... / First True wins
+    
+    # TODO: parse node MIT signature 
+    def parse_node_mit_signature(self, node_mit_signature:str):
+        return
+    
+    # TODO: parse node HIT signature    
+    def parse_node_hit_signature(self, node_hit_signature:str):
+        return    
         
     
+    # evaluates one transition, and tells whether this applies
     def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
         if not DNT_GUARD_SIGNATURE in transition:
             return  False
@@ -423,24 +431,31 @@ class DecisionExecutionEngine(object):
     # transition.isGreater(a,b) {}
     # transition.isLess(a,b) {}
     def parse_guard_signature(self, guard_signature:str):
-        # TODO: do the signature splitting and such?
-        
-        # we only need something simple right now.
+        # More cool would be an EXPRESSION AST, but currently we don't need that mode of processing signatures
+        # Because i would invoke a lexer which creates tokens and then parse the tokens to build the AST and return it
+                
+        # Signature spliting: we only need something simple right now. 
         result = re.match("(.*)\((.*)\).*", guard_signature)
         if result is None:
             return None, None
         
         transition_method = result.group(1)
-        transition_ethod_parameters = result.group(2)
+        transition_method_parameters = result.group(2)
         
         print("\ntransition method: {}".format(transition_method))
-        print("\ntransition parameters: {}".format(transition_ethod_parameters))
+        print("\ntransition parameters: {}".format(transition_method_parameters))
         
+        # for methods with no parameters
+        if not transition_method_parameters :
+            return transition_method, []
         
-        return transition_method, [ transition_ethod_parameters ]
+        # TODO: now split parameters, and trim them, left, and right, (what about hard coded strings?)
+        # TODO: convert the parameters... but conversion can be done at a different stage / different method (reuse)
+        
+        # TODO: also parse the method "body", consider this as a data conversion layer, 
+        #       which is important for the data field of the transition, so data fields from the node calculation can
+        #       be taken over to the template content for the thread report.
+        
+        return transition_method, [ transition_method_parameters ]
     
-    
-    # or get from a json array? instead of parsing signatures and stuff...
-    # have transition signatures
-    # have node sinatures
     

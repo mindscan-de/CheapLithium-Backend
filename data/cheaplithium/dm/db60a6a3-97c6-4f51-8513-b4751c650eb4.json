@@ -130,27 +130,27 @@
           "name": "always",
           "next": "DN_50621e0e-1d61-415f-925a-2f36d2377788",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
     {
       "uuid": "DN_d7ebf650-0dfa-4310-ab09-0efc89f0e7eb",
       "name": "100.classes.decide_large_sample_size",
-      "type": "hit",
+      "type": "mit",
       "kbarticle": "",
       "nextactions": [
         {
           "name": "is_less_than_100k_samples",
           "next": "DN_bf514192-076e-418f-90bc-9bb77e2ba4f9",
           "template": "",
-          "transitif": ""
+          "guard": "isLessThan(env.samplesize, 100000)"
         },
         {
           "name": "is_greater_or_equal_10k_samples",
           "next": "DN_3970503f-72ec-404d-a9b4-1047dca6d6df",
           "template": "",
-          "transitif": ""
+          "guard": "isGreaterThanOrEqual(env.samplesize, 100000)"
         }
       ]
     },
@@ -224,7 +224,7 @@
           "name": "always",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
@@ -258,7 +258,7 @@
           "name": "always",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
@@ -272,7 +272,7 @@
           "name": "always",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
@@ -306,20 +306,20 @@
     {
       "uuid": "DN_d0a25b06-83ef-4cde-a476-a36b4f534fca",
       "name": "201.clustering.decde_is_mid_size_samples",
-      "type": "hit",
+      "type": "mit",
       "kbarticle": "",
       "nextactions": [
         {
           "name": "is_less_than_10k_samples",
           "next": "DN_5512fa96-4f4a-4cbf-8461-88e5889681d4",
           "template": "",
-          "transitif": ""
+          "guard": "isLessThan(env.samplesize, 10000)"
         },
         {
           "name": "is_more_than_10k_samples",
           "next": "DN_9b20eea6-087c-47d1-bd03-910c590446f1",
           "template": "",
-          "transitif": ""
+          "guard": "isGreaterThanOrEqual(env.samplesize, 10000)"
         }
       ]
     },
@@ -353,7 +353,7 @@
           "name": "always",
           "next": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
@@ -367,7 +367,7 @@
           "name": "always",
           "next": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
@@ -401,7 +401,7 @@
           "name": "always",
           "next": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
@@ -415,20 +415,20 @@
     {
       "uuid": "DN_e169aed7-7b2c-4fd7-ac7f-65bd6ddb52e7",
       "name": "300.regression.decide_large_sample_size",
-      "type": "hit",
+      "type": "mit",
       "kbarticle": "",
       "nextactions": [
         {
           "name": "larger_or_equal_to_100k_samples",
           "next": "DN_a1c5afa8-b141-4c3b-b62b-68554d9fd94b",
           "template": "",
-          "transitif": ""
+          "guard": "isGreaterOrEqualTo(env.samplesize, 100000)"
         },
         {
           "name": "less_than_100k_samples",
           "next": "DN_0a1d7ae1-c499-40c3-b479-0d37635e1197",
           "template": "",
-          "transitif": ""
+          "guard": "isLessThan(env.samplesize, 100000)"
         }
       ]
     },
@@ -459,10 +459,9 @@
       "kbarticle": "",
       "nextactions": [
         {
-          "name": "always",
+          "name": "working",
           "next": "DN_4cfefb7a-19e6-4bb1-ba2b-3109c72849aa",
-          "template": "",
-          "transitif": ""
+          "template": ""
         },
         {
           "name": "not_working",
@@ -502,7 +501,7 @@
           "name": "always",
           "next": "DN_4cfefb7a-19e6-4bb1-ba2b-3109c72849aa",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
@@ -516,7 +515,7 @@
           "name": "always",
           "next": "DN_4cfefb7a-19e6-4bb1-ba2b-3109c72849aa",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
@@ -550,20 +549,20 @@
     {
       "uuid": "DN_254f54d3-cf58-451e-acfc-f9bba6fa2662",
       "name": "401.dimreduction.is_midsize_sample",
-      "type": "hit",
+      "type": "mit",
       "kbarticle": "",
       "nextactions": [
         {
           "name": "less_than_10k_samples",
           "next": "DN_5df0d07e-9e00-4b1c-8dbf-1079241bd843",
           "template": "",
-          "transitif": ""
+          "guard": "isLessThan(env.samplesize, 10000)"
         },
         {
           "name": "is_more_or_equal_to_10k_samples",
           "next": "DN_03f01f51-c1f3-4c58-9fe2-a13e00fe7300",
           "template": "",
-          "transitif": ""
+          "guard": "isGreaterThanOrEqual(env.samplesize, 10000)"
         }
       ]
     },
@@ -597,7 +596,7 @@
           "name": "always",
           "next": "DN_bf48a565-f3a4-4dac-8fa7-feb9ba13d317",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
@@ -611,7 +610,7 @@
           "name": "always",
           "next": "DN_bf48a565-f3a4-4dac-8fa7-feb9ba13d317",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },
@@ -639,14 +638,14 @@
     {
       "uuid": "DN_50621e0e-1d61-415f-925a-2f36d2377788",
       "name": "802.tough_luck",
-      "type": "hit",
+      "type": "mit",
       "kbarticle": "",
       "nextactions": [
         {
           "name": "always",
           "next": "DN_614b16a9-68f2-42cb-8a9b-14537a764d5b",
           "template": "",
-          "transitif": ""
+          "guard": "always()"
         }
       ]
     },

@@ -50,3 +50,20 @@ def isYes(value):
 def isNo(value):
     return value.lower()=="no"
 
+def isLessThan(a,b):
+    return a<b
+
+def isLessThanOrEqual(a,b):
+    return a<=b
+
+def isGreaterThan(a,b):
+    return a>b
+
+def isGreaterThanOrEqual(a,b):
+    return a>=b
+
+def isEqual(a,b):
+    return a==b
+
+def isNotEqual(a,b):
+    return a!=b

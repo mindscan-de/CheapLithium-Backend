@@ -266,16 +266,15 @@ class DecisionExecutionEngine(object):
         ### Thread is waiting for compute time
         ### ----------------------------------
         if thread_data[DT_CURRENTSTATE] == RT_STATE_WAIT_FOR_COMPUTE:
-            curent_node = self.__decisionModels.select_decision_node_from_decision_model(model, thread_data[DT_CURRENTNODE])
+            current_node = self.__decisionModels.select_decision_node_from_decision_model(model, thread_data[DT_CURRENTNODE])
 
-            # so lets execute the methods and its signature and then update the
-            # thread and the thread_environment, since we computed some data for tthe thread to advance forward
-
-            #TODO: self.evaluate_decision_node_method()
-            # * Method
-            # * Methodparameters
-            # * thread runtime environment
-            # * thread_data
+            # so lets execute the method(s) and its signature and then update the
+            # thread and the thread_environment, since we computed some data for the thread to advance forward
+            try:
+                result, result_data = self.evaluate_decision_node_method(current_node, thread_data, thread_environment)
+            except:
+                # TODO: maybe we should do something else, but for now it is better to have it like this.
+                return
             
             #TODO: thread_data should get a column 'lastcompute' having a timestamp
             #  fill lastcompute
@@ -360,8 +359,19 @@ class DecisionExecutionEngine(object):
 
      
     # evaluated one decision node calculation 
-    def evaluate_decision_node_method(self):
-        # TODO: calculate the signature of the method to invoke
+    def evaluate_decision_node_method(self, decision_node, thread_data, thread_environment):
+        if not DN_MIT_SIGNATURE in decision_node:
+            # TODO: we should log that this is an incoplete model
+            # TODO: we should raise an exception instead of returning
+            # TODO: maybe add that to the thread errors list
+            return None, None
+        
+        # calculate the signature of the method to invoke
+        method_name, method_parameters = self.parse_node_mit_signature(decision_node[DN_MIT_SIGNATURE])
+        
+        if method_name is None:
+            # problem is for a MIT Node, there should be a real signature, even when it is nop() or so.
+            return None, None
         
         # TODO: use the trhead eviromnent to prepare the proper method call
         # TODO: import stuff and such...
@@ -369,12 +379,12 @@ class DecisionExecutionEngine(object):
         # TODO: invoke methods / a.k.a. eval
         
         # TODO: check the result value for existence otherwise return neutral value 
-        pass
+        return None, None
 
     
     # TODO: parse node MIT signature 
     def parse_node_mit_signature(self, node_mit_signature:str):
-        return
+        return None, None
     
     # TODO: parse node HIT signature    
     def parse_node_hit_signature(self, node_hit_signature:str):

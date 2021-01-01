@@ -89,10 +89,31 @@ class DecisionExecutionEngine(object):
         return thread_uuid
 
 
-    def build_start_environment(self, model_start_environment):
-        # TODO: parse model_start_environment
-        # TODO: create the start environment from the parsed model_start_environment
-        return {}
+    def build_start_environment(self, model_start_environment:str):
+        model_start_environment = model_start_environment.strip()
+        
+        if not model_start_environment:
+            return {}
+        
+        start_environment = {}
+        
+        # parse model_start_environment
+        splitted_model_start_environment = model_start_environment.split(";")
+        for assignment_expresssion in splitted_model_start_environment:
+            assignment_expresssion = assignment_expresssion.strip()
+            
+            if not assignment_expresssion:
+                continue
+            
+            left_expression, right_expression = assignment_expresssion.split("=",2)
+            
+            # Because there is no thread data available at this moment, we can not provide any 
+            left = self.convert_single_method_parameter(left_expression, None)
+            right = self.convert_single_method_parameter(right_expression, None)
+            
+            start_environment[left] = right
+        
+        return start_environment
     
     
     # ended according to the plan (e.g. end-node reached)
@@ -507,7 +528,11 @@ class DecisionExecutionEngine(object):
         elif parameter_info.startswith("env."):
             # we can currently not subindex, but this should be possible in future (ato de) 
             key = parameter_info[len("env."):]
-            return thread_environment[DTE_RTE_DATA][key]
+            if thread_environment is None:
+                return key
+            else:
+                value = thread_environment[DTE_RTE_DATA][key]
+            return value
         # thread data, is there something interesting ? 
         elif parameter_info.startswith("thread."):
             # maybe later implement access to thread data (ato de)

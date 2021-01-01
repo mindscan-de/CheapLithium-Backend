@@ -92,6 +92,7 @@ class DecisionModel(object):
             DM_VERSION: version, 
             DM_DESCRIPTION: description, 
             DM_STARTNODE: startnode[DN_UUID],
+            DM_START_ENVIRONMENT: "",
             DM_NODES: [startnode, endnode]}
         
         self.__inMemoryDatabase[dmUuid] = decisionModel

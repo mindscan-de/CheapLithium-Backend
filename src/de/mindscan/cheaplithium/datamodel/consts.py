@@ -31,13 +31,14 @@ SOFTWARE.
 # -----------------------------------------
 
 # Internal Model of the Decision Model
-DM_NODES       = 'nodes'
-DM_NAME        = 'name'
-DM_UUID        = 'uuid'
-DM_DISPLAYNAME = 'displayname'
-DM_DESCRIPTION = 'description'
-DM_STARTNODE   = 'startnode'
-DM_VERSION     = 'version'
+DM_NODES             = 'nodes'
+DM_NAME              = 'name'
+DM_UUID              = 'uuid'
+DM_DISPLAYNAME       = 'displayname'
+DM_DESCRIPTION       = 'description'
+DM_STARTNODE         = 'startnode'
+DM_VERSION           = 'version'
+DM_START_ENVIRONMENT = 'startenvironment'
 
 # Internal Model of the Decision Node
 DN_UUID             = 'uuid'

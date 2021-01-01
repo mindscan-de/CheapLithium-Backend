@@ -303,16 +303,18 @@ class DecisionExecutionEngine(object):
                 try:
                     result, result_data = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment)
                 except:
-                    e = sys.exc_info()[0]
-                    # ATTN: will update the thread_environment
-                    thread_environment = \
-                        self.__decisionThreadEnvironments.append_error_log_entry(
-                            environment_uuid, 
-                            'error', 
-                            'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]), 
-                            { 
-                                'exception':e
-                            })
+                    e,_,traceback = sys.exc_info()
+                    # TODO: problem here is, that the exception is not usefully serializable, and the attempt to log that will show another exception 
+                    print(e)
+                    #                     # ATTN: will update the thread_environment
+                    #                     thread_environment = \
+                    #                         self.__decisionThreadEnvironments.append_error_log_entry(
+                    #                             environment_uuid, 
+                    #                             'error', 
+                    #                             'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]), 
+                    #                             { 
+                    #                                 'exception':str(e)
+                    #                             })
                     continue
                 
                 if result is False:
@@ -394,7 +396,7 @@ class DecisionExecutionEngine(object):
     
     def invoke_mit_method(self, method_name, method_parameters, ):
         # TODO: import stuff and such...
-        # TODO: check method existence
+        # TODO: check method body existence
         # TODO: invoke methods / a.k.a. eval
         return None, None
         
@@ -414,7 +416,7 @@ class DecisionExecutionEngine(object):
             return  False
 
         # calculate the method to invoke and their parameters 
-        method_name, method_parameters_info = self.parse_guard_signature(transition[DNT_GUARD_SIGNATURE])
+        method_name, method_parameters_info, method_body = self.parse_guard_signature(transition[DNT_GUARD_SIGNATURE])
         
         if method_name is None:
             return False
@@ -427,9 +429,7 @@ class DecisionExecutionEngine(object):
 
         transition_data = {}
         if result is True:
-            # TODO: evaluate "method_body" and calculate transition_data
-            # also check if the method body template contains required data - should be calculated if result is true
-            pass
+            transition_data = self.evaluate_decision_node_transition_method_body(method_body, thread_data, thread_environment)
         
         return result, transition_data
     
@@ -441,31 +441,29 @@ class DecisionExecutionEngine(object):
     # transition.isGreater(a,b) {}
     # transition.isLess(a,b) {}
     def parse_guard_signature(self, guard_signature:str):
-        # More cool would be an EXPRESSION AST, but currently we don't need that mode of processing signatures
+        # Much more useful would be an EXPRESSION AST, but currently we don't need that mode of processing signatures
         # Because i would invoke a lexer which creates tokens and then parse the tokens to build the AST and return it
                 
         # Signature spliting: we only need something simple right now. 
-        result = re.match("(.*)\((.*)\).*", guard_signature)
+        result = re.match("(.*)\((.*?)\)(.*)", guard_signature)
         if result is None:
-            return None, None
+            return None, None, None
         
         transition_method = result.group(1)
         transition_method_parameters = result.group(2)
+        transition_method_body = result.group(3) 
         
         print("\ntransition method: {}".format(transition_method))
         print("\ntransition parameters: {}".format(transition_method_parameters))
+        print("\ntransition method body: {}".format(transition_method_body))
         
         # for methods with no parameters
         if not transition_method_parameters :
-            return transition_method, []
+            return transition_method, [], transition_method_body
         
         splitted_transition_method_parameters = transition_method_parameters.split(",")
         
-        # TODO: also parse the method "body", consider this as a data conversion layer, 
-        #       which is important for the data field of the transition, so data fields from the node calculation can
-        #       be taken over to the template content for the thread report.
-        
-        return transition_method, splitted_transition_method_parameters
+        return transition_method, splitted_transition_method_parameters, transition_method_body
     
     
     def convert_method_parameter_info(self, method_parameters_info, thread_environment):
@@ -520,3 +518,27 @@ class DecisionExecutionEngine(object):
         # invoke method
         result = func(*method_parameters)
         return result
+
+
+    def evaluate_decision_node_transition_method_body(self, method_body, thread_data, thread_environment):
+        # TODO: evaluate "method_body" and calculate transition_data
+        # also check if the method body template contains required data - should be calculated if result is true
+        
+        # TODO: also parse the method "body", consider this as a data conversion layer, 
+        #       which is important for the data field of the transition, so data fields from the node calculation can
+        #       be taken over to the template content for the thread report.
+        
+        parsed_method_body = self.parse_decision_nodetransition_method_body(method_body)
+        
+        # TODO: convert parsed method_body into
+        data = {} 
+
+        return data
+    
+    
+    def parse_decision_nodetransition_method_body(self, method_body):
+        # TODO: result should be a dictionary with keys being strings and values being strings, which will be
+        # evaluated by a replacement method. 
+        return {}
+    
+    

@@ -76,7 +76,6 @@ class DecisionThreadEnvironments(object):
                 'theOtherResult' : True,
                 'stringresultyes' : 'yes',
                 'stringresultno' : 'no',
-                'samplesize': 44
             }
         
         # mix the both environments, this will be rewritten later to rte_data = 

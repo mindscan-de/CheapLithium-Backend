@@ -304,17 +304,16 @@ class DecisionExecutionEngine(object):
                     result, result_data = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment)
                 except:
                     e,_,traceback = sys.exc_info()
-                    # TODO: problem here is, that the exception is not usefully serializable, and the attempt to log that will show another exception 
-                    print(e)
-                    #                     # ATTN: will update the thread_environment
-                    #                     thread_environment = \
-                    #                         self.__decisionThreadEnvironments.append_error_log_entry(
-                    #                             environment_uuid, 
-                    #                             'error', 
-                    #                             'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]), 
-                    #                             { 
-                    #                                 'exception':str(e)
-                    #                             })
+                    # ATTN: will update the thread_environment - 
+                    thread_environment = \
+                        self.__decisionThreadEnvironments.append_error_log_entry(
+                            environment_uuid, 
+                            'error', 
+                            'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]), 
+                            { 
+                                'exception':str(e),
+                                'traceback':str(traceback)
+                            })
                     continue
                 
                 if result is False:
@@ -521,6 +520,9 @@ class DecisionExecutionEngine(object):
 
 
     def evaluate_decision_node_transition_method_body(self, method_body, thread_data, thread_environment):
+        if not method_body:
+            return {}
+        
         # TODO: evaluate "method_body" and calculate transition_data
         # also check if the method body template contains required data - should be calculated if result is true
         

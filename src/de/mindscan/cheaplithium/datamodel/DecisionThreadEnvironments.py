@@ -66,21 +66,15 @@ class DecisionThreadEnvironments(object):
     def create_thread_environment(self, default_environment_data, thread_uuid):
         environment_uuid = str(uid.uuid4())
         
-        # TODO: processs the default environment when we are more sure about the future api
-        fake_rte_environment = {
+        # processs the default environment for a runtime thread
+        rte_default_environment = {
                 'thread_uuid' : thread_uuid,
                 'environment_uuid' : environment_uuid,
-                # We will use some of this data to implement some of the ideas and solutions 
-                # TODO: anyway this code should not be here.
-                'result' : True,
-                'theOtherResult' : True,
-                'stringresultyes' : 'yes',
-                'stringresultno' : 'no',
             }
         
         # mix the both environments, this will be rewritten later to rte_data = 
         rte_data = default_environment_data.copy();
-        rte_data.update( fake_rte_environment )
+        rte_data.update( rte_default_environment )
         
         environment = {
                 DTE_UUID : environment_uuid,
@@ -94,13 +88,13 @@ class DecisionThreadEnvironments(object):
         self.save_to_disk(environment_uuid)
         
         return environment_uuid
+
     
     def save_to_disk(self, environment_uuid):
         jsonfilepath = self.__datamodel_directory + environment_uuid + '.json'
         
         with open(jsonfilepath,"w") as json_target_file:
             json.dump(self.__inMemoryDatabase[environment_uuid], json_target_file,indent=2);
-
     
     
     def split_node_identifier(self, node_identifier):
@@ -125,6 +119,7 @@ class DecisionThreadEnvironments(object):
         self.save_to_disk(environment_uuid)
         
         return environment
+
     
     def append_error_log_entry(self, environment_uuid, log_level: str, log_message: str, log_data:dict):
         environment = self.select_thread_environment_by_uuid(environment_uuid)
@@ -146,4 +141,5 @@ class DecisionThreadEnvironments(object):
     def update_decision_environment_by_uuid(self, environment_uuid:str, environment_data:dict):
         self.__inMemoryDatabase[environment_uuid] = environment_data
         self.save_to_disk(environment_uuid)
+
         

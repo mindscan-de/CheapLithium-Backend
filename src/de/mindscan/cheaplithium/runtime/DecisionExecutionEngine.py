@@ -62,6 +62,8 @@ class DecisionExecutionEngine(object):
     ## started.
     ## ( thread_uuid:str=None ) currently omitted 
     ##
+
+    
     def start_decision_thread_by_model_uuid(self, dmuuid:str, ticketreference:str=''):
         # read the model
         model = self.__decisionModels.select_decision_model_by_uuid(dmuuid)
@@ -69,20 +71,30 @@ class DecisionExecutionEngine(object):
         if model is None:
             return None
         
-        # TODO: M.100 read default environment from model, and unserialize it
-        # TODO: M.100 read special environment
+        # read default environment / non interactive envinroment from model, and unserialize it
+        model_start_environment = model[DM_START_ENVIRONMENT]
+        
         # TODO: M.100 identify data to be filled out, and check completeness 
         # TODO: M.100 if error while model runtime data calculation, return without creating a thread
         # TODO: M.100 merge the defaultenvironment and the individual thread environment, special data wins
         # TODO: M.100 insert/create thread, TODO: RUNTIME_ENVIRONMENT : the environment....
         
+        start_environment = self.build_start_environment(model_start_environment)
+        
         # create the thread
         thread_uuid = self.__decisionThreads.create_decision_thread_internal(dmuuid, model[DM_STARTNODE], ticketreference)
-        thread_environment_uuid = self.__decisionThreadEnvironments.create_thread_environment({}, thread_uuid)
+        thread_environment_uuid = self.__decisionThreadEnvironments.create_thread_environment(start_environment, thread_uuid)
         self.__decisionThreads.set_fk_environment_uuid_for_thread_uuid(thread_uuid, thread_environment_uuid)
         
         return thread_uuid
 
+
+    def build_start_environment(self, model_start_environment):
+        # TODO: parse model_start_environment
+        # TODO: create the start environment from the parsed model_start_environment
+        return {}
+    
+    
     # ended according to the plan (e.g. end-node reached)
     def stop_decision_thread(self, thread_uuid):
         thread_data = self.__decisionThreads.select_decision_thread_by_uuid(thread_uuid)

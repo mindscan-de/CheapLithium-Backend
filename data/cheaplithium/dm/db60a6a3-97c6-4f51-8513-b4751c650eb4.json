@@ -5,7 +5,7 @@
   "version": "1.0",
   "description": "Often the hardest part of solving a machine learning problem can be finding the right estimator for the job.\r\nDifferent estimators are better suited for different types of data and differen problems.\r\nThe decision tree is designed to give the user a bit of a rough guide on how to approach problems with regard to which estimators to try on your data.",
   "startnode": "DN_fba9cd0f-918a-4ce1-9b60-c53a32cef298",
-  "startenvironment":"",
+  "startenvironment":"env.samplesize=44;",
   "nodes": [
     {
       "uuid": "DN_fba9cd0f-918a-4ce1-9b60-c53a32cef298",

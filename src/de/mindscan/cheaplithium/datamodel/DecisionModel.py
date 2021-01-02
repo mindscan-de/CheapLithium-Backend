@@ -145,6 +145,10 @@ class DecisionModel(object):
         decisionModel[DM_DESCRIPTION] = description
         decisionModel[DM_VERSION] = version
 
+    def update_start_configuration(self, uuid, startnode, startenvironment):
+        decisionModel = self.__inMemoryDatabase[uuid]
+        decisionModel[DM_STARTNODE] = startnode
+        decisionModel[DM_START_ENVIRONMENT] = startenvironment
     
     # TODO: refactor that into file backend (later).
     def persist_decision_model_internal(self, dmuuid):
@@ -200,6 +204,8 @@ class DecisionModel(object):
             if transition[DNT_NAME] == transition_name:
                 return transition
         return None
+
+    
 
 
 

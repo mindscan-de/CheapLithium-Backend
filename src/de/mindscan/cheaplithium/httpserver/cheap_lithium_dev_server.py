@@ -217,6 +217,17 @@ async def update_decision_model(uuid: str = Form(...), name:str = Form(...),  di
     
     return create_successful_uuid_result(uuid)
 
+@app.post("/CheapLithium/rest/updateDecisionModelStartData")
+async def update_decision_model_start_configuration(uuid:str=Form(...), startnode:str=Form(...), startenvironment:str=Form("")):
+    uuid = validate_uuid( strip_uuid(uuid))
+    
+    if decisionModels.isInDatabase(uuid):
+        decisionModels.update_start_configuration(uuid, startnode, startenvironment)
+    else:
+        raise HTTPException(status_code=404, detail="UUID not in database")
+    
+    return create_successful_uuid_result(uuid)
+
 @app.get("/CheapLithium/rest/exportModelXGML/{uuid}")
 def export_model_as_xgml(uuid:str):
     uuid = validate_uuid( strip_uuid(uuid) )

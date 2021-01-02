@@ -57,12 +57,30 @@ base more accessible to be used.
 * starting 2020, December 28th
 * finishing approximately 2021, late January
 
-The goal of the third epoch is to finish the decision execution engine. What does this mean? Develop a
-proof-of-concept for the manipulation of the thread environment data and use it for making automated 
-decisions on transitions from one node to the next node.
+As of 2021, january 2nd speaking,
+
+The third epochs goal was to implement major parts of the decision execution engine. We are now able
+to store a default environment for a model, have thread environment data, and are able to access these
+values. We are also able to execute the transition methods (lets call them guards), evaluate their 
+outcome and provide extra data for the report, collected from the environment. The transitions can 
+be evaluated by considering runtime values found in the runtime environment data of the thread. An
+invocation of the guard-method can have zero or more input parameters.
+
+Also the default thread start environment is calculated and used when a thread is started. 
+
+* starting 2021, January 03rd
+* finishing approximately 2021, late January
 
 Also develop the interfaces required to not only automatically process the transitions, but also everything 
 what is required to process machine intelligent decision nodes, as well as human intelligent decision 
 nodes.
 
- 
+
+# Fourth Epoch (???)
+
+There are quite a few things how this project can be developed further. Rewriting the runtime execution
+parsing to use ASTs would be a huge step forward, since it allows better developement of models in the
+browser as well as in the backend. Anyways a better user experience is also a way to go to next. Also 
+better report generation and presentation capabilities is one of the next options we can take. It looks
+like the project will enter some kind of maintenance mode with eproch number 4. The heavy lifting seems
+to be done.

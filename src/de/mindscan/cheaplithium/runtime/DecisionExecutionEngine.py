@@ -28,6 +28,7 @@ SOFTWARE.
 import re
 import importlib
 import sys
+import traceback
 
 # import the data model column names / property names
 from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
@@ -336,17 +337,19 @@ class DecisionExecutionEngine(object):
                 try:
                     result, result_data = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment)
                 except:
-                    e,_,traceback = sys.exc_info()
+                    e,_,trace = sys.exc_info()
+                    print(e)
+                    print(trace)
                     # ATTN: will update the thread_environment - 
-                    thread_environment = \
-                        self.__decisionThreadEnvironments.append_error_log_entry(
-                            environment_uuid, 
-                            'error', 
-                            'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]), 
-                            { 
-                                'exception':str(e),
-                                'traceback':str(traceback)
-                            })
+#                     thread_environment = \
+#                         self.__decisionThreadEnvironments.append_error_log_entry(
+#                             environment_uuid, 
+#                             'error', 
+#                             'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]), 
+#                             { 
+#                                 'exception':str(e),
+#                                 'traceback':str(''.join(traceback.format_stack(trace)))
+#                             })
                     continue
                 
                 if result is False:
@@ -532,7 +535,7 @@ class DecisionExecutionEngine(object):
                 return key
             else:
                 value = thread_environment[DTE_RTE_DATA][key]
-            return value
+                return value
         # thread data, is there something interesting ? 
         elif parameter_info.startswith("thread."):
             # maybe later implement access to thread data (ato de)
@@ -556,28 +559,36 @@ class DecisionExecutionEngine(object):
         return result
 
 
-    def evaluate_decision_node_transition_method_body(self, method_body, thread_data, thread_environment):
+    def evaluate_decision_node_transition_method_body(self, method_body:str, thread_data:dict, thread_environment:dict):
         if not method_body:
             return {}
+
+        # remove the outer brackets        
+        result = re.match(".*\{(.*)\}.*", method_body)
+        parsed_method_body = self.parse_decision_nodetransition_method_body(result.group(1).strip())
         
-        # TODO: evaluate "method_body" and calculate transition_data
-        # also check if the method body template contains required data - should be calculated if result is true
-        
-        # TODO: also parse the method "body", consider this as a data conversion layer, 
-        #       which is important for the data field of the transition, so data fields from the node calculation can
-        #       be taken over to the template content for the thread report.
-        
-        parsed_method_body = self.parse_decision_nodetransition_method_body(method_body)
-        
-        # TODO: convert parsed method_body into
-        data = {} 
+        data = {}
+        for key, value in parsed_method_body.items():
+            data[key] = self.convert_single_method_parameter(value, thread_environment)
+            pass
 
         return data
     
     
-    def parse_decision_nodetransition_method_body(self, method_body):
-        # TODO: result should be a dictionary with keys being strings and values being strings, which will be
-        # evaluated by a replacement method. 
-        return {}
+    def parse_decision_nodetransition_method_body(self, method_body:str):
+        result = {}
+        splitted_method_body = method_body.split(";")
+        
+        for assignment_expression in splitted_method_body:
+            if not assignment_expression or not assignment_expression.strip():
+                continue
+            
+            left_expression, right_expression = assignment_expression.split("=",2)
+            left = left_expression.strip()
+            right = right_expression.strip()
+            
+            result[left] = right
+        
+        return result
     
     

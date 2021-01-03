@@ -49,6 +49,7 @@ DN_TYPE_START       = 'start'
 DN_TYPE_HIT         = 'hit'
 DN_TYPE_MIT         = 'mit'
 DN_TYPE_SYNC        = 'sync'
+DN_NODEACTION       = 'nodeaction'
 DN_KBARTICLE        = 'kbarticle'
 DN_NEXTACTIONS      = 'nextactions'
 # ??? maybe this maybe otherway around - let's see later

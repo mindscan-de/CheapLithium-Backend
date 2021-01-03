@@ -106,7 +106,11 @@ def validate_uuid(uuid):
     except:
         raise HTTPException(status_code=404, detail="Invalid uuid")
 
-
+def verify_dm_uuid(uuid):
+    if not decisionModels.isInDatabase(uuid):
+        raise HTTPException(status_code=404, detail="UUID not in database")
+    
+    return uuid
 # --------------------------------------
 # API-Webserver "code" - 
 # --------------------------------------
@@ -149,12 +153,9 @@ async def create_decision_node (name:str = Form(...), exectype:str = Form(...),
 
 @app.post("/CheapLithium/rest/persistDecisionModel")
 async def persist_decision_model ( uuid: str = Form(...)):
-    dmuuid = validate_uuid( strip_uuid(uuid) )
-    
-    if decisionModels.isInDatabase(dmuuid):
-        decisionModels.persist_decision_model_internal(dmuuid)
-    else:
-        raise HTTPException(status_code=404, detail="UUID not in database")
+    dmuuid = verify_dm_uuid ( validate_uuid( strip_uuid(uuid) ) )
+
+    decisionModels.persist_decision_model_internal(dmuuid)
         
     return create_successful_uuid_result(dmuuid)
 
@@ -168,12 +169,9 @@ async def get_decision_model_list():
 async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form(...), transition:str=Form(...)):
     transitionObject = json.loads(transition)
     
-    uuid = validate_uuid( strip_uuid(uuid) )
+    uuid = verify_dm_uuid( validate_uuid( strip_uuid(uuid) ) )
     
-    if decisionModels.isInDatabase(uuid):
-        decisionModels.insert_decision_node_transition_internal(uuid, dnuuid,  transitionObject)
-    else:
-        raise HTTPException(status_code=404, detail="UUID not in database")
+    decisionModels.insert_decision_node_transition_internal(uuid, dnuuid,  transitionObject)
     
     return create_successful_uuid_result(uuid)
 
@@ -182,24 +180,18 @@ async def insert_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
 async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form(...), index:int=Form(...), transition:str=Form(...)):
     transitionObject = json.loads(transition)
 
-    uuid = validate_uuid( strip_uuid(uuid) )
+    uuid = verify_dm_uuid( validate_uuid( strip_uuid(uuid) ) )
     
-    if decisionModels.isInDatabase(uuid):
-        decisionModels.update_decision_node_transitrion_internal(uuid, dnuuid, index, transitionObject)
-    else:
-        raise HTTPException(status_code=404, detail="UUID not in database")
+    decisionModels.update_decision_node_transitrion_internal(uuid, dnuuid, index, transitionObject)
     
     return create_successful_uuid_result(uuid)
           
 
 @app.post("/CheapLithium/rest/updateDecisionNode")
 async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:str=Form(...), exectype:str=Form(...), kbarticle:str=Form(""), nodeaction:str=Form("")):
-    uuid = validate_uuid( strip_uuid(uuid) )
+    uuid = verify_dm_uuid( validate_uuid( strip_uuid(uuid) ) )
     
-    if decisionModels.isInDatabase(uuid):
-        decisionModels.update_decision_node_internal(uuid, dnuuid, name, exectype, kbarticle, nodeaction)
-    else:
-        raise HTTPException(status_code=404, detail="UUID not in database")
+    decisionModels.update_decision_node_internal(uuid, dnuuid, name, exectype, kbarticle, nodeaction)
         
     return create_successful_uuid_result(uuid)
 
@@ -208,23 +200,17 @@ async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:s
 async def update_decision_model(uuid: str = Form(...), name:str = Form(...),  displayname:str=Form(...), 
     description:str=Form(...), version:str = Form(...)):
     
-    uuid = validate_uuid( strip_uuid(uuid) )
+    uuid = verify_dm_uuid( validate_uuid( strip_uuid(uuid) ) )
     
-    if decisionModels.isInDatabase(uuid):
-        decisionModels.update_decision_model_internal(uuid, name, displayname, description, version)
-    else:
-        raise HTTPException(status_code=404, detail="UUID not in database")
+    decisionModels.update_decision_model_internal(uuid, name, displayname, description, version)
     
     return create_successful_uuid_result(uuid)
 
 @app.post("/CheapLithium/rest/updateDecisionModelStartData")
 async def update_decision_model_start_configuration(uuid:str=Form(...), startnode:str=Form(...), startenvironment:str=Form("")):
-    uuid = validate_uuid( strip_uuid(uuid))
+    uuid = verify_dm_uuid( validate_uuid( strip_uuid(uuid)) )
     
-    if decisionModels.isInDatabase(uuid):
-        decisionModels.update_start_configuration(uuid, startnode, startenvironment)
-    else:
-        raise HTTPException(status_code=404, detail="UUID not in database")
+    decisionModels.update_start_configuration(uuid, startnode, startenvironment)
     
     return create_successful_uuid_result(uuid)
 

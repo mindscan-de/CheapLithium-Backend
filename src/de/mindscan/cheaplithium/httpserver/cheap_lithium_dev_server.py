@@ -193,10 +193,8 @@ async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
           
 
 @app.post("/CheapLithium/rest/updateDecisionNode")
-async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:str=Form(...), exectype:str=Form(...), kbarticle:str=Form("")):
+async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:str=Form(...), exectype:str=Form(...), kbarticle:str=Form(""), nodeaction:str=Form("")):
     uuid = validate_uuid( strip_uuid(uuid) )
-    
-    nodeaction = ''
     
     if decisionModels.isInDatabase(uuid):
         decisionModels.update_decision_node_internal(uuid, dnuuid, name, exectype, kbarticle, nodeaction)

@@ -400,14 +400,14 @@ class DecisionExecutionEngine(object):
      
     # evaluated one decision node calculation 
     def evaluate_decision_node_method(self, decision_node, thread_data, thread_environment):
-        if not DN_MIT_SIGNATURE in decision_node:
+        if not DN_NODEACTION in decision_node:
             # TODO: we should log that this is an incoplete model
             # TODO: we should raise an exception instead of returning
             # TODO: maybe add that to the thread errors list
             return None, None
         
         # calculate the signature of the method to invoke
-        method_name, method_parameters_info = self.parse_node_mit_signature(decision_node[DN_MIT_SIGNATURE])
+        method_name, method_parameters_info = self.parse_node_mit_signature(decision_node[DN_NODEACTION])
         
         if method_name is None:
             # problem is for a MIT Node, there should be a real signature, even when it is nop() or so.

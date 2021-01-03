@@ -52,9 +52,6 @@ DN_TYPE_SYNC        = 'sync'
 DN_NODEACTION       = 'nodeaction'
 DN_KBARTICLE        = 'kbarticle'
 DN_NEXTACTIONS      = 'nextactions'
-# ??? maybe this maybe otherway around - let's see later
-DN_MIT_SIGNATURE    = 'mitaction'
-DN_HIT_SIGNATURE    = 'hitaction' 
 
 # Internal Model of the Decision Node Transition
 DNT_NAME            = 'name'

@@ -338,18 +338,16 @@ class DecisionExecutionEngine(object):
                     result, result_data = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment)
                 except:
                     e,_,trace = sys.exc_info()
-                    print(e)
-                    print(trace)
                     # ATTN: will update the thread_environment - 
-#                     thread_environment = \
-#                         self.__decisionThreadEnvironments.append_error_log_entry(
-#                             environment_uuid, 
-#                             'error', 
-#                             'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]), 
-#                             { 
-#                                 'exception':str(e),
-#                                 'traceback':str(''.join(traceback.format_stack(trace)))
-#                             })
+                    thread_environment = \
+                        self.__decisionThreadEnvironments.append_error_log_entry(
+                            environment_uuid, 
+                            'error', 
+                            'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]), 
+                            { 
+                                'exception':str(e),
+                                'traceback':str(''.join(traceback.format_stack(trace)))
+                            })
                     continue
                 
                 if result is False:

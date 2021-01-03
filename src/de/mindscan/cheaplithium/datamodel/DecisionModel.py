@@ -64,7 +64,8 @@ class DecisionModel(object):
         decisionNode = {
             DN_UUID: 'DN_' + dnUuid, 
             DN_NAME: dnname , 
-            DN_TYPE: dntype , 
+            DN_TYPE: dntype ,
+            DN_NODEACTION: '',            
             DN_KBARTICLE: kbarticle ,
             DN_NEXTACTIONS: []}
         
@@ -129,12 +130,13 @@ class DecisionModel(object):
                 decisionNode[DN_NEXTACTIONS][index] = transitionObject
                 return
 
-    def update_decision_node_internal(self, uuid, dnuuid, name, exectype, kbarticle):
+    def update_decision_node_internal(self, uuid, dnuuid, name, exectype, kbarticle, nodeaction):
         decisionModel = self.__inMemoryDatabase[uuid]
         for decisionNode in decisionModel[DM_NODES]:
             if decisionNode[DN_UUID] == dnuuid:
                 decisionNode[DN_NAME] = name
                 decisionNode[DN_TYPE] = exectype
+                decisionNode[DN_NODEACTION] = nodeaction
                 decisionNode[DN_KBARTICLE] = kbarticle
                 return
 

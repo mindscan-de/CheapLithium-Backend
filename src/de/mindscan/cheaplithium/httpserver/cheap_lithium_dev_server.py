@@ -196,8 +196,10 @@ async def update_decision_node_transition(uuid: str = Form(...), dnuuid:str=Form
 async def update_decision_node( uuid:str=Form(...), dnuuid:str=Form(...), name:str=Form(...), exectype:str=Form(...), kbarticle:str=Form("")):
     uuid = validate_uuid( strip_uuid(uuid) )
     
+    nodeaction = ''
+    
     if decisionModels.isInDatabase(uuid):
-        decisionModels.update_decision_node_internal(uuid, dnuuid, name, exectype, kbarticle)
+        decisionModels.update_decision_node_internal(uuid, dnuuid, name, exectype, kbarticle, nodeaction)
     else:
         raise HTTPException(status_code=404, detail="UUID not in database")
         

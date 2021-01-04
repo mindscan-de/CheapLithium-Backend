@@ -313,8 +313,11 @@ class DecisionExecutionEngine(object):
             
             #TODO: thread_data should get a column 'lastcompute' having a timestamp
             #  fill lastcompute
+            # TODO: this is a crude hack, should be better (but do later)
+            if result is not None and 'result' in result:
+                #TODO: update contents of the threadenvironment
+                thread_environment[DTE_RTE_DATA]['result']=result['result']
             
-            #TODO: update contents of the threadenvironment
             #TODO: maybe we have to rethink that... we should not override the environment this way.
             self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
             
@@ -428,10 +431,18 @@ class DecisionExecutionEngine(object):
     
     
     def invoke_mit_method(self, method_name, method_parameters, ):
-        # TODO: import stuff and such...
-        # TODO: check method body existence
-        # TODO: invoke methods / a.k.a. eval
-        return None, None
+        # load a predefined package + module 
+        vm_transitions_module = importlib.import_module('.common', package='de.mindscan.cheaplithium.vm')
+        
+        # find the function - it will raise an exception if method_name doesn't exist
+        func = getattr(vm_transitions_module, method_name)
+        # print("\nfunc: {}".format(func))
+        
+        # invoke method
+        result = func(*method_parameters)
+
+        # return result, result and data separate?
+        return result, {}
         
     
     # TODO: parse node HIT signature    

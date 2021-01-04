@@ -19,7 +19,8 @@
           "template": "h4. Start Analysis",
           "guard": "always()"
         }
-      ]
+      ],
+      "nodeaction": "nop() {}"
     },
     {
       "uuid": "DN_b9f67ac9-17ff-443f-8af9-48457b83ccaf",
@@ -30,16 +31,17 @@
         {
           "name": "outcome1",
           "next": "DN_a9507347-a3dc-41ce-bf55-6378898d30ab",
-          "template": "We could find that {text}...",
-          "guard": "isTrue(False)"
+          "template": "We could find that the calculated value was below 50, which means that the threshold of 50 was not exceeded.",
+          "guard": "isLessThan(env.result,50) {}"
         },
         {
           "name": "outcome2",
           "next": "DN_2f50f8f1-46f9-4682-a43a-2b65a59f638e",
-          "template": "We could not find that {operation} happened.",
-          "guard": "isFalse(False)"
+          "template": "We could identify that the threshold was reached or exceeded. You should be careful, with such values.",
+          "guard": "isGreaterThanOrEqual(env.result, 50) {}"
         }
-      ]
+      ],
+      "nodeaction": "calculateNumberOfSamples(5) {}"
     },
     {
       "uuid": "DN_a9507347-a3dc-41ce-bf55-6378898d30ab",

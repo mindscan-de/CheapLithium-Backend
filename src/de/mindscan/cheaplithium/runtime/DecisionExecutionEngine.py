@@ -314,7 +314,7 @@ class DecisionExecutionEngine(object):
             #TODO: thread_data should get a column 'lastcompute' having a timestamp
             #  fill lastcompute
             # TODO: this is a crude hack, should be better (but do later)
-            if result is not None and 'result' in result:
+            if (result is not None) and ('result' in result):
                 #TODO: update contents of the threadenvironment
                 thread_environment[DTE_RTE_DATA]['result']=result['result']
             
@@ -391,6 +391,7 @@ class DecisionExecutionEngine(object):
             pass
         # endif wait for transit
         pass
+
     
     def strip_uuid(self, uuid):
         if(uuid.startswith("DM_") or uuid.startswith("DN_")) :
@@ -418,24 +419,38 @@ class DecisionExecutionEngine(object):
         
         method_parameters = self.convert_method_parameter_info(method_parameters_info, thread_environment)
         
-        result, result_data = self.invoke_mit_method(self, method_name, method_parameters)
+        result, result_data = self.invoke_mit_method(method_name, method_parameters)
         
         # TODO: evaluate the "method body" of the MIT-signature
         # TODO: We might now return also an update packet wor the environment? 
         return result, result_data
 
-    
+
     # TODO: parse node MIT signature 
     def parse_node_mit_signature(self, node_mit_signature:str):
-        return None, None
+        
+        result = re.match("(.*)\((.*?)\)(.*)", node_mit_signature)
+        if result is None:
+            return None, None
+        
+        transition_method = result.group(1)
+        transition_method_parameters = result.group(2)
+        transition_method_body = result.group(3) 
+        
+        if not transition_method_parameters :
+            return transition_method, []
+
+        splitted_transition_method_parameters = transition_method_parameters.split(",")
+        
+        return transition_method, splitted_transition_method_parameters
     
     
-    def invoke_mit_method(self, method_name, method_parameters, ):
+    def invoke_mit_method(self, method_name, method_parameters ):
         # load a predefined package + module 
-        vm_transitions_module = importlib.import_module('.common', package='de.mindscan.cheaplithium.vm')
+        vm_common_module = importlib.import_module('.common', package='de.mindscan.cheaplithium.vm')
         
         # find the function - it will raise an exception if method_name doesn't exist
-        func = getattr(vm_transitions_module, method_name)
+        func = getattr(vm_common_module, method_name)
         # print("\nfunc: {}".format(func))
         
         # invoke method
@@ -457,13 +472,13 @@ class DecisionExecutionEngine(object):
     
     def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
         if not DNT_GUARD_SIGNATURE in transition:
-            return  False
+            return  False, {}
 
         # calculate the method to invoke and their parameters 
         method_name, method_parameters_info, method_body = self.parse_guard_signature(transition[DNT_GUARD_SIGNATURE])
         
         if method_name is None:
-            return False
+            return False, {}
         
         # convert the parameters to their correct type and such
         method_parameters = self.convert_method_parameter_info(method_parameters_info, thread_environment)

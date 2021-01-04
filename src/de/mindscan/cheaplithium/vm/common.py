@@ -37,7 +37,7 @@ def nop():
     attribute logdata to the thread. 
     '''
     print("Invoked Node: nop()")
-    return {'result':None}
+    return None
 
 def foo():
     print("Invoked Node: foo()")

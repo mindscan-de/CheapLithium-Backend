@@ -70,6 +70,7 @@ class DecisionThreadEnvironments(object):
         rte_default_environment = {
                 'thread_uuid' : thread_uuid,
                 'environment_uuid' : environment_uuid,
+                'result' : None
             }
         
         # mix the both environments, this will be rewritten later to rte_data = 

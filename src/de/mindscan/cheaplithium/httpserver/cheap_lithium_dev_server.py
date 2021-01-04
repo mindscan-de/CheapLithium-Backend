@@ -216,14 +216,13 @@ async def update_decision_model_start_configuration(uuid:str=Form(...), startnod
 
 @app.get("/CheapLithium/rest/exportModelXGML/{uuid}")
 def export_model_as_xgml(uuid:str):
-    uuid = validate_uuid( strip_uuid(uuid) )
+    uuid = verify_dm_uuid( validate_uuid( strip_uuid(uuid) ) )
     
-    if decisionModels.isInDatabase(uuid):
-        generator = ExportModelGenerator(decisionModels)
-        fullpath = generator.exportAsYEDML(uuid)
-        if os.path.isfile(fullpath):
-            _, file_name = os.path.split(fullpath)
-            return FileResponse(fullpath,media_type='application/octet-stream',filename=file_name)
+    generator = ExportModelGenerator(decisionModels)
+    fullpath = generator.exportAsYEDML(uuid)
+    if os.path.isfile(fullpath):
+        _, file_name = os.path.split(fullpath)
+        return FileResponse(fullpath,media_type='application/octet-stream',filename=file_name)
     
     raise HTTPException(status_code=404, detail="Item not found")
     

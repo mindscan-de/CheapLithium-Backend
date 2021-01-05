@@ -206,9 +206,19 @@ class DecisionExecutionEngine(object):
         if thread_data[DT_CURRENTSTATE] == RT_STATE_BLOCKED:
             return
         
+        # for cycle detection
+        traversed_nodes = []
         
         running = True
         while running is True:
+            
+            # Loop detection, if loop: then break this cycle.
+            current_node = thread_data[DT_CURRENTNODE]
+            if current_node not in traversed_nodes:
+                traversed_nodes.append(current_node)
+            else:
+                break
+            
             # run the current node
             self.process_single_decision_node(thread_uuid)
             

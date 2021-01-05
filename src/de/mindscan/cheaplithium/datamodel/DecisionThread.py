@@ -89,6 +89,11 @@ class DecisionThread(object):
         
         return threadUuid
     
+    
+    def isInDatabase(self, uuid):
+        return uuid in self.__inMemoryDatabase
+
+    
     ## ATTENTION this is not for public use, i will refactor it 
     ## when the decision engine workd
     ## TODO: add update modified date...

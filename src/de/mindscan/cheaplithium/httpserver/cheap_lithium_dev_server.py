@@ -285,6 +285,18 @@ async def get_decision_thread_report(uuid:str):
         return result 
     
 
+@app.post("/CheapLithium/rest/retryDecisionThread")
+async def retry_decision_thread(uuid:str=Form(...)):
+    thread_uuid = validate_uuid( strip_uuid( uuid ) )
+    
+    if not decisionThreads.isInDatabase(thread_uuid):
+        raise HTTPException(status_code=404, detail="UUID not in database")
+    
+    decisionExecutionEngine.process_single_decision_thread( thread_uuid )
+    
+    return create_successful_uuid_result( thread_uuid )
+
+
 ##
 ##
 ## KnowledgeBase-Articles

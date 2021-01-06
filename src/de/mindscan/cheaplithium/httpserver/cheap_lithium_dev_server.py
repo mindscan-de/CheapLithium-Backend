@@ -309,7 +309,9 @@ async def get_decision_thread_current_user_input_interface(uuid:str = Form(...))
     # then we need a commit method, and then processHIT is called for this thread... 
     
     ## return empty user interface
-    return { 'uiInputInterface': [] }
+    return { 'uiInputInterface': [
+        {'label':'myLabel'}
+        ]}
 
 
 ##

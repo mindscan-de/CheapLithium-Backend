@@ -296,6 +296,21 @@ async def retry_decision_thread(uuid:str=Form(...)):
     
     return create_successful_uuid_result( thread_uuid )
 
+@app.post("/CheapLithium/rest/getDecisionThreadCurrentUserInterface")
+async def get_decision_thread_current_user_input_interface(uuid:str = Form(...)):
+    thread_uuid = validate_uuid( strip_uuid( uuid ) )
+    
+    if not decisionThreads.isInDatabase(thread_uuid):
+        raise HTTPException(status_code=404, detail="UUID not in database")
+
+    # now identify the current decision node and then calculate, whether it is a HIT node
+    # if HIT node, calculate the signature, then generate an interface description transferrable 
+    # by json, such that the interface is presented to the user, so the user can interact
+    # then we need a commit method, and then processHIT is called for this thread... 
+    
+    ## return empty user interface
+    return { 'uiInputInterface': [] }
+
 
 ##
 ##

@@ -57,8 +57,8 @@ class KnowledgeBaseArticles(object):
             KBA_PAGESUMMARY: pagesummary,
             KBA_PAGECONTENT: pagecontent,
             KBA_CREATED: str(time.time()),
-            KBA_REVISION: 1,
-            KBA_MODIFIED: ""
+            KBA_MODIFIED: "",
+            KBA_REVISION: 1
             }
         
         return article, kba_uuid

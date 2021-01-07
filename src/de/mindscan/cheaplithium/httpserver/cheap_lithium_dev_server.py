@@ -317,7 +317,12 @@ async def get_decision_thread_current_user_input_interface(uuid:str = Form(...))
                                 {
                                     'label':'myTextAreaLabel',
                                     'type':'textarea'
-                                }]}
+                                },
+                                {
+                                    'label':'myYesNoSelectionLabel',
+                                    'type':'yesnoselection'
+                                }
+                                  ]}
 
 ##
 ##

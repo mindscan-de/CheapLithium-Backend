@@ -25,3 +25,45 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+
+## TODO: DecisionLanguageLexxer will output tokens for an input string lexxer is based on regexes...
+## TODO: DecisionLanguageTokenzer will use the Lexxer to provide tokens
+
+## TODO: don't make it too fancy... for now i use regexes, but they aren't 
+##       sufficient enough, because i want to extract some information from 
+##       the AST, like input descriptions from the node, and transitiion 
+##       signatures....
+## TODO: also want to provide the users with help, and code completion later on. 
+
+class Literal(object):
+    pass
+
+# for nonfractional numbers    
+class Integer(Literal):
+    pass
+
+# for Strings
+class String(Literal):
+    pass
+
+# for true / false
+class Boolean(Literal):
+    pass
+
+# for None / Null
+class NONE(Literal):
+    pass
+
+# '=' 
+class Operator(object):
+    pass
+
+# ';', '.', ',', '(', ')'
+class Separator(object):
+    pass
+
+# Names of variables, methods, environments
+class Identifier(object):
+    pass
+
+

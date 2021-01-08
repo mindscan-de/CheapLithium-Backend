@@ -1,0 +1,23 @@
+{
+  "uuid": "e7b7faf1-01d6-4a1f-bc93-b1d0ccf7058f",
+  "thread_uuid": "edb17ce2-c7cc-42ed-984e-a167ad5e49d3",
+  "transitiondata": [
+    {
+      "transition": "db60a6a3-97c6-4f51-8513-b4751c650eb4::DN_fba9cd0f-918a-4ce1-9b60-c53a32cef298::always",
+      "timestamp": 1610131490.3245487,
+      "data": {}
+    },
+    {
+      "transition": "db60a6a3-97c6-4f51-8513-b4751c650eb4::DN_cefacc87-4d5f-48c9-9d85-9e64f829b570::more_than_50_samples",
+      "timestamp": 1610131490.3245487,
+      "data": {}
+    }
+  ],
+  "data": {
+    "samplesize": 55,
+    "thread_uuid": "edb17ce2-c7cc-42ed-984e-a167ad5e49d3",
+    "environment_uuid": "e7b7faf1-01d6-4a1f-bc93-b1d0ccf7058f",
+    "result": 55
+  },
+  "errorlog": []
+}

@@ -1,0 +1,16 @@
+{
+  "uuid": "ee4f22b6-aa42-416c-b0d8-a601f937d41a",
+  "environment": {
+    "uuid": "efcb3892-2ef9-4f46-898c-77af04a2135e"
+  },
+  "currentstate": "STOPPED",
+  "currentmodel": "0518f24f-41a0-4f13-b5f6-94a015b5b04c",
+  "currentnode": "DN_2f50f8f1-46f9-4682-a43a-2b65a59f638e",
+  "ticketreference": [
+    "XSSYMI-1823"
+  ],
+  "owner": "",
+  "created": "1610131276.5162492",
+  "modified": "",
+  "finalized": ""
+}

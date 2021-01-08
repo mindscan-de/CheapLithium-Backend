@@ -1,0 +1,16 @@
+{
+  "uuid": "edb17ce2-c7cc-42ed-984e-a167ad5e49d3",
+  "environment": {
+    "uuid": "e7b7faf1-01d6-4a1f-bc93-b1d0ccf7058f"
+  },
+  "currentstate": "BLOCKED",
+  "currentmodel": "db60a6a3-97c6-4f51-8513-b4751c650eb4",
+  "currentnode": "DN_d2d5eacc-3dba-456c-b8dc-62b58afd0e68",
+  "ticketreference": [
+    "XMSYMI-39742"
+  ],
+  "owner": "",
+  "created": "1610131490.3245487",
+  "modified": "",
+  "finalized": ""
+}

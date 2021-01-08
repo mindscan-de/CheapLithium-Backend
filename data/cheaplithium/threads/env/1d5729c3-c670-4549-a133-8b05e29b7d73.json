@@ -1,0 +1,30 @@
+{
+  "uuid": "1d5729c3-c670-4549-a133-8b05e29b7d73",
+  "thread_uuid": "d419e2f4-c5d3-4d48-aff7-33274f7f5f90",
+  "transitiondata": [
+    {
+      "transition": "db60a6a3-97c6-4f51-8513-b4751c650eb4::DN_fba9cd0f-918a-4ce1-9b60-c53a32cef298::always",
+      "timestamp": 1610131368.5162728,
+      "data": {}
+    },
+    {
+      "transition": "db60a6a3-97c6-4f51-8513-b4751c650eb4::DN_cefacc87-4d5f-48c9-9d85-9e64f829b570::less_than_or_equal_to_50_samples",
+      "timestamp": 1610131368.518273,
+      "data": {}
+    },
+    {
+      "transition": "db60a6a3-97c6-4f51-8513-b4751c650eb4::DN_c18f5206-d5aa-4c83-91ad-d41fa8e3d897::always",
+      "timestamp": 1610131368.520273,
+      "data": {
+        "numberOfSamples": 44
+      }
+    }
+  ],
+  "data": {
+    "samplesize": 44,
+    "thread_uuid": "d419e2f4-c5d3-4d48-aff7-33274f7f5f90",
+    "environment_uuid": "1d5729c3-c670-4549-a133-8b05e29b7d73",
+    "result": null
+  },
+  "errorlog": []
+}

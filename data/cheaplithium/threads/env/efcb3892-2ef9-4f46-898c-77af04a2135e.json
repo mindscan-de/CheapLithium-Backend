@@ -1,0 +1,22 @@
+{
+  "uuid": "efcb3892-2ef9-4f46-898c-77af04a2135e",
+  "thread_uuid": "ee4f22b6-aa42-416c-b0d8-a601f937d41a",
+  "transitiondata": [
+    {
+      "transition": "0518f24f-41a0-4f13-b5f6-94a015b5b04c::DN_559e9bf8-242e-4887-86fa-f3427647f1cb::_",
+      "timestamp": 1610131276.5202494,
+      "data": {}
+    },
+    {
+      "transition": "0518f24f-41a0-4f13-b5f6-94a015b5b04c::DN_b9f67ac9-17ff-443f-8af9-48457b83ccaf::outcome2",
+      "timestamp": 1610131276.5222495,
+      "data": {}
+    }
+  ],
+  "data": {
+    "thread_uuid": "ee4f22b6-aa42-416c-b0d8-a601f937d41a",
+    "environment_uuid": "efcb3892-2ef9-4f46-898c-77af04a2135e",
+    "result": 55
+  },
+  "errorlog": []
+}

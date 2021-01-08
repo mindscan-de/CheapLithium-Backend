@@ -312,15 +312,18 @@ async def get_decision_thread_current_user_input_interface(uuid:str = Form(...))
     return { 'uiInputInterface': [
                                 {
                                     'label':'myTextFieldLabel',
-                                    'type':'textfield'
+                                    'type':'textfield',
+                                    'description':'How was your experience using this product?'
                                 },
                                 {
                                     'label':'myTextAreaLabel',
-                                    'type':'textarea'
+                                    'type':'textarea',
+                                    'description':'Please drop the stack trace into this text area!'
                                 },
                                 {
                                     'label':'myYesNoSelectionLabel',
-                                    'type':'yesnoselection'
+                                    'type':'yesnoselection',
+                                    'description':'What about saying just "yes" or "no" now?'
                                 }
                                   ]}
 

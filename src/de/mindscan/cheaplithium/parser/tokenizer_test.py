@@ -111,6 +111,11 @@ class Test(unittest.TestCase):
         tokens = tokenizer.tokenize("9")
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Integer "9"'])
+
+    def testTokenize_OperatorAssign_expectOperatorAssign(self):
+        tokens = tokenizer.tokenize("=")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Operator "="'])
         
 
     def testTokenize_True_expectBooleanType(self):

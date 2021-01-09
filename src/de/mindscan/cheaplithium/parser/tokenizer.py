@@ -33,9 +33,31 @@ SOFTWARE.
 ##       sufficient enough, because i want to extract some information from 
 ##       the AST, like input descriptions from the node, and transitiion 
 ##       signatures....
-## TODO: also want to provide the users with help, and code completion later on. 
+## TODO: also want to provide the users with help, and code completion later on.
 
-class Literal(object):
+
+# This are the token types for the lithium language
+# A token has a value and has a tokentype, the tokentype
+
+# ####################################
+# Lithium Language Tokentypes
+# ####################################
+
+class LithiumToken(object):
+    def __init__(self, tokenValue):
+        self.token_value = tokenValue
+    
+    def __repr__(self):
+        return '%s "%s"'.format(self.__class__.__name__, self.token_value)
+    
+    def __str__(self):
+        return self.__repr__()
+
+
+class EndOfInput(LithiumToken):
+    pass
+
+class Literal(LithiumToken):
     pass
 
 # for nonfractional numbers    
@@ -46,24 +68,34 @@ class Integer(Literal):
 class String(Literal):
     pass
 
-# for true / false
 class Boolean(Literal):
-    pass
+    SETOF = set(['True', 'False'])
 
 # for None / Null
 class NONE(Literal):
     pass
 
-# '=' 
-class Operator(object):
-    pass
+class Operator(LithiumToken):
+    SETOF = set(['='])
 
-# ';', '.', ',', '(', ')'
-class Separator(object):
-    pass
+class Separator(LithiumToken):
+    SETOF = set([';', '.', ',', '(', ')'])
 
 # Names of variables, methods, environments
-class Identifier(object):
+class Identifier(LithiumToken):
     pass
 
+# ########################################
+# Lithium Language Tokenizer
+# ########################################
 
+def tokenize(code: str):
+    tokenizer = LithiumTokenizer()
+    return tokenizer.tokenize()
+
+class LithiumTokenizer(object):
+    def __init__(self):
+        pass
+    
+    def tokenize(self):
+        return None

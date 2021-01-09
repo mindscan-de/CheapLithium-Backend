@@ -90,12 +90,12 @@ class Identifier(LithiumToken):
 # ########################################
 
 def tokenize(code: str):
-    tokenizer = LithiumTokenizer()
+    tokenizer = LithiumTokenizer(code)
     return tokenizer.tokenize()
 
 class LithiumTokenizer(object):
-    def __init__(self):
-        pass
+    def __init__(self, code):
+        self.code = code
     
     def tokenize(self):
         return None

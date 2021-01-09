@@ -121,8 +121,7 @@ class LithiumTokenizer(object):
                 self.consumeWhitespaces()
                 continue
                 
-            
-            # TODO: comments?        
+            # TODO: ato de comments?        
             
             currentTokenType = None
             if(currentChar in Separator.SETOF):
@@ -145,8 +144,7 @@ class LithiumTokenizer(object):
         
             # the start of the new token is the end of the current token
             self.tokenstart = self.tokenend
-            
-        return None
+
 
     def isStartOfIdentifier(self, char):
         return re.match(r'^\w+$', char)

@@ -62,6 +62,55 @@ class Test(unittest.TestCase):
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Separator ")"'])
         
+    def testTokenize_IntegerZero_expectIntegerZero(self):
+        tokens = tokenizer.tokenize("0")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "0"'])
+
+    def testTokenize_IntegerOne_expectIntegerOne(self):
+        tokens = tokenizer.tokenize("1")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "1"'])
+
+    def testTokenize_IntegerTwo_expectIntegerTwo(self):
+        tokens = tokenizer.tokenize("2")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "2"'])
+        
+    def testTokenize_IntegerThree_expectIntegerThree(self):
+        tokens = tokenizer.tokenize("3")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "3"'])
+        
+    def testTokenize_IntegerFour_expectIntegerFour(self):
+        tokens = tokenizer.tokenize("4")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "4"'])
+
+    def testTokenize_IntegerFive_expectIntegerFive(self):
+        tokens = tokenizer.tokenize("5")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "5"'])
+
+    def testTokenize_IntegerSix_expectIntegerSix(self):
+        tokens = tokenizer.tokenize("6")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "6"'])
+
+    def testTokenize_IntegerSeven_expectIntegerSeven(self):
+        tokens = tokenizer.tokenize("7")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "7"'])
+
+    def testTokenize_IntegerEight_expectIntegerEight(self):
+        tokens = tokenizer.tokenize("8")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "8"'])
+
+    def testTokenize_IntegerNine_expectIntegerNine(self):
+        tokens = tokenizer.tokenize("9")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "9"'])
         
 
     def testTokenize_True_expectBooleanType(self):

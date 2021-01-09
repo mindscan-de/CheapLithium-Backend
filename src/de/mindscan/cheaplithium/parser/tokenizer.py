@@ -117,6 +117,8 @@ class LithiumTokenizer(object):
             currentTokenType = None
             if(currentChar in Separator.SETOF):
                 currentTokenType = Separator
+            elif(currentChar in '0123456789'):
+                currentTokenType = Integer
 
             # if we can not identify that particular token
             if(currentTokenType is None):

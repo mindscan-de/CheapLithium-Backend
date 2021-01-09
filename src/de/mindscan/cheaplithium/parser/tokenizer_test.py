@@ -52,15 +52,26 @@ class Test(unittest.TestCase):
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Separator ","'])
 
-    def testTokenize_SeparatorOpen_expectSeperatorOpen(self):
+    def testTokenize_SeparatorOpenParentheses_expectSeperatorOpen(self):
         tokens = tokenizer.tokenize("(")
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Separator "("'])
         
-    def testTokenize_SeparatorClose_expectSeperatorClose(self):
+    def testTokenize_SeparatorCloseParentheses_expectSeperatorClose(self):
         tokens = tokenizer.tokenize(")")
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Separator ")"'])
+        
+    def testTokenize_SeparatorOpenCurlyBraces_expectSeperatorOpen(self):
+        tokens = tokenizer.tokenize("{")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Separator "{"'])
+        
+    def testTokenize_SeparatorCloseCurlyBraces_expectSeperatorClose(self):
+        tokens = tokenizer.tokenize("}")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Separator "}"'])
+        
         
     def testTokenize_IntegerZero_expectIntegerZero(self):
         tokens = tokenizer.tokenize("0")
@@ -176,6 +187,11 @@ class Test(unittest.TestCase):
         tokens = tokenizer.tokenize("always ()")
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Identifier "always"', 'Separator "("', 'Separator ")"'])
+        
+    def testTokenize_AlwaysMethodCallFollowedByEmptyDataBody_expectOneIdentifierAndFourSeparators(self):
+        tokens = tokenizer.tokenize("always (){ }")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Identifier "always"', 'Separator "("', 'Separator ")"', 'Separator "{"', 'Separator "}"' ])
         
         
     def testTokenize_FourtyFour_expectOneInteger(self):

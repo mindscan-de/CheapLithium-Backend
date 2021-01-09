@@ -81,7 +81,7 @@ class Operator(LithiumToken):
     SETOF = set(['='])
 
 class Separator(LithiumToken):
-    SETOF = set([';', '.', ',', '(', ')'])
+    SETOF = set([';', '.', ',', '(', ')', '{', '}'])
 
 # Names of variables, methods, environments
 class Identifier(LithiumToken):
@@ -139,6 +139,7 @@ class LithiumTokenizer(object):
             # if we can not identify that particular token
             if(currentTokenType is None):
                 # skip that sh$t and yield nothing
+                # currently WS are part of this handling, we might have to rethink that 
                 self.tokenstart = self.tokenend
                 continue
             

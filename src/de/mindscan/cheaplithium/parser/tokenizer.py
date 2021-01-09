@@ -148,14 +148,23 @@ class LithiumTokenizer(object):
             self.tokenstart = self.tokenend
 
     def consumeInteger(self):
+        i=self.tokenstart
+        while (i<self.codeLength) and (self.code[i].isnumeric()):
+            i=i+1
+            self.tokenend = i
+        
         pass
 
     def isStartOfIdentifier(self, char):
         return re.match(r'^\w+$', char)
     
     def consumeIdentifier(self):
+        i=self.tokenstart
+        while (i<self.codeLength) and (self.code[i].isalpha()):
+            i=i+1
+            self.tokenend = i
         pass
-    
+        
     def isStartOfWhitespace(self, char):
         return re.match(r'^\s+$', char)
     
@@ -166,5 +175,5 @@ class LithiumTokenizer(object):
             i=i+1
             self.tokenend=i 
         
-        # skip until nonwhitespace found.
-        self.tokenstart = self.tokenend
+        ## skip
+        self.tokenstart=self.tokenend

@@ -144,6 +144,13 @@ class Test(unittest.TestCase):
         tokens = tokenizer.tokenize("\n")
         self.assertEqual(next(tokens, None), None)
         
+    def testTokenize_MultipleWhitespace1_expectEmptyGenerator(self):
+        tokens = tokenizer.tokenize("\n\t\t     \n\n\t\t\n")
+        self.assertEqual(next(tokens, None), None)
+        
+    def testTokenize_MultipleWhitespace2_expectEmptyGenerator(self):
+        tokens = tokenizer.tokenize("     \n\t\t  \n \n\t   \t\n")
+        self.assertEqual(next(tokens, None), None)
 
     def testTokenize_True_expectBooleanType(self):
         # tokens  = tokenizer.tokenize('True')

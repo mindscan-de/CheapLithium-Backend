@@ -96,6 +96,23 @@ def tokenize(code: str):
 class LithiumTokenizer(object):
     def __init__(self, code):
         self.code = code
+        self.codeLength = len(self.code)
+        
+    # tokenstart is the character position, where we will start with a new token
+    # tokenend is the current character position, we are going to read and analyze,
+    # the real token is between these positions, but excluding the end position  
+    def reset(self):
+        self.tokenstart = 0
+        self.tokenend = 0
     
     def tokenize(self):
+        self.reset()
+        
+        while self.tokenstart < self.codeLength:
+            # be optimistic and start with a tokenlength of one
+            self.tokenend = self.tokenstart+1
+        
+            # the start of the new token is the end of the current token
+            self.tokenstart = self.tokenend
+            
         return None

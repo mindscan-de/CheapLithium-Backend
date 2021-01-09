@@ -33,7 +33,7 @@ from . import tokenizer
 
 class Test(unittest.TestCase):
 
-    def testTokenize_Empty_expectEmptyArray(self):
+    def testTokenize_Empty_expectEmptyGenerator(self):
         tokens = tokenizer.tokenize('')
         self.assertEqual(next(tokens, None), None)
         
@@ -132,6 +132,17 @@ class Test(unittest.TestCase):
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Identifier "i"'])
         
+    def testTokenize_WhiteSpace_expectEmptyGenerator(self):
+        tokens = tokenizer.tokenize(" ")
+        self.assertEqual(next(tokens, None), None)
+        
+    def testTokenize_TabWhiteSpace_expectEmptyGenerator(self):
+        tokens = tokenizer.tokenize("\t")
+        self.assertEqual(next(tokens, None), None)
+
+    def testTokenize_NewlineWhiteSpace_expectEmptyGenerator(self):
+        tokens = tokenizer.tokenize("\n")
+        self.assertEqual(next(tokens, None), None)
         
 
     def testTokenize_True_expectBooleanType(self):

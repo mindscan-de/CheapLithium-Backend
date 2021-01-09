@@ -116,7 +116,12 @@ class LithiumTokenizer(object):
             
             currentChar = self.code[self.tokenstart]
             
-            # TODO: whitespace
+            # whitespace
+            if(self.isStartOfWhitespace(currentChar)):
+                self.tokenstart = self.tokenend
+                continue
+                
+            
             # TODO: comments?        
             
             currentTokenType = None
@@ -145,3 +150,6 @@ class LithiumTokenizer(object):
 
     def isStartOfIdentifier(self, char):
         return re.match(r'^\w+$', char)
+    
+    def isStartOfWhitespace(self, char):
+        return re.match(r'^\s+$', char)

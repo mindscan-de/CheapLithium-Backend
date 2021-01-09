@@ -162,6 +162,22 @@ class Test(unittest.TestCase):
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Identifier "always"', 'Separator "("', 'Separator ")"'])
         
+    def testTokenize_AlwaysMethodCallPreceededBySpace_expectOneIdentifierAndTwoSeparators(self):
+        tokens = tokenizer.tokenize(" always()")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Identifier "always"', 'Separator "("', 'Separator ")"'])
+
+    def testTokenize_AlwaysMethodCallPreceededByWhiteSpaces_expectOneIdentifierAndTwoSeparators(self):
+        tokens = tokenizer.tokenize("\t always()")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Identifier "always"', 'Separator "("', 'Separator ")"'])
+
+    def testTokenize_AlwaysMethodCallFollowedByWhiteSpace_expectOneIdentifierAndTwoSeparators(self):
+        tokens = tokenizer.tokenize("always ()")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Identifier "always"', 'Separator "("', 'Separator ")"'])
+        
+        
     def testTokenize_FourtyFour_expectOneInteger(self):
         tokens = tokenizer.tokenize("44")
         stokens = [str(token) for token in tokens]

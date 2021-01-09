@@ -25,6 +25,7 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+from tensorflow.python.distribute.device_util import current
 
 ## TODO: DecisionLanguageLexxer will output tokens for an input string lexxer is based on regexes...
 ## TODO: DecisionLanguageTokenzer will use the Lexxer to provide tokens
@@ -48,7 +49,7 @@ class LithiumToken(object):
         self.token_value = tokenValue
     
     def __repr__(self):
-        return '%s "%s"'.format(self.__class__.__name__, self.token_value)
+        return '{} "{}"'.format(self.__class__.__name__, self.token_value)
     
     def __str__(self):
         return self.__repr__()
@@ -111,6 +112,21 @@ class LithiumTokenizer(object):
         while self.tokenstart < self.codeLength:
             # be optimistic and start with a tokenlength of one
             self.tokenend = self.tokenstart+1
+            
+            currentChar = self.code[self.tokenstart]
+            
+            currentTokenType = None
+            if(currentChar in Separator.SETOF):
+                currentTokenType = Separator
+
+            # if we can not identify that particular token
+            if(currentTokenType is None):
+                # skip that sh$t and yield nothing
+                self.tokenstart = self.tokenend
+                continue
+            
+            currentGeneratedToken = currentTokenType(self.code[self.tokenstart:self.tokenend])
+            yield currentGeneratedToken
         
             # the start of the new token is the end of the current token
             self.tokenstart = self.tokenend

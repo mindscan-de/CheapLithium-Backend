@@ -35,7 +35,34 @@ class Test(unittest.TestCase):
 
     def testTokenize_Empty_expectEmptyArray(self):
         tokens = tokenizer.tokenize('')
-        self.assertEqual(tokens, None)
+        self.assertEqual(next(tokens, None), None)
+        
+    def testTokenize_SeparatorSemicolon_expectSeperatorSemicolon(self):
+        tokens = tokenizer.tokenize(";")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Separator ";"'])
+        
+    def testTokenize_SeparatorDot_expectSeperatorDot(self):
+        tokens = tokenizer.tokenize(".")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Separator "."'])
+        
+    def testTokenize_SeparatorComma_expectSeperatorComma(self):
+        tokens = tokenizer.tokenize(",")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Separator ","'])
+
+    def testTokenize_SeparatorOpen_expectSeperatorOpen(self):
+        tokens = tokenizer.tokenize("(")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Separator "("'])
+        
+    def testTokenize_SeparatorClose_expectSeperatorClose(self):
+        tokens = tokenizer.tokenize(")")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Separator ")"'])
+        
+        
 
     def testTokenize_True_expectBooleanType(self):
         # tokens  = tokenizer.tokenize('True')

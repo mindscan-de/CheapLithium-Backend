@@ -116,21 +116,22 @@ class LithiumTokenizer(object):
             
             currentChar = self.code[self.tokenstart]
             
+            currentTokenType = None
+
             # whitespace
             if(self.isStartOfWhitespace(currentChar)):
                 self.consumeWhitespaces()
-                continue
-                
-            # TODO: ato de comments?        
-            
-            currentTokenType = None
-            if(currentChar in Separator.SETOF):
+            # separators
+            elif(currentChar in Separator.SETOF):
                 currentTokenType = Separator
+            # numbers
             elif(currentChar in '0123456789'):
                 self.consumeInteger()
                 currentTokenType = Integer
+            # operators
             elif(currentChar in Operator.SETOF):
                 currentTokenType = Operator
+            # identifiers
             elif(self.isStartOfIdentifier(currentChar)):
                 self.consumeIdentifier()
                 currentTokenType = Identifier
@@ -174,6 +175,3 @@ class LithiumTokenizer(object):
         while (i<self.codeLength) and (self.isStartOfWhitespace( self.code[i])):
             i=i+1
             self.tokenend=i 
-        
-        ## skip
-        self.tokenstart=self.tokenend

@@ -116,6 +116,22 @@ class Test(unittest.TestCase):
         tokens = tokenizer.tokenize("=")
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Operator "="'])
+
+    def testTokenize_IdentifierA_expectIdentifierA(self):
+        tokens = tokenizer.tokenize("a")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Identifier "a"'])
+
+    def testTokenize_IdentifierE_expectIdentifierE(self):
+        tokens = tokenizer.tokenize("e")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Identifier "e"'])
+        
+    def testTokenize_IdentifierI_expectIdentifierI(self):
+        tokens = tokenizer.tokenize("i")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Identifier "i"'])
+        
         
 
     def testTokenize_True_expectBooleanType(self):

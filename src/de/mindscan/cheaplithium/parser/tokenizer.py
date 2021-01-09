@@ -26,6 +26,8 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
+import re
+
 ## TODO: DecisionLanguageLexxer will output tokens for an input string lexxer is based on regexes...
 ## TODO: DecisionLanguageTokenzer will use the Lexxer to provide tokens
 
@@ -114,6 +116,9 @@ class LithiumTokenizer(object):
             
             currentChar = self.code[self.tokenstart]
             
+            # TODO: whitespace
+            # TODO: comments?        
+            
             currentTokenType = None
             if(currentChar in Separator.SETOF):
                 currentTokenType = Separator
@@ -121,6 +126,8 @@ class LithiumTokenizer(object):
                 currentTokenType = Integer
             elif(currentChar in Operator.SETOF):
                 currentTokenType = Operator
+            elif(self.isStartOfIdentifier(currentChar)):
+                currentTokenType = Identifier
 
             # if we can not identify that particular token
             if(currentTokenType is None):
@@ -135,3 +142,6 @@ class LithiumTokenizer(object):
             self.tokenstart = self.tokenend
             
         return None
+
+    def isStartOfIdentifier(self, char):
+        return re.match(r'^\w+$', char)

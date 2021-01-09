@@ -127,10 +127,12 @@ class LithiumTokenizer(object):
             if(currentChar in Separator.SETOF):
                 currentTokenType = Separator
             elif(currentChar in '0123456789'):
+                self.consumeInteger()
                 currentTokenType = Integer
             elif(currentChar in Operator.SETOF):
                 currentTokenType = Operator
             elif(self.isStartOfIdentifier(currentChar)):
+                self.consumeIdentifier()
                 currentTokenType = Identifier
 
             # if we can not identify that particular token
@@ -145,9 +147,14 @@ class LithiumTokenizer(object):
             # the start of the new token is the end of the current token
             self.tokenstart = self.tokenend
 
+    def consumeInteger(self):
+        pass
 
     def isStartOfIdentifier(self, char):
         return re.match(r'^\w+$', char)
+    
+    def consumeIdentifier(self):
+        pass
     
     def isStartOfWhitespace(self, char):
         return re.match(r'^\s+$', char)

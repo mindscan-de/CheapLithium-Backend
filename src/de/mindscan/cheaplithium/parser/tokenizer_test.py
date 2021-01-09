@@ -152,6 +152,27 @@ class Test(unittest.TestCase):
         tokens = tokenizer.tokenize("     \n\t\t  \n \n\t   \t\n")
         self.assertEqual(next(tokens, None), None)
 
+    def testTokenize_NopMethodCall_expectOneIdentifierAndTwoSeparators(self):
+        tokens = tokenizer.tokenize("nop()")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Identifier "nop"', 'Separator "("', 'Separator ")"'])
+        
+    def testTokenize_AlwaysMethodCall_expectOneIdentifierAndTwoSeparators(self):
+        tokens = tokenizer.tokenize("always()")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Identifier "always"', 'Separator "("', 'Separator ")"'])
+        
+    def testTokenize_FourtyFour_expectOneInteger(self):
+        tokens = tokenizer.tokenize("44")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "44"'])
+
+    def testTokenize_FiftyFive_expectOneInteger(self):
+        tokens = tokenizer.tokenize("55")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Integer "55"'])
+        
+
     def testTokenize_True_expectBooleanType(self):
         # tokens  = tokenizer.tokenize('True')
         pass

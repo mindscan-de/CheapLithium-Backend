@@ -25,7 +25,6 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
-from tensorflow.python.distribute.device_util import current
 
 ## TODO: DecisionLanguageLexxer will output tokens for an input string lexxer is based on regexes...
 ## TODO: DecisionLanguageTokenzer will use the Lexxer to provide tokens

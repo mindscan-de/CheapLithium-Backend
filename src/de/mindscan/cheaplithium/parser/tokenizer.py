@@ -118,7 +118,7 @@ class LithiumTokenizer(object):
             
             # whitespace
             if(self.isStartOfWhitespace(currentChar)):
-                self.tokenstart = self.tokenend
+                self.consumeWhitespaces()
                 continue
                 
             
@@ -153,3 +153,10 @@ class LithiumTokenizer(object):
     
     def isStartOfWhitespace(self, char):
         return re.match(r'^\s+$', char)
+    
+    def consumeWhitespaces(self):
+        
+        
+        # skip until nonwhitespace found.
+        self.tokenstart = self.tokenend
+        return 

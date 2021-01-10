@@ -26,9 +26,26 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
+from . import tokenizer
+from . import ast
+ 
+
+
 # TODO: then we need some DecisionLanguageParser - Call it "LithiumParser"?
 # TODO: takes the tokens and parses them into an AST
 # TODO: the AST then can be executed, and interpreted in different ways, such 
 #       that the same "code" has different meanings, eg. as e.g as 
 #       INPUT-specification, initialization, guard, etc, it is so much more flexible...
 # TODO: but someone must write it...  
+
+
+def parse(tokens):
+    parser = LithiumParser()
+    return parser.parse(tokens)
+
+class LithiumParser(object):
+    def __init__(self):
+        pass
+    
+    def parse(self, tokens):
+        pass

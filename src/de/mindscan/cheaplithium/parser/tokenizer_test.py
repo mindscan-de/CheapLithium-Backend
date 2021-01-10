@@ -213,6 +213,11 @@ class Test(unittest.TestCase):
         tokens  = tokenizer.tokenize('False')
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Boolean "False"'])
+
+    def testTokenize_None_expectNONE(self):
+        tokens  = tokenizer.tokenize('None')
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['NONE "None"'])
     
     
     

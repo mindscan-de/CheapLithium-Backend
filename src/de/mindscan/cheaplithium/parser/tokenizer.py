@@ -75,7 +75,7 @@ class Boolean(Literal):
 
 # for None / Null
 class NONE(Literal):
-    pass
+    SETOF = set(['None'])
 
 class Operator(LithiumToken):
     SETOF = set(['='])
@@ -167,7 +167,9 @@ class LithiumTokenizer(object):
         tokenValue = self.code[self.tokenstart:self.tokenend]
         if(tokenValue in Boolean.SETOF):
             return Boolean
-        
+        elif (tokenValue in NONE.SETOF):
+            return NONE
+         
         return Identifier
         
     def isStartOfWhitespace(self, char):

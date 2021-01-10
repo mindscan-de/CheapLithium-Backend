@@ -224,6 +224,27 @@ class Test(unittest.TestCase):
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Identifier "test3"'])
 
+    def testTokenize_StringInSingleQuote_expectString(self):
+        tokens  = tokenizer.tokenize("'test3'")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['String "test3"'])
+        
+    def testTokenize_StringInSingleQuoteContainingSpace_expectString(self):
+        tokens  = tokenizer.tokenize("'test 3'")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['String "test 3"'])
+        
+    def testTokenize_StringInDoubleQuote_expectString(self):
+        tokens  = tokenizer.tokenize('"test3"')
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['String "test3"'])
+
+    def testTokenize_StringInDoubleQuoteContainingSpace_expectString(self):
+        tokens  = tokenizer.tokenize('"test 3"')
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['String "test 3"'])
+
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

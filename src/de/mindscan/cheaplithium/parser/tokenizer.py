@@ -163,6 +163,11 @@ class LithiumTokenizer(object):
         while (i<self.codeLength) and (self.code[i].isalpha()):
             i=i+1
             self.tokenend = i
+            
+        tokenValue = self.code[self.tokenstart:self.tokenend]
+        if(tokenValue in Boolean.SETOF):
+            return Boolean
+        
         return Identifier
         
     def isStartOfWhitespace(self, char):

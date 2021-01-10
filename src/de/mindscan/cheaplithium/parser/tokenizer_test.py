@@ -204,22 +204,16 @@ class Test(unittest.TestCase):
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Integer "55"'])
         
-
-    def testTokenize_True_expectBooleanType(self):
-        # tokens  = tokenizer.tokenize('True')
-        pass
+    def testTokenize_True_expectBooleanTrue(self):
+        tokens  = tokenizer.tokenize('True')
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Boolean "True"'])
     
-    def testTokenize_True_expectBooleanValueTrue(self):
-        # tokens  = tokenizer.tokenize('True')
-        pass
+    def testTokenize_False_expectBooleanFalse(self):
+        tokens  = tokenizer.tokenize('False')
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Boolean "False"'])
     
-    def testTokenize_False_expectBooleanType(self):
-        # tokens  = tokenizer.tokenize('True')
-        pass
-    
-    def testTokenize_False_expectBooleanValueType(self):
-        # tokens  = tokenizer.tokenize('True')
-        pass
     
     
 

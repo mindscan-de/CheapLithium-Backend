@@ -219,8 +219,10 @@ class Test(unittest.TestCase):
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['NONE "None"'])
     
-    
-    
+    def testTokenize_IdentifierContainingANumber_expectOneIdentifier(self):
+        tokens  = tokenizer.tokenize('test3')
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['Identifier "test3"'])
 
 
 if __name__ == "__main__":

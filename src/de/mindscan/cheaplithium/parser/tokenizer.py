@@ -160,7 +160,8 @@ class LithiumTokenizer(object):
     
     def consumeIdentifier(self):
         i=self.tokenstart
-        while (i<self.codeLength) and (self.code[i].isalpha()):
+        # we start with a alpha implicit because of isStartOfIdentifier() tests for a alpha value
+        while (i<self.codeLength) and (self.code[i].isalpha() or (self.code[i].isnumeric())):
             i=i+1
             self.tokenend = i
             

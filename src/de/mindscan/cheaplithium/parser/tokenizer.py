@@ -28,19 +28,6 @@ SOFTWARE.
 
 import re
 
-## TODO: DecisionLanguageLexxer will output tokens for an input string lexxer is based on regexes...
-## TODO: DecisionLanguageTokenzer will use the Lexxer to provide tokens
-
-## TODO: don't make it too fancy... for now i use regexes, but they aren't 
-##       sufficient enough, because i want to extract some information from 
-##       the AST, like input descriptions from the node, and transitiion 
-##       signatures....
-## TODO: also want to provide the users with help, and code completion later on.
-
-
-# This are the token types for the lithium language
-# A token has a value and has a tokentype, the tokentype
-
 # ####################################
 # Lithium Language Tokentypes
 # ####################################
@@ -55,6 +42,8 @@ class LithiumToken(object):
     def __str__(self):
         return self.__repr__()
 
+class WS(LithiumToken):
+    pass
 
 class EndOfInput(LithiumToken):
     pass
@@ -120,7 +109,7 @@ class LithiumTokenizer(object):
 
             # whitespace
             if(self.isStartOfWhitespace(currentChar)):
-                self.consumeWhitespaces()
+                currentTokenType = self.consumeWhitespaces()
             # separators
             elif(currentChar in Separator.SETOF):
                 currentTokenType = Separator
@@ -135,8 +124,7 @@ class LithiumTokenizer(object):
                 currentTokenType = self.consumeIdentifier()
 
             # if we can not identify that particular token
-            if(currentTokenType is None):
-                # skip that sh$t and yield nothing
+            if(currentTokenType is None) or (currentTokenType is WS):
                 # currently WS are part of this handling, we might have to rethink that 
                 self.tokenstart = self.tokenend
                 continue
@@ -182,3 +170,4 @@ class LithiumTokenizer(object):
         while (i<self.codeLength) and (self.isStartOfWhitespace( self.code[i])):
             i=i+1
             self.tokenend=i 
+        return WS

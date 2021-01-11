@@ -28,6 +28,8 @@ SOFTWARE.
 
 from . import tokenizer
 from . import ast
+from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
+
  
 
 
@@ -48,4 +50,42 @@ class LithiumParser(object):
         pass
     
     def parse(self, tokens):
+        # create a lookAheadBuffer for the tokens, 
+        #   and a nonexisting token is a EndOfInput-LithiumToken 
+        
+        # parse data_processing_function
+        # {optional] parse data_transfer_body
+        
         pass
+
+
+    def parse_data_transfer_body(self):
+        # TODO: use an AST element
+        # a data_transferbody contains a list of assignments
+        data_transfer_body = None
+        
+        currentToken = EndOfInput("")
+        if isinstance( currentToken, EndOfInput ):
+            return data_transfer_body
+        
+        
+        # check if next is Separateor."{" -- otherwise is parser error
+        # consume Separator."{" -- this can actually check
+        parser_error=None
+        if not isinstance( currentToken, Separator) or not currentToken.token_value.equals("{"):
+            return parser_error;
+        
+        
+        # while tokens avail (!=EndOfInput)
+        #  if token is Separator."}" - consume - return data transfer_body
+        #  assignment = parseDataAssignment()
+        #  
+        
+        currentToken = EndOfInput("")
+        if not isinstance(currentToken, EndOfInput):
+            # unexpected tokens after body close
+            # everything else should be ignored?
+            return data_transfer_body
+        
+        
+        return data_transfer_body

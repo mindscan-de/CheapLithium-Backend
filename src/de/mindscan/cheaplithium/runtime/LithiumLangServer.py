@@ -37,6 +37,7 @@ class LithiumLangServer(object):
     classdocs
     '''
 
+    # TODO: then we need a commit method, and then processHIT is called for this thread...
 
     def __init__(self, threadProvider:DecisionThread, runtimeProvider:DecisionThreadEnvironments, modelProvider:DecisionModel):
         '''
@@ -60,12 +61,24 @@ class LithiumLangServer(object):
         return self.__compileNodeToInputInterFace(node, environment)
     
     def __compileNodeToInputInterFace(self, node, _environment):
+        emptyInterface = self.__compileEmptyInterface()
+
+        if DN_NODEACTION not in node:
+            # TODO: add parserError, that node action was not defined for this
+            return emptyInterface
+
         # tokenize
         _tokens = tokenizer.tokenize(node[DN_NODEACTION])
-        # TODO: parse from tokens
+        
+        # TODO: parse AST from tokens
+        # compile to UserInputInterface / dictionary 
+        # return compiled interface.
         
         # TODO: generate interface from AST, using the "LithiumUIGenerator" or the Lithium
-        # It will also respect the environment to do precalculations and such? 
+        # It will also respect the environment to do precalculations and such?
+         
+        # calculate, whether it is a HIT node 
+        # (only HIT Nodes should return a user interface)
         if node[DN_TYPE] == DN_TYPE_HIT:
             return { 'uiInputInterface': [
                                 {
@@ -85,11 +98,17 @@ class LithiumLangServer(object):
                                 }
                                   ]}
         elif node[DN_TYPE] == DN_TYPE_START:
-            return { 'uiInputInterface': [] }
+            return emptyInterface
         elif node[DN_TYPE] == DN_TYPE_MIT:
-            return { 'uiInputInterface': [] }
+            return emptyInterface
         elif node[DN_TYPE] == DN_TYPE_END:
-            return { 'uiInputInterface': [] }
+            return emptyInterface
         else:
-            return { 'uiInputInterface': [] }
+            return emptyInterface
+
+
+    def __compileEmptyInterface(self):
+        return { 'uiInputInterface': [] }
+    
+    
     

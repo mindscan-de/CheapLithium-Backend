@@ -60,7 +60,8 @@
           "template": "",
           "transitif": ""
         }
-      ]
+      ],
+      "nodeaction": "input() {\r\n}"
     },
     {
       "uuid": "DN_85c6502c-f3ca-4fa2-a299-4cc83cfec614",

@@ -51,6 +51,7 @@ from de.mindscan.cheaplithium.datamodel.KnowledgeBaseArticles import KnowledgeBa
 from de.mindscan.cheaplithium.generator.ExportModelGenerator import ExportModelGenerator
 from de.mindscan.cheaplithium.generator.ThreadReportGenerator import ThreadReportGenerator
 from de.mindscan.cheaplithium.runtime.DecisionExecutionEngine import DecisionExecutionEngine
+from de.mindscan.cheaplithium.runtime.LithiumLangServer import LithiumLangServer
 
 DATAMODEL_DIR = DATA_BASE_DIR + '/cheaplithium/dm/'
 DATATHREAD_DIR = DATA_BASE_DIR + '/cheaplithium/threads/'
@@ -306,26 +307,14 @@ async def get_decision_thread_current_user_input_interface(uuid:str = Form(...))
     # now identify the current decision node and then calculate, whether it is a HIT node
     # if HIT node, calculate the signature, then generate an interface description transferrable 
     # by json, such that the interface is presented to the user, so the user can interact
-    # then we need a commit method, and then processHIT is called for this thread... 
+    # then we need a commit method, and then processHIT is called for this thread...
     
-    ## return empty user interface
-    return { 'uiInputInterface': [
-                                {
-                                    'label':'myTextFieldLabel',
-                                    'type':'textfield',
-                                    'description':'How was your experience using this product?'
-                                },
-                                {
-                                    'label':'myTextAreaLabel',
-                                    'type':'textarea',
-                                    'description':'Please drop the stack trace into this text area!'
-                                },
-                                {
-                                    'label':'myYesNoSelectionLabel',
-                                    'type':'yesnoselection',
-                                    'description':'What about saying just "yes" or "no" now?'
-                                }
-                                  ]}
+    # parse_AST 
+    # compile to UserInputInterface
+    # return compiled interface.
+
+    langServer = LithiumLangServer(decisionThreads, decisionThreadEnvironments, decisionModels ) 
+    return langServer.compileCurrentInputInterfaceForThread(thread_uuid)
 
 ##
 ##

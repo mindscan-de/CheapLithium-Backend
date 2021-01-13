@@ -33,7 +33,6 @@ from . import ast
 
 class Test(unittest.TestCase):
 
-
     def testMethodDeclaration_GuardNameEmptyParametersEmptyBody_expectXYZ(self):
         decl = ast.MethodDeclaration(name='always', parameters=None, body=None)
         self.assertEqual(str(decl), "MethodDeclaration()")

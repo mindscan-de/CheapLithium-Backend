@@ -27,8 +27,22 @@ SOFTWARE.
 '''
 
 class Node(object):
+    nodeAttrs = ()
     
     def __init__(self,**kwargs):
+        
+        namedArguments = kwargs.copy()
+        
+        for nodeAttributeName in self.nodeAttrs:
+            # pop the named values from the argument list
+            value = namedArguments.pop(nodeAttributeName, None)
+            # make it an attribute of this class instance
+            setattr(self, nodeAttributeName, value)
+        
+        # check if some parameters were extra    
+        if namedArguments:
+            print ("found extra argumens: {}".format(namedArguments))
+            
         pass
     
     def __repr__(self):

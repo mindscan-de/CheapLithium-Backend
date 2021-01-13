@@ -35,7 +35,7 @@ class Test(unittest.TestCase):
 
     def testMethodDeclaration_GuardNameEmptyParametersEmptyBody_expectXYZ(self):
         decl = ast.MethodDeclaration(name='always', parameters=None, body=None)
-        self.assertEqual(str(decl), "MethodDeclaration()")
+        self.assertEqual(str(decl), "MethodDeclaration(name:always)")
 
 
 if __name__ == "__main__":

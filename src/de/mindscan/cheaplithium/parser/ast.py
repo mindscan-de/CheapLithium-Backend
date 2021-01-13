@@ -27,7 +27,7 @@ SOFTWARE.
 '''
 
 class Node(object):
-    nodeAttrs = ()
+    nodeAttrs = []
     
     def __init__(self,**kwargs):
         
@@ -60,7 +60,7 @@ class Declaration(Node):
 
 
 class MethodDeclaration(Declaration):
-    # name
+    nodeAttrs=['name']
     # parameters
     # body
     pass

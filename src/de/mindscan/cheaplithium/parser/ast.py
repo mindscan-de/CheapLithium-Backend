@@ -48,6 +48,9 @@ class Node(object):
     def __repr__(self):
         node_attributes_values = []
         
+        for nodeAttributeName in self.nodeAttrs:
+            node_attributes_values.append("{}:{}".format(nodeAttributeName, getattr(self, nodeAttributeName)))
+        
         return '{}({})'.format( type(self).__name__ , ', '.join(node_attributes_values))
     
     pass

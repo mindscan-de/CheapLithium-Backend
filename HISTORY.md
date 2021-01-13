@@ -68,12 +68,22 @@ invocation of the guard-method can have zero or more input parameters.
 
 Also the default thread start environment is calculated and used when a thread is started. 
 
-* starting 2021, January 03rd
+* starting 2021, January 03rd 
 * finishing approximately 2021, late January
 
 Also develop the interfaces required to not only automatically process the transitions, but also everything 
 what is required to process machine intelligent decision nodes, as well as human intelligent decision 
 nodes.
+
+* starting 2021, January 09th
+
+I started with implementing the tokenizer and parser from January 9th. Main reason for it, is that i
+wanted to avoid to fill my code with more provisoric code, which would be to just to make the runtime 
+engine work. Therefore I reordered the priorities to finish some of the requirements, so that the 
+Tokenizer/Parser/Interpreter will be used instead of propietary and temporary solutions. Such work
+arounds will also make a later transition more difficult. The minimal viable product will just enable 
+to execute the guard and ignore the data manipulation body.
+
 
 
 # Fourth Epoch (???)

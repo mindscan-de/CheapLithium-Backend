@@ -1,5 +1,5 @@
 '''
-Created on 08.01.2021
+Created on 13.01.2021
 
 MIT License
 
@@ -26,32 +26,19 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
-class Node(object):
-    
-    def __init__(self,**kwargs):
-        pass
-    
-    def __repr__(self):
-        node_attributes_values = []
-        
-        return '{}({})'.format( type(self).__name__ , ', '.join(node_attributes_values))
-    
-    pass
+import unittest
 
-class Declaration(Node):
-    pass
+from . import ast
 
 
-class MethodDeclaration(Declaration):
-    # name
-    # parameters
-    # body
-    pass
+class Test(unittest.TestCase):
 
-class Expression(Node):
-    pass
 
-class Assignment(Expression):
-    # leftexpression
-    # value
-    pass
+    def testMethodDeclaration_GuardNameEmptyParametersEmptyBody_expectXYZ(self):
+        decl = ast.MethodDeclaration(name='always', parameters=None, body=None)
+        self.assertEqual(str(decl), "MethodDeclaration()")
+
+
+if __name__ == "__main__":
+    #import sys;sys.argv = ['', 'Test.testMethodDeclaration_GuardNameEmptyParametersEmptyBody_expectXYZ']
+    unittest.main()

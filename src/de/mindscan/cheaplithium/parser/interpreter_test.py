@@ -43,6 +43,11 @@ class Test(unittest.TestCase):
         result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
         self.assertEqual(result, False)
 
+    #def testEvalTransition_invokeTransitionsIsTrue_expectReturnsTrue(self):
+    #    ast = MethodDeclaration(name="isTrue", parameters=[])
+    #    result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
+    #    self.assertEqual(result, True)
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

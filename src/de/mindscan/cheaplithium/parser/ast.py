@@ -60,7 +60,7 @@ class Declaration(Node):
 
 
 class MethodDeclaration(Declaration):
-    nodeAttrs=['name']
+    nodeAttrs=['name','parameters']
     # parameters
     # body
     pass

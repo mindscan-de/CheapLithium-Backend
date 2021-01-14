@@ -38,6 +38,9 @@ def always():
     '''
     return True
 
+def never():
+    return False
+
 def isTrue(value):
     return value==True or str(value).lower()=="true"
 

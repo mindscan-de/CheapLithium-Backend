@@ -57,5 +57,5 @@ def eval_ll( ast, environment):
     if ast is None:
         return None
     
-    raise Exception("eval_ll can't evaluate {}: (NYI) please implement this type!".format())
+    raise Exception("eval_ll can't evaluate {}: (NYI) please implement this type!".format(type(ast)))
     

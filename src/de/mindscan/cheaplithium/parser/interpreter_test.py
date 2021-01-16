@@ -81,10 +81,18 @@ class Test(unittest.TestCase):
         self.assertEqual(result, True)
 
     # test with access to environment
-    #def testEvalTransition_invokeIsLessArg1020_expectReturnsTrue(self):
-    #    ast = Apply(name=Literal(value="isTrue"), arguments=[ Primary(qualifier=Env(), selector=DictSelector(key=Literal(value="myValue"))) ])
-    #    result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
-    #    self.assertEqual(result, True)
+    def testEvalTransition_invokeIsTrueWithEnvValueTrue_expectReturnsTrue(self):
+        environment = {'myValue':True}
+        ast = Apply(name=Literal(value="isTrue"), arguments=[ Env(selector=DictSelector(index=Literal(value='myValue'))) ])
+        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', environment)
+        self.assertEqual(result, True)
+        
+        # test with access to environment
+    def testEvalTransition_invokeIsTrueWithEnvValueFalse_expectReturnsFalse(self):
+        environment = {'myValue':False}
+        ast = Apply(name=Literal(value="isTrue"), arguments=[ Env(selector=DictSelector(index=Literal(value='myValue'))) ])
+        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', environment)
+        self.assertEqual(result, False)
     
     def testEvalLL_invokeEnv_expectReturnsEnvironment(self):
         environment = {'this':'is the environment'}

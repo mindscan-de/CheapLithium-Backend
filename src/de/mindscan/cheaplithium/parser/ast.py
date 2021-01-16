@@ -41,7 +41,7 @@ class Node(object):
         
         # check if some parameters were extra    
         if namedArguments:
-            print ("found extra argumens: {}".format(namedArguments))
+            print ("found extra argumens: {} for class {} ".format(namedArguments, type(self).__name__))
             
         pass
     

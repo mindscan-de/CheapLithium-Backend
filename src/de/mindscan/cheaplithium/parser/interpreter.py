@@ -30,11 +30,9 @@ SRC_BASE_DIR  = '../../../../../src'
 import sys
 sys.path.insert(0,SRC_BASE_DIR)
 
-
 import importlib
 
-from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector
-from .ast import MethodDeclaration
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector, MethodDeclaration
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
 

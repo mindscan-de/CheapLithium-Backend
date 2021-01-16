@@ -68,7 +68,10 @@ class MethodDeclaration(Declaration):
 
 class Apply(Node):
     nodeAttrs=['name', 'arguments']
-    
+
+
+class Env(Node):
+    nodeAttrs=[]    
     
 class Literal(Node):
     nodeAttrs=['value']

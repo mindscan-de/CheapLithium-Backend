@@ -28,7 +28,7 @@ SOFTWARE.
 import unittest
 
 from . import interpreter
-from de.mindscan.cheaplithium.parser.ast import Apply, Literal, MethodDeclaration
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal, MethodDeclaration, Env
 
 # TODO: work on the execution model first
 
@@ -80,7 +80,18 @@ class Test(unittest.TestCase):
         result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
         self.assertEqual(result, True)
 
+    # test with access to environment
+    #def testEvalTransition_invokeIsLessArg1020_expectReturnsTrue(self):
+    #    ast = Apply(name=Literal(value="isTrue"), arguments=[ Primary(qualifier=Env(), selector=DictSelector(key=Literal(value="myValue"))) ])
+    #    result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
+    #    self.assertEqual(result, True)
+    
+    def testEvalLL_invokeEnv_expectReturnsEnvironment(self):
+        environment = {'this':'is the environment'}
         
+        ast = Env()
+        result = interpreter.eval_ll(ast, environment)
+        self.assertDictEqual(result, environment)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

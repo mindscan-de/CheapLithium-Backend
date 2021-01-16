@@ -33,7 +33,7 @@ sys.path.insert(0,SRC_BASE_DIR)
 
 import importlib
 
-from de.mindscan.cheaplithium.parser.ast import Apply, Literal
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env
 from .ast import MethodDeclaration
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
@@ -70,6 +70,9 @@ def eval_ll( ast, environment):
     
     elif isinstance(ast,Literal):
         return ast.value
+    
+    elif isinstance(ast, Env):
+        return environment
     
     elif isinstance(ast, list):
         evaluatedList = []

@@ -50,15 +50,21 @@ class Test(unittest.TestCase):
     #    self.assertEqual(result, True)
 
 
-    def testEvalTransition_invokeAlwaysTransition_expectsReturnsTrue(self):
+    def testEvalTransition_invokeAlwaysTransition_expectReturnsTrue(self):
         ast = Apply(name=Literal(value="always"), arguments=[])
         result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
         self.assertEqual(result, True)
         
-    def testEvalTransition_invokeIsTrueArgTrue_expectsReturnsTrue(self):
+    def testEvalTransition_invokeIsTrueArgTrue_expectReturnsTrue(self):
         ast = Apply(name=Literal(value="isTrue"), arguments=[ Literal(value=True) ])
         result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
         self.assertEqual(result, True)
+        
+    def testEvalTransition_invokeIsTrueArgFalse_expectReturnsFalse(self):
+        ast = Apply(name=Literal(value="isTrue"), arguments=[ Literal(value=False) ])
+        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
+        self.assertEqual(result, False)
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

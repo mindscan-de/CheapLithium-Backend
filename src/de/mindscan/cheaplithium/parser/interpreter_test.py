@@ -54,6 +54,11 @@ class Test(unittest.TestCase):
         ast = Apply(name=Literal(value="always"), arguments=[])
         result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
         self.assertEqual(result, True)
+        
+    def testEvalTransition_invokeIsTrueArgTrue_expectsReturnsTrue(self):
+        ast = Apply(name=Literal(value="isTrue"), arguments=[ Literal(value=True) ])
+        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
+        self.assertEqual(result, True)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

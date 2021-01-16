@@ -52,6 +52,7 @@ def eval_transition(ast, package, module, environment:dict ):
         return func(*arguments)
     ## restart implementation for AST
     elif isinstance(ast, Apply):
+        print(str(ast))
         function_name = eval_ll(ast.name, environment)
         arguments = eval_ll(ast.arguments, environment)
         
@@ -66,10 +67,17 @@ def eval_transition(ast, package, module, environment:dict ):
 def eval_ll( ast, environment):
     if ast is None:
         return None
-    if ast == []:
-        return []
-    if isinstance(ast,Literal):
+    
+    elif isinstance(ast,Literal):
         return ast.value
+    
+    elif isinstance(ast, list):
+        evaluatedList = []
+        for element in ast:
+            result = eval_ll(element, environment)
+            evaluatedList.append( result )
+        return evaluatedList 
+    
     
     raise Exception("eval_ll can't evaluate {}: (NYI) please implement this type!".format(type(ast)))
     

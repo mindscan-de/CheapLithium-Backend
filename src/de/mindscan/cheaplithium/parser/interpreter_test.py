@@ -50,21 +50,31 @@ class Test(unittest.TestCase):
     #    self.assertEqual(result, True)
 
 
+    # test with one method without arguments
     def testEvalTransition_invokeAlwaysTransition_expectReturnsTrue(self):
         ast = Apply(name=Literal(value="always"), arguments=[])
         result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
         self.assertEqual(result, True)
-        
+    
+    # test with a different method without arguments
+    def testEvalTransition_invokeNeverTransition_expectReturnsFalse(self):
+        ast = Apply(name=Literal(value="never"), arguments=[])
+        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
+        self.assertEqual(result, False)
+    
+    # test with one boolean argument
     def testEvalTransition_invokeIsTrueArgTrue_expectReturnsTrue(self):
         ast = Apply(name=Literal(value="isTrue"), arguments=[ Literal(value=True) ])
         result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
         self.assertEqual(result, True)
-        
+    
+    # test with one boolean argument - different return value
     def testEvalTransition_invokeIsTrueArgFalse_expectReturnsFalse(self):
         ast = Apply(name=Literal(value="isTrue"), arguments=[ Literal(value=False) ])
         result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
         self.assertEqual(result, False)
 
+    # test with two integer aguments
     def testEvalTransition_invokeIsLessArg1020_expectReturnsTrue(self):
         ast = Apply(name=Literal(value="isLessThan"), arguments=[ Literal(value=10), Literal(value=20) ])
         result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})

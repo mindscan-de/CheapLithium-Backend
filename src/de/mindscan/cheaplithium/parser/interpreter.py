@@ -33,6 +33,7 @@ sys.path.insert(0,SRC_BASE_DIR)
 
 import importlib
 
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal
 from .ast import MethodDeclaration
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
@@ -49,6 +50,15 @@ def eval_transition(ast, package, module, environment:dict ):
             arguments=[]
             
         return func(*arguments)
+    ## restart implementation for AST
+    elif isinstance(ast, Apply):
+        function_name = eval_ll(ast.name, environment)
+        arguments = eval_ll(ast.arguments, environment)
+        
+        func = getattr(dynamic_module, function_name)
+        
+        return func(*arguments)
+    
     else:
         raise Exception("eval_transition can't evaluate {}: (NYI) please implement this type!".format(type(ast)))
 
@@ -56,6 +66,10 @@ def eval_transition(ast, package, module, environment:dict ):
 def eval_ll( ast, environment):
     if ast is None:
         return None
+    if ast == []:
+        return []
+    if isinstance(ast,Literal):
+        return ast.value
     
     raise Exception("eval_ll can't evaluate {}: (NYI) please implement this type!".format(type(ast)))
     

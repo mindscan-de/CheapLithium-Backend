@@ -28,7 +28,7 @@ SOFTWARE.
 import unittest
 
 from . import interpreter
-from .ast import MethodDeclaration
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal, MethodDeclaration
 
 # TODO: work on the execution model first
 
@@ -49,6 +49,11 @@ class Test(unittest.TestCase):
     #    result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
     #    self.assertEqual(result, True)
 
+
+    def testEvalTransition_invokeAlwaysTransition_expectsReturnsTrue(self):
+        ast = Apply(name=Literal(value="always"), arguments=[])
+        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
+        self.assertEqual(result, True)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

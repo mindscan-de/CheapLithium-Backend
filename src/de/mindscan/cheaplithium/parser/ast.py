@@ -65,6 +65,14 @@ class MethodDeclaration(Declaration):
     # body
     pass
 
+
+class Apply(Node):
+    nodeAttrs=['name', 'arguments']
+    
+    
+class Literal(Node):
+    nodeAttrs=['value']
+
 class Expression(Node):
     pass
 

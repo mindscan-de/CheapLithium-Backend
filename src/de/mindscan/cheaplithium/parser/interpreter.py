@@ -43,11 +43,11 @@ def eval_transition(ast, package, module, environment:dict ):
         func = getattr(dynamic_module, ast.name)
         arguments = eval_ll( ast.parameters, environment )
         
-        # TODO check, whether this is really needed...
         if arguments is None:
-            arguments=[]
-            
-        return func(*arguments)
+            return func()
+        else:
+            return func(*arguments)
+    
     ## restart implementation for AST
     elif isinstance(ast, Apply):
         print(str(ast))

@@ -33,7 +33,7 @@ sys.path.insert(0,SRC_BASE_DIR)
 
 import importlib
 
-from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector
 from .ast import MethodDeclaration
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
@@ -71,8 +71,16 @@ def eval_ll( ast, environment):
     elif isinstance(ast,Literal):
         return ast.value
     
+    elif isinstance(ast, DictSelector):
+        index = eval_ll(ast.index,environment)
+        return lambda theDict:theDict[index]
+    
     elif isinstance(ast, Env):
-        return environment
+        if(ast.selector==None):
+            return environment
+        
+        selector = eval_ll(ast.selector, environment)
+        return selector(environment)
     
     elif isinstance(ast, list):
         evaluatedList = []

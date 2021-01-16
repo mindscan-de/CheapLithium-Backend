@@ -69,12 +69,14 @@ class MethodDeclaration(Declaration):
 class Apply(Node):
     nodeAttrs=['name', 'arguments']
 
-
 class Env(Node):
-    nodeAttrs=[]    
+    nodeAttrs=['selector']    
     
 class Literal(Node):
     nodeAttrs=['value']
+    
+class DictSelector(Node):
+    nodeAttrs=['index']
 
 class Expression(Node):
     pass

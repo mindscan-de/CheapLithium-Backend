@@ -64,6 +64,12 @@ class Test(unittest.TestCase):
         ast = Apply(name=Literal(value="isTrue"), arguments=[ Literal(value=False) ])
         result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
         self.assertEqual(result, False)
+
+    def testEvalTransition_invokeIsLessArg1020_expectReturnsTrue(self):
+        ast = Apply(name=Literal(value="isLessThan"), arguments=[ Literal(value=10), Literal(value=20) ])
+        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
+        self.assertEqual(result, True)
+
         
 
 if __name__ == "__main__":

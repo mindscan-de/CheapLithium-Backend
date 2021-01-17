@@ -65,8 +65,11 @@ class MethodDeclaration(Declaration):
     nodeAttrs=['name','parameters']
     # parameters
     # body
-    pass
 
+
+class LithiumCompileUnit(Declaration):
+    nodeAttrs = ['guard', 'body']
+    
 
 class Apply(Node):
     nodeAttrs=['name', 'arguments']

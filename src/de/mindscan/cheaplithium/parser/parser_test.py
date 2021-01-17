@@ -35,11 +35,15 @@ from . import tokenizer
 class Test(unittest.TestCase):
 
 
-    def testParse(self):
-        tokens = tokenizer.tokenize("always()")
+    def testParse_TransitionsAlwaysNoArgsNoBody_expect(self):
+        # arrange
+        tokens = tokenizer.tokenize("transitions.always()")
+        
+        #act
         parsed_ast = parser.parse(tokens)
-        self.fail("Implement a simple way to test the ast")
-        pass
+        
+        #assert
+        self.assertEqual(str(parsed_ast), 'LithiumCompileUnit(guard:None, body:None)')
 
 
 if __name__ == "__main__":

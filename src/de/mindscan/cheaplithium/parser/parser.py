@@ -26,9 +26,13 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
-from . import tokenizer
-from . import ast
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
+from de.mindscan.cheaplithium.parser.ast import LithiumCompileUnit
+
+
+def parse(tokens):
+    parser = LithiumParser()
+    return parser.parse(tokens)
 
  
 
@@ -102,24 +106,93 @@ LLTerminalExpression returns LLExpression:
 # TODO: but someone must write it...  
 
 
-def parse(tokens):
-    parser = LithiumParser()
-    return parser.parse(tokens)
+class LATokenIterator(object):
+    
+    def __init__(self, iterable):
+        self.list = list(iterable)
+        self.current_position = 0
+        self.default_token = None
+        self.value = None
+    
+    def __iter__(self):
+        return self
+    
+    def set_default(self, default_token ):
+        self.default_token = default_token
+        
+    def last(self):
+        return self.value
+
+    def next(self):
+        return self.__next__()
+    
+    def __next__(self):
+        try:
+            self.value = self.list[self.current_position]
+            self.current_position += 1
+        except IndexError:
+            raise StopIteration
+        
+        return self.value
+    
+    def lookahead(self, skip_count=0):
+        try:
+            self.value = self.list[self.current_position + skip_count]
+        except IndexError:
+            return self.default_token
+        
+        return self.value
+    
 
 class LithiumParser(object):
     def __init__(self):
+        self.tokens = None
         pass
     
     def parse(self, tokens):
-        # create a lookAheadBuffer for the tokens, 
-        #   and a nonexisting token is a EndOfInput-LithiumToken 
         
-        # parse data_processing_function
-        # {optional] parse data_transfer_body
+        self.tokens = LATokenIterator(tokens)
+        self.tokens.set_default(EndOfInput(None))
         
-        pass
+        return self.parse_compile_unit()
+
+#
+#
+#
+#
+
+    
+# ----------------------------------------------------------------------------
+# Parser Rules implementation
+# ----------------------------------------------------------------------------
+#
+# ----------------------------------------------------------------------------
+    
+    '''
+    Model:
+        guard=LLGuard ( body=LLMethodBody )?  
+    ;
+    '''
+    def parse_compile_unit(self):
+        guard = self.parse_guard( )
+
+        body = None
+        if self.try_accept(Separator('{')):
+            body = self.parse_method_body()
+            self.accept(Separator('}'))
+            
+        return LithiumCompileUnit( guard = guard, body = body)
+
+    def parse_guard(self):
+        return None
+    
+    def try_accept(self, *accepted_tokens):
+        return False
 
 
+
+
+    # Doesnt't work
     def parse_data_transfer_body(self):
         # TODO: use an AST element
         # a data_transferbody contains a list of assignments

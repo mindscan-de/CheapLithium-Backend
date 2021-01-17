@@ -73,12 +73,19 @@ class LithiumCompileUnit(Declaration):
 
 class Apply(Node):
     nodeAttrs=['name', 'arguments']
+    
+class Apply2(Node):
+    nodeAttrs=['name', 'arguments']
+    
+    
+class Primary(Node):
+    nodeAttrs=['selector']
 
-class Env(Node):
+class Env(Primary):
     nodeAttrs=['selector']    
     
-class Literal(Node):
-    nodeAttrs=['value']
+class Literal(Primary):
+    nodeAttrs=['value', 'selector']
     
 class DictSelector(Node):
     nodeAttrs=['index']

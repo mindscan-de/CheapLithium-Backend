@@ -27,7 +27,7 @@ SOFTWARE.
 '''
 
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
-from de.mindscan.cheaplithium.parser.ast import LithiumCompileUnit
+from de.mindscan.cheaplithium.parser.ast import LithiumCompileUnit, Apply2, DictSelector, Literal
 
 
 def parse(tokens):
@@ -181,7 +181,10 @@ class LithiumParser(object):
         return LithiumCompileUnit( guard = guard, body = body)
 
     def parse_guard(self):
-        return None
+        
+        selector = DictSelector(index=Literal(value='always'))
+        name = Literal(value='transitions', selector=selector )
+        return Apply2(name=name, arguments=None)
     
     def try_accept(self, *accepted_tokens):
         return False

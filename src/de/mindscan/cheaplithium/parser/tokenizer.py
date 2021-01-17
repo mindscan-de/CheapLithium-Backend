@@ -113,6 +113,9 @@ class LithiumTokenizer(object):
             # separators
             elif(currentChar in Separator.SETOF):
                 currentTokenType = Separator
+            # string
+            elif(currentChar in ('"',"'")):
+                currentTokenType = self.consumeString()
             # numbers
             elif(currentChar in '0123456789'):
                 currentTokenType = self.consumeInteger()
@@ -142,6 +145,19 @@ class LithiumTokenizer(object):
             self.tokenend = i
         
         return Integer
+
+    def consumeString(self):
+        i=self.tokenstart
+        startSmbol=self.code[i]
+
+        i+=1
+                
+        while (i<self.codeLength) and (self.code[i]!=startSmbol):
+            i=i+1
+            self.tokenend = i
+        
+        self.tokenend += 1
+        return String
 
     def isStartOfIdentifier(self, char):
         return re.match(r'^\w+$', char)

@@ -31,8 +31,8 @@ from de.mindscan.cheaplithium.parser.ast import LithiumCompileUnit
 
 
 def parse(tokens):
-    parser = LithiumParser()
-    return parser.parse(tokens)
+    parser = LithiumParser(tokens)
+    return parser.parse()
 
  
 
@@ -145,15 +145,12 @@ class LATokenIterator(object):
     
 
 class LithiumParser(object):
-    def __init__(self):
-        self.tokens = None
-        pass
     
-    def parse(self, tokens):
-        
+    def __init__(self, tokens):
         self.tokens = LATokenIterator(tokens)
         self.tokens.set_default(EndOfInput(None))
-        
+    
+    def parse(self):
         return self.parse_compile_unit()
 
 #

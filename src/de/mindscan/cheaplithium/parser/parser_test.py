@@ -52,7 +52,7 @@ class Test(unittest.TestCase):
         tokens = tokenizer.tokenize("transitions.always()")
         
         #act
-        parsed_ast = LithiumParser().parse_guard()
+        parsed_ast = LithiumParser(tokens).parse_guard()
         
         #assert
         self.assertEqual(str(parsed_ast), 'None')

@@ -32,6 +32,67 @@ from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
 
  
 
+'''
+=================================
+First basic idea for this grammar
+=================================
+
+Even though the grammar allows more by syntax, the parser (validation) will take care of it, or not...
+Maybe i will rewrite this whole parser, if i need to support Expressions with oerations and parentheses...
+This version is good enough for now...
+
+-------------------------------------------------------------------------
+First layout of this parser. I might rewrite this parser in the future... 
+-------------------------------------------------------------------------
+
+Model:
+    guard=LLGuard ( body=LLMethodBody )?  
+;
+
+LLGuard:
+    expr = LLExpression
+;
+
+LLMethodBody:
+    {LLMethodBody} '{'    statements+=LLStatement* '}'
+;
+
+LLStatement:
+    LLExpression ';'
+;
+
+LLExpression: LLAssignment;
+
+LLAssignment returns LLExpression:
+    LLSelectionExpression 
+    ( 
+        {LLAssignment.left = current} '=' right=LLExpression
+    )?
+;
+
+LLSelectionExpression returns LLExpression:
+    LLTerminalExpression 
+    (
+        {LLMemberSelection.receiver=current} '.' member=ID
+        (
+            methodinvocation?='(' 
+                    (args+=LLExpression (',' args+=LLExpression)* )?
+                ')'
+        )?
+    )*
+;
+
+LLTerminalExpression returns LLExpression:
+    {LLStringLiteralConstant} value=STRING |
+    {LLIntConstant} value=INT |
+    {LLBooleanConstant} value= ('True' | 'False') |
+    {LLThis} 'this' |
+    {LLEnv} 'env' |
+    {LLNone} 'None' |
+    {LLRef} symbol=ID 
+;
+
+'''
 
 # TODO: then we need some DecisionLanguageParser - Call it "LithiumParser"?
 # TODO: takes the tokens and parses them into an AST

@@ -33,6 +33,7 @@ class Node(object):
         
         namedArguments = kwargs.copy()
         
+        # TODO: collect nodeAttrs from base classes and add them here too 
         for nodeAttributeName in self.nodeAttrs:
             # pop the named values from the argument list
             value = namedArguments.pop(nodeAttributeName, None)
@@ -48,6 +49,7 @@ class Node(object):
     def __repr__(self):
         node_attributes_values = []
         
+        # TODO: collect nodeAttrs from base classes and add them here too
         for nodeAttributeName in self.nodeAttrs:
             node_attributes_values.append("{}:{}".format(nodeAttributeName, getattr(self, nodeAttributeName)))
         

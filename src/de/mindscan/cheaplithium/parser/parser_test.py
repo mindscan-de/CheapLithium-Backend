@@ -30,12 +30,13 @@ import unittest
 
 from . import parser
 from . import tokenizer
+from de.mindscan.cheaplithium.parser.parser import LithiumParser
 
 
 class Test(unittest.TestCase):
 
 
-    def testParse_TransitionsAlwaysNoArgsNoBody_expect(self):
+    def testParse_TransitionsAlwaysNoArgsNoBody_expectLitiumCompileUnitWithGuard(self):
         # arrange
         tokens = tokenizer.tokenize("transitions.always()")
         
@@ -45,6 +46,17 @@ class Test(unittest.TestCase):
         #assert
         self.assertEqual(str(parsed_ast), 'LithiumCompileUnit(guard:None, body:None)')
 
+
+    def testParseBody_TransitionsAlwaysNoARgumentsNoBody_expectTransition(self):
+        # arrange
+        tokens = tokenizer.tokenize("transitions.always()")
+        
+        #act
+        parsed_ast = LithiumParser().parse_guard()
+        
+        #assert
+        self.assertEqual(str(parsed_ast), 'None')
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

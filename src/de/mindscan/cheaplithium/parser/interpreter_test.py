@@ -30,7 +30,8 @@ import unittest
 from types import ModuleType
 
 from . import interpreter
-from de.mindscan.cheaplithium.parser.ast import Apply, Literal, MethodDeclaration, Env, DictSelector, VMModule
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal, MethodDeclaration, Env, DictSelector, VMModule,\
+    VMPrimary, Apply2
 
 # TODO: work on the execution model first
 
@@ -114,10 +115,45 @@ class Test(unittest.TestCase):
         result = interpreter.eval_ll(ast, environment)
         self.assertEqual(result, 'otherValue')
     
-    def testEvalLL_invokeVMModuleTransitions_expectResultIsModuleType(self):
+    def testEvalLL_invokeVMModuleForTransitions_expectResultIsModuleType(self):
         ast = VMModule(name=Literal(value='transitions'))
         result = interpreter.eval_ll(ast, {})
         self.assertIsInstance(result, ModuleType)
+        
+    def testEvalLL_selectVMModuleAlwaysMethod_expectMethodNameIsAlways(self):
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='always'))
+        ast = VMPrimary(value = module, selector = selector)
+        # act
+        result = interpreter.eval_ll(ast, {})
+        # assert
+        self.assertEquals(result.__name__, "always")
+        
+    def testEvalLL_invokeVMModuleAlwaysMethod_expectMethodResultIsTrue(self):
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='always'))
+        vmprimary = VMPrimary(value = module, selector = selector)
+        ast = Apply2(func=vmprimary, arguments=[])
+        # act
+        result = interpreter.eval_ll(ast, {})
+        # assert
+        self.assertEquals(result, True)
+
+    def testEvalLL_invokeVMModuleNeverMethod_expectMethodResultIsFalse(self):
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='never'))
+        vmprimary = VMPrimary(value=module, selector = selector)
+        ast = Apply2(func = vmprimary, arguments=[])
+        # act
+        result = interpreter.eval_ll(ast, {})
+        # assert
+        self.assertEquals(result, False)
+        
+        
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

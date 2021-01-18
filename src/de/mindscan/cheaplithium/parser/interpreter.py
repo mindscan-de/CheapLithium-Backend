@@ -32,7 +32,8 @@ sys.path.insert(0,SRC_BASE_DIR)
 
 import importlib
 
-from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector, MethodDeclaration, VMModule
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector, MethodDeclaration, VMModule,\
+    VMPrimary, Apply2
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
 
@@ -91,6 +92,19 @@ def eval_ll( ast, environment):
         module_name = eval_ll(ast.name, environment)
         return importlib.import_module('.'+module_name, package='de.mindscan.cheaplithium.vm')
     
+    elif isinstance(ast,VMPrimary):
+        value = eval_ll(ast.value,environment)
+        selector = eval_ll(ast.selector, environment)
+        return selector(value)
+    
+    elif isinstance(ast,Apply2):
+        theFunction = eval_ll(ast.func, environment)
+        arguments = eval_ll(ast.arguments, environment)
+        if arguments is None:
+            return theFunction()
+        else:
+            return theFunction(*arguments)
+        
     
     raise Exception("eval_ll can't evaluate {}: (NYI) please implement this type!".format(type(ast)))
     

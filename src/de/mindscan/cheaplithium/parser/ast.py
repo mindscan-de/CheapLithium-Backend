@@ -75,7 +75,7 @@ class Apply(Node):
     nodeAttrs=['name', 'arguments']
     
 class Apply2(Node):
-    nodeAttrs=['name', 'arguments']
+    nodeAttrs=['func', 'arguments']
     
     
 class Primary(Node):
@@ -102,3 +102,6 @@ class Assignment(Expression):
 
 class VMModule(Node):
         nodeAttrs=['name']
+        
+class VMPrimary(Node):
+        nodeAttrs=['value', 'selector']

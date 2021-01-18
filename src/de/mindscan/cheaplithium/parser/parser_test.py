@@ -28,8 +28,8 @@ SOFTWARE.
 
 import unittest
 
-from . import parser
-from . import tokenizer
+from de.mindscan.cheaplithium.parser import parser
+from de.mindscan.cheaplithium.parser import tokenizer
 from de.mindscan.cheaplithium.parser.parser import LithiumParser
 
 
@@ -44,7 +44,7 @@ class Test(unittest.TestCase):
         parsed_ast = parser.parse(tokens)
         
         #assert
-        self.assertEqual(str(parsed_ast), 'LithiumCompileUnit(guard:Apply2(name:Literal(value:transitions, selector:DictSelector(index:Literal(value:always, selector:None))), arguments:None), body:None)')
+        self.assertEqual(str(parsed_ast), 'LithiumCompileUnit(guard:VMApply(func:Literal(value:transitions, selector:DictSelector(index:Literal(value:always, selector:None))), arguments:None), body:None)')
 
 
     def testParseBody_TransitionsAlwaysNoARgumentsNoBody_expectTransition(self):
@@ -55,7 +55,7 @@ class Test(unittest.TestCase):
         parsed_ast = LithiumParser(tokens).parse_guard()
         
         #assert
-        self.assertEqual(str(parsed_ast), 'Apply2(name:Literal(value:transitions, selector:DictSelector(index:Literal(value:always, selector:None))), arguments:None)')
+        self.assertEqual(str(parsed_ast), 'VMApply(func:Literal(value:transitions, selector:DictSelector(index:Literal(value:always, selector:None))), arguments:None)')
         
 
 if __name__ == "__main__":

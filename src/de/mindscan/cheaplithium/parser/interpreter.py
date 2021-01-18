@@ -71,7 +71,7 @@ def eval_ll( ast, environment):
     
     elif isinstance(ast, DictSelector):
         index = eval_ll(ast.index,environment)
-        return lambda theDict:theDict[index]
+        return lambda theDict: theDict[index] if ( isinstance(theDict, dict) or isinstance(theDict, list) ) else getattr(theDict, index)
     
     elif isinstance(ast, Env):
         if(ast.selector==None):
@@ -85,8 +85,7 @@ def eval_ll( ast, environment):
         for element in ast:
             result = eval_ll(element, environment)
             evaluatedList.append( result )
-        return evaluatedList 
-    
+        return evaluatedList
     
     raise Exception("eval_ll can't evaluate {}: (NYI) please implement this type!".format(type(ast)))
     

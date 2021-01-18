@@ -27,8 +27,10 @@ SOFTWARE.
 '''
 import unittest
 
+from types import ModuleType
+
 from . import interpreter
-from de.mindscan.cheaplithium.parser.ast import Apply, Literal, MethodDeclaration, Env, DictSelector
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal, MethodDeclaration, Env, DictSelector, VMModule
 
 # TODO: work on the execution model first
 
@@ -111,8 +113,11 @@ class Test(unittest.TestCase):
         ast = Env(selector=DictSelector(index=Literal(value='otherKey')))
         result = interpreter.eval_ll(ast, environment)
         self.assertEqual(result, 'otherValue')
-        
-        
+    
+    def testEvalLL_invokeVMModuleTransitions_expectResultIsModuleType(self):
+        ast = VMModule(name=Literal(value='transitions'))
+        result = interpreter.eval_ll(ast, {})
+        self.assertIsInstance(result, ModuleType)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

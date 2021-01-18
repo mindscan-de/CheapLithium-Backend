@@ -97,3 +97,8 @@ class Assignment(Expression):
     # leftexpression
     # value
     pass
+
+
+
+class VMModule(Node):
+        nodeAttrs=['name']

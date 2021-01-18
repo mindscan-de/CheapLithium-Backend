@@ -94,6 +94,9 @@ def eval_ll( ast, environment):
     
     elif isinstance(ast,VMPrimary):
         value = eval_ll(ast.value,environment)
+        if ast.selector is None:
+            return value
+        
         selector = eval_ll(ast.selector, environment)
         return selector(value)
     

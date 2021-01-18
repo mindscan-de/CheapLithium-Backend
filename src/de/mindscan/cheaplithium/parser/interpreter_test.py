@@ -120,6 +120,12 @@ class Test(unittest.TestCase):
         result = interpreter.eval_ll(ast, {})
         self.assertIsInstance(result, ModuleType)
         
+    def testEvalLL_invokeVMModuleForTransitions_expectModuleNameIsTransitions(self):
+        ast = VMModule(name=Literal(value='transitions'))
+        result = interpreter.eval_ll(ast, {})
+        self.assertEquals(result.__name__, 'de.mindscan.cheaplithium.vm.transitions')
+        
+        
     def testEvalLL_selectVMModuleAlwaysMethod_expectMethodNameIsAlways(self):
         # arrange
         module = VMModule(name=Literal(value='transitions'))

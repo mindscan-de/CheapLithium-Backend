@@ -97,10 +97,10 @@ class Assignment(Expression):
 
 
 class VMModule(Node):
-        nodeAttrs=['name']
-        
+    nodeAttrs=['name']
+
 class VMPrimary(Node):
-        nodeAttrs=['value', 'selector']
+    nodeAttrs=['value', 'selector']
 
 class VMApply(Node):
     nodeAttrs=['func', 'arguments']

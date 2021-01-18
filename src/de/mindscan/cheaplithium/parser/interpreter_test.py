@@ -31,7 +31,7 @@ from types import ModuleType
 
 from . import interpreter
 from de.mindscan.cheaplithium.parser.ast import Apply, Literal, MethodDeclaration, Env, DictSelector, VMModule,\
-    VMPrimary, Apply2
+    VMPrimary, VMApply
 
 # TODO: work on the execution model first
 
@@ -141,7 +141,7 @@ class Test(unittest.TestCase):
         module = VMModule(name=Literal(value='transitions'))
         selector = DictSelector(index=Literal(value='always'))
         vmprimary = VMPrimary(value = module, selector = selector)
-        ast = Apply2(func=vmprimary, arguments=[])
+        ast = VMApply(func=vmprimary, arguments=[])
         # act
         result = interpreter.eval_ll(ast, {})
         # assert
@@ -152,7 +152,7 @@ class Test(unittest.TestCase):
         module = VMModule(name=Literal(value='transitions'))
         selector = DictSelector(index=Literal(value='never'))
         vmprimary = VMPrimary(value=module, selector = selector)
-        ast = Apply2(func = vmprimary, arguments=[])
+        ast = VMApply(func = vmprimary, arguments=[])
         # act
         result = interpreter.eval_ll(ast, {})
         # assert

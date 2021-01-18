@@ -33,7 +33,7 @@ sys.path.insert(0,SRC_BASE_DIR)
 import importlib
 
 from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector, MethodDeclaration, VMModule,\
-    VMPrimary, Apply2
+    VMPrimary, VMApply
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
 
@@ -97,7 +97,7 @@ def eval_ll( ast, environment):
         selector = eval_ll(ast.selector, environment)
         return selector(value)
     
-    elif isinstance(ast,Apply2):
+    elif isinstance(ast,VMApply):
         theFunction = eval_ll(ast.func, environment)
         arguments = eval_ll(ast.arguments, environment)
         if arguments is None:

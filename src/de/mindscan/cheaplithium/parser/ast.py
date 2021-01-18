@@ -74,10 +74,6 @@ class LithiumCompileUnit(Declaration):
 class Apply(Node):
     nodeAttrs=['name', 'arguments']
     
-class Apply2(Node):
-    nodeAttrs=['func', 'arguments']
-    
-    
 class Primary(Node):
     nodeAttrs=['selector']
 
@@ -105,3 +101,6 @@ class VMModule(Node):
         
 class VMPrimary(Node):
         nodeAttrs=['value', 'selector']
+
+class VMApply(Node):
+    nodeAttrs=['func', 'arguments']

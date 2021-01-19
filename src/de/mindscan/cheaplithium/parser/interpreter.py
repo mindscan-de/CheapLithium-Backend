@@ -36,7 +36,7 @@ from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMMo
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
 
-def eval_transition(ast, package, module, environment:dict ):
+def eval_transition(ast, environment:dict ):
     
     if isinstance(ast, VMLithiumCompileUnit):
         guard_result = eval_ll(ast.guard, environment);

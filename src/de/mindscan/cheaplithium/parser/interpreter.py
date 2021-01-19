@@ -38,7 +38,6 @@ from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelecto
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
 
 def eval_transition(ast, package, module, environment:dict ):
-    dynamic_module = importlib.import_module('.'+module, package=package)
     
     if isinstance(ast, VMLithiumCompileUnit):
         guard_result = eval_ll(ast.guard, environment);
@@ -51,6 +50,7 @@ def eval_transition(ast, package, module, environment:dict ):
         return guard_result
           
     elif isinstance(ast, MethodDeclaration):
+        dynamic_module = importlib.import_module('.'+module, package=package)
         func = getattr(dynamic_module, ast.name)
         arguments = eval_ll( ast.parameters, environment )
         
@@ -62,6 +62,7 @@ def eval_transition(ast, package, module, environment:dict ):
     ## restart implementation for AST
     elif isinstance(ast, Apply):
         print(str(ast))
+        dynamic_module = importlib.import_module('.'+module, package=package)
         function_name = eval_ll(ast.name, environment)
         arguments = eval_ll(ast.arguments, environment)
         

@@ -32,7 +32,7 @@ sys.path.insert(0,SRC_BASE_DIR)
 
 import importlib
 
-from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector, MethodDeclaration, VMModule,\
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector, VMModule,\
     VMPrimary, VMApply, VMLithiumCompileUnit
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
@@ -50,16 +50,6 @@ def eval_transition(ast, package, module, environment:dict ):
         # TODO: return a pair of returnresult (one for the result of the Guard and one for the result of the body
         return guard_result
           
-    elif isinstance(ast, MethodDeclaration):
-        dynamic_module = importlib.import_module('.'+module, package=package)
-        func = getattr(dynamic_module, ast.name)
-        arguments = eval_ll( ast.parameters, environment )
-        
-        if arguments is None:
-            return func()
-        else:
-            return func(*arguments)
-    
     ## restart implementation for AST
     elif isinstance(ast, Apply):
         print(str(ast))

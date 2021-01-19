@@ -57,18 +57,6 @@ class Node(object):
     
     pass
 
-class Declaration(Node):
-    pass
-
-
-class MethodDeclaration(Declaration):
-    nodeAttrs=['name','parameters']
-    # parameters
-    # body
-
-
-    
-
 class Apply(Node):
     nodeAttrs=['name', 'arguments']
     

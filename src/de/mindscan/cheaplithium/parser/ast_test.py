@@ -34,8 +34,8 @@ from . import ast
 class Test(unittest.TestCase):
 
     def testMethodDeclaration_GuardNameEmptyParametersEmptyBody_expectXYZ(self):
-        decl = ast.MethodDeclaration(name='always', parameters=None) #), body=None)
-        self.assertEqual(str(decl), "MethodDeclaration(name:always, parameters:None)")
+        decl = ast.VMLithiumCompileUnit(guard=None, body=None)
+        self.assertEqual(str(decl), "VMLithiumCompileUnit(guard:None, body:None)")
 
 
 if __name__ == "__main__":

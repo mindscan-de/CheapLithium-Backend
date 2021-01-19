@@ -89,19 +89,7 @@ class Test(unittest.TestCase):
         self.assertEquals(result, False)
 
 
-    # test with access to environment
-    def testEvalTransition_invokeIsTrueWithEnvValueTrue_expectReturnsTrue(self):
-        environment = {'myValue':True}
-        ast = Apply(name=Literal(value="isTrue"), arguments=[ Env(selector=DictSelector(index=Literal(value='myValue'))) ])
-        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', environment)
-        self.assertEqual(result, True)
         
-        # test with access to environment
-    def testEvalTransition_invokeIsTrueWithEnvValueFalse_expectReturnsFalse(self):
-        environment = {'myValue':False}
-        ast = Apply(name=Literal(value="isTrue"), arguments=[ Env(selector=DictSelector(index=Literal(value='myValue'))) ])
-        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', environment)
-        self.assertEqual(result, False)
     
     def testEvalLL_invokeEnv_expectReturnsEnvironment(self):
         environment = {'this':'is the environment'}
@@ -208,7 +196,30 @@ class Test(unittest.TestCase):
         # assert
         self.assertEquals(result, False)
 
-                
+    def testEvalLL_invokeIsTrueWithEnvValueTrue_expectReturnsTrue(self):
+        # arrange
+        environment = {'myValue':True}
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='isTrue'))
+        vmprimary = VMPrimary(value=module, selector = selector)
+        ast = VMApply(func = vmprimary, arguments=[Env(selector=DictSelector(index=Literal(value='myValue')))])
+        # act
+        result = interpreter.eval_ll(ast, environment)
+        # assert
+        self.assertEquals(result, True)
+
+    def testEvalLL_invokeIsTrueWithEnvValueFalse_expectReturnsFalse(self):
+        # arrange
+        environment = {'myValue':False}
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='isTrue'))
+        vmprimary = VMPrimary(value=module, selector = selector)
+        ast = VMApply(func = vmprimary, arguments=[Env(selector=DictSelector(index=Literal(value='myValue')))])
+        # act
+        result = interpreter.eval_ll(ast, environment)
+        # assert
+        self.assertEquals(result, False)
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

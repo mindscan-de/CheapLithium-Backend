@@ -42,7 +42,8 @@ def eval_transition(ast, package, module, environment:dict ):
     if isinstance(ast, VMLithiumCompileUnit):
         guard_result = eval_ll(ast.guard, environment);
         if guard_result is False:
-            return guard_result,None
+            # TODO: add a second retur result
+            return guard_result  #TODO: reenable this ",None"
         
         # TODO: This result should contain the data which is added to the transition data.
         __body_result = eval_ll(ast.body, environment)

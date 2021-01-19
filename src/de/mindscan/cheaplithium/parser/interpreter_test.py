@@ -30,22 +30,38 @@ import unittest
 from types import ModuleType
 
 from . import interpreter
-from de.mindscan.cheaplithium.parser.ast import Apply, Literal, MethodDeclaration, Env, DictSelector, VMModule,\
-    VMPrimary, VMApply
+from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector, VMModule,\
+    VMPrimary, VMApply, VMLithiumCompileUnit
 
 # TODO: work on the execution model first
 
 class Test(unittest.TestCase):
 
     def testEvalTransition_invokeTransitionsAlways_expectReturnsTrue(self):
-        ast = MethodDeclaration(name="always", parameters=None)
-        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
-        self.assertEqual(result, True)
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='always'))
+        vmprimary = VMPrimary(value = module, selector = selector)
+        guard = VMApply(func=vmprimary, arguments=[])
+        compileunit = VMLithiumCompileUnit(guard=guard, body = None)
+        # act
+        result = interpreter.eval_transition(compileunit,'','',{})  
+        # assert
+        self.assertEquals(result, True)
+
 
     def testEvalTransition_invokeTransitionsNever_expectReturnsFalse(self):
-        ast = MethodDeclaration(name="never", parameters=None)
-        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
-        self.assertEqual(result, False)
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='never'))
+        vmprimary = VMPrimary(value = module, selector = selector)
+        guard = VMApply(func=vmprimary, arguments=[])
+        compileunit = VMLithiumCompileUnit(guard=guard, body = None)
+        # act
+        result = interpreter.eval_transition(compileunit,'','',{})  
+        # assert
+        self.assertEquals(result, False)
+
 
     #def testEvalTransition_invokeTransitionsIsTrue_expectReturnsTrue(self):
     #    ast = MethodDeclaration(name="isTrue", parameters=[])

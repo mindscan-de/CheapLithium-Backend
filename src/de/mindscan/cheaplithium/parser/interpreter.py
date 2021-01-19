@@ -54,7 +54,7 @@ def eval_transition(ast, environment:dict ):
 
     
 # TODO: implement the way HIT-NODES are evaluated, (after the input is provided)
-def eval_hit_node(compileunit, environment:dict, input:dict):
+def eval_hit_node(compileunit, environment:dict, inputdata:dict):
     pass
 
 

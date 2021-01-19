@@ -33,14 +33,24 @@ sys.path.insert(0,SRC_BASE_DIR)
 import importlib
 
 from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector, MethodDeclaration, VMModule,\
-    VMPrimary, VMApply
+    VMPrimary, VMApply, VMLithiumCompileUnit
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
 
 def eval_transition(ast, package, module, environment:dict ):
     dynamic_module = importlib.import_module('.'+module, package=package)
     
-    if isinstance(ast, MethodDeclaration):
+    if isinstance(ast, VMLithiumCompileUnit):
+        guard_result = eval_ll(ast.guard, environment);
+        if guard_result is False:
+            return guard_result,None
+        
+        # TODO: This result should contain the data which is added to the transition data.
+        __body_result = eval_ll(ast.body, environment)
+        # TODO: return a pair of returnresult (one for the result of the Guard and one for the result of the body
+        return guard_result
+          
+    elif isinstance(ast, MethodDeclaration):
         func = getattr(dynamic_module, ast.name)
         arguments = eval_ll( ast.parameters, environment )
         

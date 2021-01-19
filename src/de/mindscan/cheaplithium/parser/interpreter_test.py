@@ -89,36 +89,6 @@ class Test(unittest.TestCase):
         self.assertEquals(result, False)
 
 
-    # test with one method without arguments
-    def testEvalTransition_invokeAlwaysTransition_expectReturnsTrue(self):
-        ast = Apply(name=Literal(value="always"), arguments=[])
-        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
-        self.assertEqual(result, True)
-    
-    # test with a different method without arguments
-    def testEvalTransition_invokeNeverTransition_expectReturnsFalse(self):
-        ast = Apply(name=Literal(value="never"), arguments=[])
-        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
-        self.assertEqual(result, False)
-    
-    # test with one boolean argument
-    def testEvalTransition_invokeIsTrueArgTrue_expectReturnsTrue(self):
-        ast = Apply(name=Literal(value="isTrue"), arguments=[ Literal(value=True) ])
-        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
-        self.assertEqual(result, True)
-    
-    # test with one boolean argument - different return value
-    def testEvalTransition_invokeIsTrueArgFalse_expectReturnsFalse(self):
-        ast = Apply(name=Literal(value="isTrue"), arguments=[ Literal(value=False) ])
-        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
-        self.assertEqual(result, False)
-
-    # test with two integer aguments
-    def testEvalTransition_invokeIsLessArg1020_expectReturnsTrue(self):
-        ast = Apply(name=Literal(value="isLessThan"), arguments=[ Literal(value=10), Literal(value=20) ])
-        result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
-        self.assertEqual(result, True)
-
     # test with access to environment
     def testEvalTransition_invokeIsTrueWithEnvValueTrue_expectReturnsTrue(self):
         environment = {'myValue':True}
@@ -193,9 +163,52 @@ class Test(unittest.TestCase):
         result = interpreter.eval_ll(ast, {})
         # assert
         self.assertEquals(result, False)
+
+    def testEvalLL_invokeVMModuleIsTrueMethodWithTrueValue_expectMethodResultIsTrue(self):
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='isTrue'))
+        vmprimary = VMPrimary(value=module, selector = selector)
+        ast = VMApply(func = vmprimary, arguments=[Literal(value=True)])
+        # act
+        result = interpreter.eval_ll(ast, {})
+        # assert
+        self.assertEquals(result, True)
         
-        
-        
+    def testEvalLL_invokeVMModuleIsTrueMethodWithFalseValue_expectMethodResultIsFalse(self):
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='isTrue'))
+        vmprimary = VMPrimary(value=module, selector = selector)
+        ast = VMApply(func = vmprimary, arguments=[Literal(value=False)])
+        # act
+        result = interpreter.eval_ll(ast, {})
+        # assert
+        self.assertEquals(result, False)
+
+    def testEvalLL_invokeVMModuleIsLessThanMethod1020_expectMethodResultIsTrue(self):
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='isLessThan'))
+        vmprimary = VMPrimary(value=module, selector = selector)
+        ast = VMApply(func = vmprimary, arguments=[Literal(value=10), Literal(value=20)])
+        # act
+        result = interpreter.eval_ll(ast, {})
+        # assert
+        self.assertEquals(result, True)
+
+    def testEvalLL_invokeVMModuleIsLessThanMethod2010_expectMethodResultIsFalse(self):
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='isLessThan'))
+        vmprimary = VMPrimary(value=module, selector = selector)
+        ast = VMApply(func = vmprimary, arguments=[Literal(value=20), Literal(value=10)])
+        # act
+        result = interpreter.eval_ll(ast, {})
+        # assert
+        self.assertEquals(result, False)
+
+                
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

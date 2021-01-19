@@ -30,8 +30,7 @@ import unittest
 from types import ModuleType
 
 from . import interpreter
-from de.mindscan.cheaplithium.parser.ast import Apply, Literal, Env, DictSelector, VMModule,\
-    VMPrimary, VMApply, VMLithiumCompileUnit
+from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMModule, VMPrimary, VMApply, VMLithiumCompileUnit
 
 # TODO: work on the execution model first
 

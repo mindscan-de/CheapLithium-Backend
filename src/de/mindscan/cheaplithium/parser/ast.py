@@ -57,9 +57,6 @@ class Node(object):
     
     pass
 
-class Apply(Node):
-    nodeAttrs=['name', 'arguments']
-    
 class Primary(Node):
     nodeAttrs=['selector']
 

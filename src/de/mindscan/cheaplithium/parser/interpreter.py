@@ -64,6 +64,24 @@ def eval_transition(ast, package, module, environment:dict ):
     else:
         raise Exception("eval_transition can't evaluate {}: (NYI) please implement this type!".format(type(ast)))
 
+    
+# TODO: implement the way HIT-NODES are evaluated, (after the input is provided)
+def eval_hit_node(compileunit, environment:dict, input:dict):
+    pass
+
+
+# TODO: mode to calculate the input field from the compile unit
+def eval_as_input_node(compileunit, environment:dict):
+    pass
+
+
+# TODO: code to calculate the MIT nodes.
+def eval_mit_node(ast, environment:dict):
+    pass
+
+
+
+
 # eval lithium language
 def eval_ll( ast, environment):
     if ast is None:

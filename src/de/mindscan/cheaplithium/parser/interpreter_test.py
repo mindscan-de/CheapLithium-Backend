@@ -63,10 +63,30 @@ class Test(unittest.TestCase):
         self.assertEquals(result, False)
 
 
-    #def testEvalTransition_invokeTransitionsIsTrue_expectReturnsTrue(self):
-    #    ast = MethodDeclaration(name="isTrue", parameters=[])
-    #    result = interpreter.eval_transition(ast, 'de.mindscan.cheaplithium.vm', 'transitions', {})
-    #    self.assertEqual(result, True)
+    def testEvalTransition_invokeTransitionsIsTrue_expectReturnsTrue(self):
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='isTrue'))
+        vmprimary = VMPrimary(value = module, selector = selector)
+        guard = VMApply(func=vmprimary, arguments=[Literal(value=True)])
+        compileunit = VMLithiumCompileUnit(guard=guard, body = None)
+        # act
+        result = interpreter.eval_transition(compileunit,'','',{})  
+        # assert
+        self.assertEquals(result, True)
+
+
+    def testEvalTransition_invokeTransitionsIsTrueWithFalse_expectReturnsFalse(self):
+        # arrange
+        module = VMModule(name=Literal(value='transitions'))
+        selector = DictSelector(index=Literal(value='isTrue'))
+        vmprimary = VMPrimary(value = module, selector = selector)
+        guard = VMApply(func=vmprimary, arguments=[Literal(value=False)])
+        compileunit = VMLithiumCompileUnit(guard=guard, body = None)
+        # act
+        result = interpreter.eval_transition(compileunit,'','',{})  
+        # assert
+        self.assertEquals(result, False)
 
 
     # test with one method without arguments

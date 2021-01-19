@@ -67,8 +67,6 @@ class MethodDeclaration(Declaration):
     # body
 
 
-class LithiumCompileUnit(Declaration):
-    nodeAttrs = ['guard', 'body']
     
 
 class Apply(Node):
@@ -104,3 +102,6 @@ class VMPrimary(Node):
 
 class VMApply(Node):
     nodeAttrs=['func', 'arguments']
+
+class VMLithiumCompileUnit(Node):
+    nodeAttrs = ['guard', 'body']

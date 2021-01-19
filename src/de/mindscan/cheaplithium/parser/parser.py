@@ -27,7 +27,7 @@ SOFTWARE.
 '''
 
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
-from de.mindscan.cheaplithium.parser.ast import LithiumCompileUnit,  DictSelector, Literal, VMApply
+from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply
 
 
 def parse(tokens):
@@ -178,7 +178,7 @@ class LithiumParser(object):
             body = self.parse_method_body()
             self.accept(Separator('}'))
             
-        return LithiumCompileUnit( guard = guard, body = body)
+        return VMLithiumCompileUnit( guard = guard, body = body)
 
     def parse_guard(self):
         

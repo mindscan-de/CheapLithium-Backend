@@ -44,7 +44,7 @@ class Test(unittest.TestCase):
         parsed_ast = parser.parse(tokens)
         
         #assert
-        self.assertEqual(str(parsed_ast), 'LithiumCompileUnit(guard:VMApply(func:Literal(value:transitions, selector:DictSelector(index:Literal(value:always, selector:None))), arguments:None), body:None)')
+        self.assertEqual(str(parsed_ast), 'VMLithiumCompileUnit(guard:VMApply(func:Literal(value:transitions, selector:DictSelector(index:Literal(value:always, selector:None))), arguments:None), body:None)')
 
 
     def testParseBody_TransitionsAlwaysNoARgumentsNoBody_expectTransition(self):

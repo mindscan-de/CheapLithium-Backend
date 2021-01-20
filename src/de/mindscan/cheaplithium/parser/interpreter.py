@@ -81,7 +81,7 @@ def eval_mit_node(ast, environment:dict):
 
 
 # eval lithium language
-def eval_ll( ast, environment):
+def eval_ll( ast, environment, special_engine=None):
     if ast is None:
         return None
     
@@ -89,38 +89,47 @@ def eval_ll( ast, environment):
         return ast.value
     
     elif isinstance(ast, DictSelector):
-        index = eval_ll(ast.index,environment)
+        index = eval_ll(ast.index,environment, special_engine)
         return lambda theDict: theDict[index] if ( isinstance(theDict, dict) or isinstance(theDict, list) ) else getattr(theDict, index)
     
     elif isinstance(ast, Env):
         if(ast.selector==None):
             return environment
         
-        selector = eval_ll(ast.selector, environment)
+        selector = eval_ll(ast.selector, environment, special_engine)
         return selector(environment)
     
     elif isinstance(ast, list):
         evaluatedList = []
         for element in ast:
-            result = eval_ll(element, environment)
+            result = eval_ll(element, environment, special_engine)
             evaluatedList.append( result )
         return evaluatedList
     
     elif isinstance(ast,VMModule):
-        module_name = eval_ll(ast.name, environment)
-        return importlib.import_module('.'+module_name, package='de.mindscan.cheaplithium.vm')
+        module_name = eval_ll(ast.name, environment, special_engine)
+        themodule = importlib.import_module('.'+module_name, package='de.mindscan.cheaplithium.vm')
+        
+        ## TODO: maybe so..., such that the special engine may get injected.
+        if special_engine:
+            try:
+                themodule.__set_engine(special_engine)
+            except:
+                pass
+        
+        return themodule
     
     elif isinstance(ast,VMPrimary):
-        value = eval_ll(ast.value,environment)
+        value = eval_ll(ast.value,environment, special_engine)
         if ast.selector is None:
             return value
         
-        selector = eval_ll(ast.selector, environment)
+        selector = eval_ll(ast.selector, environment, special_engine)
         return selector(value)
     
     elif isinstance(ast,VMApply):
-        theFunction = eval_ll(ast.func, environment)
-        arguments = eval_ll(ast.arguments, environment)
+        theFunction = eval_ll(ast.func, environment, special_engine)
+        arguments = eval_ll(ast.arguments, environment, special_engine)
         if arguments is None:
             return theFunction()
         else:

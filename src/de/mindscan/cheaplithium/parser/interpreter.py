@@ -36,21 +36,21 @@ from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMMo
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
 
-def eval_transition(ast, environment:dict ):
+def eval_transition(compileunit, environment:dict ):
     
-    if isinstance(ast, VMLithiumCompileUnit):
-        guard_result = eval_ll(ast.guard, environment);
+    if isinstance(compileunit, VMLithiumCompileUnit):
+        guard_result = eval_ll(compileunit.guard, environment);
         if guard_result is False:
             # TODO: add a second retur result
             return guard_result  #TODO: reenable this ",None"
         
         # TODO: This result should contain the data which is added to the transition data.
-        __body_result = eval_ll(ast.body, environment)
+        __body_result = eval_ll(compileunit.body, environment)
         # TODO: return a pair of returnresult (one for the result of the Guard and one for the result of the body
         return guard_result
           
     else:
-        raise Exception("eval_transition can't evaluate {}: (NYI) please implement this type!".format(type(ast)))
+        raise Exception("eval_transition can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
     
 # TODO: implement the way HIT-NODES are evaluated, (after the input is provided)
@@ -59,7 +59,7 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
 
 
 # TODO: mode to calculate the input field from the compile unit
-def eval_as_input_node(compileunit, environment:dict):
+def eval_hit_render_input_interface(compileunit, environment:dict):
     pass
 
 

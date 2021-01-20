@@ -61,7 +61,7 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
 
 
 # TODO: mode to calculate the input field from the compile unit
-def eval_hit_render_input_interface(compileunit, environment:dict, inputdata:dict):
+def eval_hit_render_input_interface(compileunit, environment:dict):
     ui_input_interface = []
     # TODO: we want to evaluate the body of the compile unit.
     # we want to render the nodes, which refer to the input.

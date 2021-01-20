@@ -25,50 +25,51 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine 
 
-__local_engine = None
+__input__local_engine:SpecialEngine = None
 
-
-## TODO something like this to inject user data back into the input evaluation, without cripling the interpreter
-def __inject_engine(engine):
-    __local_engine = engine
-
-## according to the 
-def user_textfield(label, description):
-    if __local_engine.__isrenderui_mode:
-        # TODO: maybe write that back into the engine
-        # return the UI - rendering instructions
-        return \
-            {
-                'label' : label,
-                'type' : 'textfield',
-                'description' : description 
-            }
+def __inject_engine(engine:SpecialEngine):
+    if engine is None:
+        __input__local_engine = SpecialEngine()
     else:
-        # return the real input of the user
-        return __local_engine.__input_data[label]
+        __input__local_engine = engine
+
+ 
+def user_textfield(label:str, description:str):
+    if __input__local_engine.isInterfaceRenderMode():
+        item = {
+            'label' : label,
+            'type' : 'textfield',
+            'description' : description 
+            }
+        __input__local_engine.appendInputInterface(item)
+        return item
+    else:
+        return __input__local_engine.getUserLabelledInput(label)
         
-def user_textarea(label, description):
-    if __local_engine.__isrenderui_mode:
-        # TODO: maybe write that back into the engine
-        # return the UI - rendering instructions
-        return \
-            {
-                'label' : label,
-                'type' : 'textarea',
-                'description' : description 
+        
+def user_textarea(label:str, description:str):
+    if __input__local_engine.isInterfaceRenderMode():
+        item = {
+            'label' : label,
+            'type' : 'textarea',
+            'description' : description
             }
+        __input__local_engine.appendInputInterface(item)
+        return item
     else:
-        return __local_engine.__input_data[label]
+        return __input__local_engine.getUserLabelledInput(label)
 
-def user_yesnoselection(label, description):
-    # TODO: maybe write that back into the engine
-    if __local_engine.__isrenderui_mode:
-        return \
-            {
-                'label' : label,
-                'type' : 'yesnoselection',
-                'description' : description 
+
+def user_yesnoselection(label:str, description:str):
+    if __input__local_engine.isInterfaceRenderMode():
+        item = {
+            'label' : label,
+            'type' : 'yesnoselection',
+            'description' : description 
             }
+        __input__local_engine.appendInputInterface(item)
+        return item
     else:
-        return __local_engine.__input_data['label']
+        return __input__local_engine.getUserLabelledInput(label)

@@ -55,12 +55,22 @@ def eval_transition(compileunit, environment:dict ):
     
 # TODO: implement the way HIT-NODES are evaluated, (after the input is provided)
 def eval_hit_node(compileunit, environment:dict, inputdata:dict):
+    # use special runtime mode/class to influence behavior of inputui, 
+    # the injected special runtime provides input data to the thread via inputui
     pass
 
 
 # TODO: mode to calculate the input field from the compile unit
-def eval_hit_render_input_interface(compileunit, environment:dict):
-    pass
+def eval_hit_render_input_interface(compileunit, environment:dict, inputdata:dict):
+    ui_input_interface = []
+    # TODO: we want to evaluate the body of the compile unit.
+    # we want to render the nodes, which refer to the input.
+    if isinstance(compileunit, VMLithiumCompileUnit):
+        # TODO: use a special runtime mode/class to influence behavior of inputui, this class collects also the input interface
+        # then get the data from collector and then return the collected data.        
+        return ui_input_interface
+    else:
+        raise Exception()
 
 
 # TODO: code to calculate the MIT nodes.

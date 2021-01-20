@@ -113,7 +113,7 @@ def eval_ll( ast, environment, special_engine=None):
         ## TODO: maybe so..., such that the special engine may get injected.
         if special_engine:
             try:
-                themodule.__set_engine(special_engine)
+                themodule.__inject_engine(special_engine)
             except:
                 pass
         

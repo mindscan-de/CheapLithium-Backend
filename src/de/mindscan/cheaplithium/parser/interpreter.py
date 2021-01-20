@@ -33,6 +33,7 @@ sys.path.insert(0,SRC_BASE_DIR)
 import importlib
 
 from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMModule, VMPrimary, VMApply, VMLithiumCompileUnit
+from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
 # interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
 
@@ -53,22 +54,34 @@ def eval_transition(compileunit, environment:dict ):
         raise Exception("eval_transition can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
     
-# TODO: implement the way HIT-NODES are evaluated, (after the input is provided)
 def eval_hit_node(compileunit, environment:dict, inputdata:dict):
-    # use special runtime mode/class to influence behavior of inputui, 
-    # the injected special runtime provides input data to the thread via inputui
-    pass
+    special_engine = SpecialEngine()
+    # inject the form data into the thread
+    special_engine.setUserLabeledInput(inputdata)
 
-
-# TODO: mode to calculate the input field from the compile unit
-def eval_hit_render_input_interface(compileunit, environment:dict):
-    ui_input_interface = []
-    # TODO: we want to evaluate the body of the compile unit.
-    # we want to render the nodes, which refer to the input.
     if isinstance(compileunit, VMLithiumCompileUnit):
-        # TODO: use a special runtime mode/class to influence behavior of inputui, this class collects also the input interface
-        # then get the data from collector and then return the collected data.        
-        return ui_input_interface
+        # TODO: should the guard be calcuated at all?
+        # eval_ll(compileunit.guard, environment, special_engine)
+        
+        # inject the inputdata data into the thread, by using the special engine
+        eval_ll(compileunit.body, environment, special_engine)
+    else:
+        raise Exception("eval_hit_node can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
+
+
+def eval_hit_render_input_interface(compileunit, environment:dict):
+    special_engine = SpecialEngine()
+    # enable the recording mode, for the user interface
+    special_engine.setInterfaceRenderMode(True)
+    
+    if isinstance(compileunit, VMLithiumCompileUnit):
+        # TODO: should the guard be calcuated at all?
+        # eval_ll(compileunit.guard, environment, special_engine)
+        
+        # record the user input interface into special engine, while execution
+        eval_ll(compileunit.body, environment, special_engine)
+        # replay user input interface after evaluation
+        return special_engine.getInputInterface()
     else:
         raise Exception()
 

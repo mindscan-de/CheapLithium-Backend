@@ -27,7 +27,7 @@ SOFTWARE.
 '''
 from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine 
 
-__input__local_engine:SpecialEngine = None
+__input__local_engine:SpecialEngine = SpecialEngine()
 
 def __inject_engine(engine:SpecialEngine):
     if engine is None:

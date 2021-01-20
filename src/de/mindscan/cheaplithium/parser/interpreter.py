@@ -122,8 +122,7 @@ def eval_ll( ast, environment, special_engine=None):
     elif isinstance(ast,VMModule):
         module_name = eval_ll(ast.name, environment, special_engine)
         themodule = importlib.import_module('.'+module_name, package='de.mindscan.cheaplithium.vm')
-        
-        ## TODO: maybe so..., such that the special engine may get injected.
+
         if special_engine:
             try:
                 themodule.__inject_engine(special_engine)

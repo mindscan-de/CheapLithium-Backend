@@ -103,21 +103,6 @@ class Test(unittest.TestCase):
         self.assertEqual(result['type'], 'textfield')
         
 
-    def testUserTextField_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
-        # arrange
-        special_engine = SpecialEngine()
-        special_engine.setInterfaceRenderMode(True)
-        
-        theModule = self.createModule('inputui')
-        theModule._inject_engine(special_engine)
-        # act
-        theModule.user_textfield("myLabel","myDescription")
-        result = special_engine.getInputInterface()
-        
-        # assert
-        self.assertEqual(result, [{'label':'myLabel', 'type':'textfield', 'description':'myDescription' }])
-
-        
     def testUserTextField_NoEngineNoInputForMyLabel_expectMyLabelMissing(self):
         # arrange
         special_engine = SpecialEngine()
@@ -156,6 +141,21 @@ class Test(unittest.TestCase):
         result = theModule.user_textfield("myLabel","myDescription")
         # assert
         self.assertEqual(result, 'MyLabelInput')
+
+
+    def testUserTextField_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
+        # arrange
+        special_engine = SpecialEngine()
+        special_engine.setInterfaceRenderMode(True)
+        
+        theModule = self.createModule('inputui')
+        theModule._inject_engine(special_engine)
+        # act
+        theModule.user_textfield("myLabel","myDescription")
+        result = special_engine.getInputInterface()
+        
+        # assert
+        self.assertEqual(result, [{'label':'myLabel', 'type':'textfield', 'description':'myDescription' }])
 
 
     def testUserTextArea_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):

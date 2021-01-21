@@ -173,6 +173,19 @@ class Test(unittest.TestCase):
         self.assertEqual(result, [{'label':'myLabel', 'type':'textarea', 'description':'myDescription' }])
 
 
+    def testUserYesNoSelection_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
+        # arrange
+        special_engine = SpecialEngine()
+        special_engine.setInterfaceRenderMode(True)
+        
+        theModule = self.createModule('inputui')
+        theModule._inject_engine(special_engine)
+        # act
+        theModule.user_yesnoselection("myLabel","myDescription")
+        result = special_engine.getInputInterface()
+        
+        # assert
+        self.assertEqual(result, [{'label':'myLabel', 'type':'yesnoselection', 'description':'myDescription' }])
 
     
 

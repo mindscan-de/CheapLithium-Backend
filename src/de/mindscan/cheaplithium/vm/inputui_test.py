@@ -90,6 +90,50 @@ class Test(unittest.TestCase):
         self.assertEqual(result['description'], 'myOtherDescription')
         
 
+    def testUserTextField_SetInputInterfaceRenderMode_resultHastextfieldType(self):
+        # arrange
+        special_engine = SpecialEngine()
+        special_engine.setInterfaceRenderMode(True)
+        
+        theModule = self.createModule('inputui')
+        theModule._inject_engine(special_engine)
+        # act
+        result = theModule.user_textfield("myLabel","myDescription")
+        # assert
+        self.assertEqual(result['type'], 'textfield')
+        
+        
+    def testUserTextField_NoEngineNoInputForMyLabel_expectMyLabelMissing(self):
+        # arrange
+        theModule = self.createModule('inputui')
+        # act
+        result = theModule.user_textfield("myLabel","myDescription")
+        # assert
+        self.assertEqual(result, 'myLabelMissing')
+        
+        
+    def testUserTextField_NoEngineNoInputForMyOtherLabel_expectMyOtherLabelMissing(self):
+        # arrange
+        theModule = self.createModule('inputui')
+        # act
+        result = theModule.user_textfield("myOtherLabel","myDescription")
+        # assert
+        self.assertEqual(result, 'myOtherLabelMissing')
+
+
+    def testUserTextField_SetEngineWithUserDataForMyLabel_expectMyLabelInputFromInputDictionary(self):
+        # arrange
+        special_engine = SpecialEngine()
+        special_engine.setUserLabeledInput({'myLabel':'MyLabelInput'})
+
+        theModule = self.createModule('inputui')
+        theModule._inject_engine(special_engine)
+        # act
+        result = theModule.user_textfield("myLabel","myDescription")
+        # assert
+        self.assertEqual(result, 'MyLabelInput')
+
+
     def createModule(self, module_name):
         themodule = importlib.import_module('.'+module_name, package='de.mindscan.cheaplithium.vm')
         return themodule

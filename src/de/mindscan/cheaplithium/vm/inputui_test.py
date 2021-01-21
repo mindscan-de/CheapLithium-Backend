@@ -102,6 +102,21 @@ class Test(unittest.TestCase):
         # assert
         self.assertEqual(result['type'], 'textfield')
         
+
+    def testUserTextField_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
+        # arrange
+        special_engine = SpecialEngine()
+        special_engine.setInterfaceRenderMode(True)
+        
+        theModule = self.createModule('inputui')
+        theModule._inject_engine(special_engine)
+        # act
+        theModule.user_textfield("myLabel","myDescription")
+        result = special_engine.getInputInterface()
+        
+        # assert
+        self.assertEqual(result, [{'label':'myLabel', 'type':'textfield', 'description':'myDescription' }])
+
         
     def testUserTextField_NoEngineNoInputForMyLabel_expectMyLabelMissing(self):
         # arrange
@@ -133,6 +148,8 @@ class Test(unittest.TestCase):
         # assert
         self.assertEqual(result, 'MyLabelInput')
 
+
+    
 
     def createModule(self, module_name):
         themodule = importlib.import_module('.'+module_name, package='de.mindscan.cheaplithium.vm')

@@ -27,7 +27,7 @@ SOFTWARE.
 '''
 from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine 
 
-__input__local_engine:SpecialEngine = SpecialEngine()
+__input__local_engine = SpecialEngine()
 
 def _inject_engine(engine:SpecialEngine):
     global __input__local_engine
@@ -38,6 +38,7 @@ def _inject_engine(engine:SpecialEngine):
 
  
 def user_textfield(label:str, description:str):
+    global __input__local_engine
     if __input__local_engine.isInterfaceRenderMode():
         item = {
             'label' : label,
@@ -51,6 +52,7 @@ def user_textfield(label:str, description:str):
         
         
 def user_textarea(label:str, description:str):
+    global __input__local_engine
     if __input__local_engine.isInterfaceRenderMode():
         item = {
             'label' : label,
@@ -64,6 +66,7 @@ def user_textarea(label:str, description:str):
 
 
 def user_yesnoselection(label:str, description:str):
+    global __input__local_engine
     if __input__local_engine.isInterfaceRenderMode():
         item = {
             'label' : label,

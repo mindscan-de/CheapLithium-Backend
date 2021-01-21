@@ -120,7 +120,11 @@ class Test(unittest.TestCase):
         
     def testUserTextField_NoEngineNoInputForMyLabel_expectMyLabelMissing(self):
         # arrange
+        special_engine = SpecialEngine()
+        special_engine.setInterfaceRenderMode(False)
+        
         theModule = self.createModule('inputui')
+        theModule._inject_engine(special_engine)
         # act
         result = theModule.user_textfield("myLabel","myDescription")
         # assert
@@ -129,9 +133,14 @@ class Test(unittest.TestCase):
         
     def testUserTextField_NoEngineNoInputForMyOtherLabel_expectMyOtherLabelMissing(self):
         # arrange
+        special_engine = SpecialEngine()
+        special_engine.setInterfaceRenderMode(False)
+
         theModule = self.createModule('inputui')
+        theModule._inject_engine(special_engine)
         # act
         result = theModule.user_textfield("myOtherLabel","myDescription")
+        
         # assert
         self.assertEqual(result, 'myOtherLabelMissing')
 
@@ -147,6 +156,22 @@ class Test(unittest.TestCase):
         result = theModule.user_textfield("myLabel","myDescription")
         # assert
         self.assertEqual(result, 'MyLabelInput')
+
+
+    def testUserTextArea_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
+        # arrange
+        special_engine = SpecialEngine()
+        special_engine.setInterfaceRenderMode(True)
+        
+        theModule = self.createModule('inputui')
+        theModule._inject_engine(special_engine)
+        # act
+        theModule.user_textarea("myLabel","myDescription")
+        result = special_engine.getInputInterface()
+        
+        # assert
+        self.assertEqual(result, [{'label':'myLabel', 'type':'textarea', 'description':'myDescription' }])
+
 
 
     

@@ -29,7 +29,8 @@ from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
 __input__local_engine:SpecialEngine = SpecialEngine()
 
-def __inject_engine(engine:SpecialEngine):
+def _inject_engine(engine:SpecialEngine):
+    global __input__local_engine
     if engine is None:
         __input__local_engine = SpecialEngine()
     else:

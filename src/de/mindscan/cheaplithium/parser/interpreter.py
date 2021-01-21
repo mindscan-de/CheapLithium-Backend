@@ -125,7 +125,7 @@ def eval_ll( ast, environment, special_engine=None):
 
         if special_engine:
             try:
-                themodule.__inject_engine(special_engine)
+                themodule._inject_engine(special_engine)
             except:
                 pass
         

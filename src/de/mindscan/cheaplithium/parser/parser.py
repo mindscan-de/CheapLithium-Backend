@@ -26,9 +26,12 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
-from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
 from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply
+from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
 
+# ##############################
+# Simple Interface to the parser
+# ##############################
 
 def parse(tokens):
     parser = LithiumParser(tokens)
@@ -40,6 +43,10 @@ def parse(tokens):
 =================================
 First basic idea for this grammar
 =================================
+
+We don't need something perfect, but we need something, which is good enough.
+
+(Currently testing alternate grammars with xtext)
 
 Even though the grammar allows more by syntax, the parser (validation) will take care of it, or not...
 Maybe i will rewrite this whole parser, if i need to support Expressions with oerations and parentheses...

@@ -56,14 +56,23 @@ def eval_transition(compileunit, environment:dict ):
     
 def eval_hit_node(compileunit, environment:dict, inputdata:dict):
     special_engine = SpecialEngine()
-    # inject the form data into the thread
-    special_engine.setUserLabeledInput(inputdata)
 
     if isinstance(compileunit, VMLithiumCompileUnit):
-        # TODO: should the guard be calcuated at all?
+        userinterface = eval_hit_render_input_interface(compileunit, environment)
+        allowed_input_labels = [ x['label'] for x in userinterface ]
+        
+        ## filter input data, whether it is allowed dur to user interface         
+        filtered_input_data = {}
+        for input_label in allowed_input_labels:
+            filtered_input_data[input_label] = inputdata[input_label]
+
+        # inject the filtered form data into the thread
+        special_engine.setUserLabeledInput(filtered_input_data)
+        
+        # TODO: evaluate the compileunit guard?
         # eval_ll(compileunit.guard, environment, special_engine)
         
-        # inject the inputdata data into the thread, by using the special engine
+        # inject the filtered form inputdata data into the thread, by using the special engine
         eval_ll(compileunit.body, environment, special_engine)
     else:
         raise Exception("eval_hit_node can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
@@ -71,10 +80,11 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
 
 def eval_hit_render_input_interface(compileunit, environment:dict):
     special_engine = SpecialEngine()
-    # enable the recording mode, for the user interface
-    special_engine.setInterfaceRenderMode(True)
     
     if isinstance(compileunit, VMLithiumCompileUnit):
+        # enable the recording mode, for the user interface
+        special_engine.setInterfaceRenderMode(True)
+        
         # TODO: should the guard be calcuated at all?
         # eval_ll(compileunit.guard, environment, special_engine)
         

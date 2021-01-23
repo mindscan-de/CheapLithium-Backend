@@ -35,14 +35,13 @@ import importlib
 from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMModule, VMPrimary, VMApply, VMLithiumCompileUnit
 from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
-# interpreterrun = (tree, 'de.mindscan.cheaplithium.vm', 'transitions', {} )
 
 def eval_transition(compileunit, environment:dict ):
     
     if isinstance(compileunit, VMLithiumCompileUnit):
         guard_result = eval_ll(compileunit.guard, environment);
         if guard_result is False:
-            # TODO: add a second retur result
+            # TODO: add a second return result
             return guard_result  #TODO: reenable this ",None"
         
         # TODO: This result should contain the data which is added to the transition data.

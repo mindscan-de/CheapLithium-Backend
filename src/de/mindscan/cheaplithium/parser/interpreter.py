@@ -55,7 +55,6 @@ def eval_transition(compileunit, environment:dict ):
 
     
 def eval_hit_node(compileunit, environment:dict, inputdata:dict):
-    special_engine = SpecialEngine()
 
     if isinstance(compileunit, VMLithiumCompileUnit):
         userinterface = eval_hit_render_input_interface(compileunit, environment)
@@ -67,6 +66,7 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
             filtered_input_data[input_label] = inputdata[input_label]
 
         # inject the filtered form data into the thread
+        special_engine = SpecialEngine()
         special_engine.setUserLabeledInput(filtered_input_data)
         
         # TODO: evaluate the compileunit guard?
@@ -79,10 +79,10 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
 
 
 def eval_hit_render_input_interface(compileunit, environment:dict):
-    special_engine = SpecialEngine()
     
     if isinstance(compileunit, VMLithiumCompileUnit):
         # enable the recording mode, for the user interface
+        special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
         
         # TODO: should the guard be calcuated at all?

@@ -31,6 +31,8 @@ from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.parser import tokenizer
+from de.mindscan.cheaplithium.parser import parser
+from de.mindscan.cheaplithium.parser import interpreter
 
 class LithiumLangServer(object):
     '''
@@ -70,16 +72,18 @@ class LithiumLangServer(object):
         # tokenize
         _tokens = tokenizer.tokenize(node[DN_NODEACTION])
         
-        # TODO: parse AST from tokens
-        # compile to UserInputInterface / dictionary 
-        # return compiled interface.
-        
-        # TODO: generate interface from AST, using the "LithiumUIGenerator" or the Lithium
-        # It will also respect the environment to do precalculations and such?
-         
         # calculate, whether it is a HIT node 
         # (only HIT Nodes should return a user interface)
         if node[DN_TYPE] == DN_TYPE_HIT:
+            #             # parse AST from tokens
+            #             _ast_compileunit = parser.parse(_tokens)
+            #             
+            #             # compile to UserInputInterface / dictionary 
+            #             _interface = interpreter.eval_hit_render_input_interface(_ast_compileunit, environment)
+            #             
+            #             # return compiled interface.
+            #             return { 'uiInputInterface': _interface }
+            
             return { 'uiInputInterface': [
                                 {
                                     'label':'myTextFieldLabel',

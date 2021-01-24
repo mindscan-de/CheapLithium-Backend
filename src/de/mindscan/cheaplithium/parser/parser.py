@@ -60,6 +60,7 @@ Model:
     {Model} model = (VMLithiumCompileUnit)?
 ;
 
+
 VMLithiumCompileUnit:
     {VMLithiumCompileUnit} guard = LLMethodInvocation ( body = VMBody )?
 ;
@@ -71,7 +72,21 @@ VMBody:
 
     
 LLStatement:
-    LLExpression ';'
+    LLExpressionStatement ';'
+;
+
+
+LLExpressionStatement:
+    LLAssignment |
+    LLExpression
+;
+
+
+LLAssignment:
+    PrimaryAndSelection
+    (
+        {LLAssignment.left=current} '=' right=LLExpression 
+    )
 ;
 
 
@@ -111,6 +126,7 @@ LLLiteral returns Expression:
     {LLRef} value=ID
 ;
 
+
 This can parse the following:
 
 *  (empty) 
@@ -135,10 +151,24 @@ This can parse the following:
                     inputui.user_textarea("myLabelTA","myTADescription") ;
                     inputui.user_yesnoselection("myLabelYN","myYNDescription") ;
                 }
+*  commons.foo() {
+                    env.x = env.y;
+                }
+*  commons.foo() {
+                    env.x = env.y();
+                }
+*  commons.foo() {
+                    env.x = inputui.user_yesnoselection("myLabelYN","myYNDescription");
+                }
+
+** THIS will fail (as expected) :
+*  commons.foo() {
+                    env.x() = env.y;
+                }
 
 Can not parse right now...:
 
-*  assignments
+*  expressions with operators <-- (ato de)
 
 '''
 

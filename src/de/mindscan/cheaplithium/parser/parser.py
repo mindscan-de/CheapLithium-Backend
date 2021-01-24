@@ -57,7 +57,7 @@ First layout of this parser. I might rewrite this parser in the future...
 -------------------------------------------------------------------------
 
 Model:
-    model = (VMLithiumCompileUnit)?
+    {Model} model = (VMLithiumCompileUnit)?
 ;
 
 VMLithiumCompileUnit:
@@ -65,23 +65,26 @@ VMLithiumCompileUnit:
 ;
 
 
-LLMethodInvocation:
-    func=PrimaryAndSelection '(' (args+=LLExpression (',' args+=LLExpression)* )? ')'
-;
-
-
 VMBody:
     {VMBody} '{' statements+=LLStatement* '}'
 ;
 
-
+    
 LLStatement:
-    'z' ';'
+    LLExpression ';'
 ;
 
 
 LLExpression returns Expression:
-    LLMemberSelection
+    LLMethodInvocation
+;
+
+
+LLMethodInvocation returns Expression:
+    PrimaryAndSelection
+    (
+        {LLMethodInvocation.func=current} '(' (args+=LLExpression (',' args+=LLExpression)* )? ')'
+    )?
 ;
 
 
@@ -97,6 +100,7 @@ LLMemberSelection returns Expression:
     )?
 ;
 
+
 LLLiteral returns Expression:
     {LLStringLiteral} value = STRING |
     {LLIntegerLiteral} value = INT |
@@ -109,6 +113,7 @@ LLLiteral returns Expression:
 
 This can parse the following:
 
+*  (empty) 
 *  always()
 *  always() {}
 *  transitions.always() {}
@@ -121,10 +126,19 @@ This can parse the following:
 *  transitions.foo.isLessThan(env.y, env.x.y, env) {}
 *  transitions.isEqualTo(env.result, "myvalue") {}
 *  transitions.isEqualTo(env.result, 'myvalue') {}
+*  transitions.isLessThan(env.result.y, commons.a()) {}
+*  commons.foo() {
+                    inputui.user_textfield("myLabel","myDescription") ;
+                }
+*  commons.foo() {
+                    inputui.user_textfield("myLabelTF","myTFDescription ") ;
+                    inputui.user_textarea("myLabelTA","myTADescription") ;
+                    inputui.user_yesnoselection("myLabelYN","myYNDescription") ;
+                }
 
 Can not parse right now...:
 
-*  transitions.isLessThan(env.result.y, commons.a()) {}
+*  assignments
 
 '''
 

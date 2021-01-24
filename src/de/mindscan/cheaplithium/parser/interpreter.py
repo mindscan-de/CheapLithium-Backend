@@ -36,6 +36,10 @@ from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMMo
 from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
 
+# TODO: the return of the environment and the data is the most important thing after the parsing, because this will 
+#       make the lithium runtime engine update the runtime data / threadenvironment  
+
+# TODO: return the data assigned in the lithium-compileunit.body
 def eval_transition(compileunit, environment:dict ):
     
     if isinstance(compileunit, VMLithiumCompileUnit):
@@ -52,7 +56,7 @@ def eval_transition(compileunit, environment:dict ):
     else:
         raise Exception("eval_transition can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
-    
+# TODO: return the environment after executing the HIT Node    
 def eval_hit_node(compileunit, environment:dict, inputdata:dict):
 
     if isinstance(compileunit, VMLithiumCompileUnit):
@@ -77,6 +81,11 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
         raise Exception("eval_hit_node can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
 
+# TODO: return the environment? - Probably no.
+# TODO: prevent the environment to change because we use (execute) this method as a  help to identify 
+#       thevalues which are input data and which nit, because all other statements are exevuted too and
+#       manipulate the environment. Therefore the environment may has to be firewalled...
+#       make a deep copy of the environment first. 
 def eval_hit_render_input_interface(compileunit, environment:dict):
     
     if isinstance(compileunit, VMLithiumCompileUnit):

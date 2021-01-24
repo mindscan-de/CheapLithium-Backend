@@ -57,51 +57,74 @@ First layout of this parser. I might rewrite this parser in the future...
 -------------------------------------------------------------------------
 
 Model:
-    guard=LLGuard ( body=LLMethodBody )?  
+    model = (VMLithiumCompileUnit)?
 ;
 
-LLGuard:
-    expr = LLExpression
+VMLithiumCompileUnit:
+    {VMLithiumCompileUnit} guard = LLMethodInvocation ( body = VMBody )?
 ;
 
-LLMethodBody:
-    {LLMethodBody} '{'    statements+=LLStatement* '}'
+
+LLMethodInvocation:
+    func=PrimaryAndSelection '(' (args+=LLExpression (',' args+=LLExpression)* )? ')'
 ;
+
+
+VMBody:
+    {VMBody} '{' statements+=LLStatement* '}'
+;
+
 
 LLStatement:
-    LLExpression ';'
+    'z' ';'
 ;
 
-LLExpression: LLAssignment;
 
-LLAssignment returns LLExpression:
-    LLSelectionExpression 
-    ( 
-        {LLAssignment.left = current} '=' right=LLExpression
+LLExpression returns Expression:
+    LLMemberSelection
+;
+
+
+PrimaryAndSelection returns Expression:
+    LLMemberSelection    
+;
+
+
+LLMemberSelection returns Expression:
+    LLLiteral
+    (
+        {LLMemberSelection.value=current} '.' (selector+=ID ('.' selector+=ID)*)
     )?
 ;
 
-LLSelectionExpression returns LLExpression:
-    LLTerminalExpression 
-    (
-        {LLMemberSelection.receiver=current} '.' member=ID
-        (
-            methodinvocation?='(' 
-                    (args+=LLExpression (',' args+=LLExpression)* )?
-                ')'
-        )?
-    )*
+LLLiteral returns Expression:
+    {LLStringLiteral} value = STRING |
+    {LLIntegerLiteral} value = INT |
+    {LLBooleanLiteral} value = ('True' | 'False') |
+    {LLNoneLiteral} value = 'None' |
+    {LLEnv} 'env' |
+    {LLThis} 'this' |
+    {LLRef} value=ID
 ;
 
-LLTerminalExpression returns LLExpression:
-    {LLStringLiteralConstant} value=STRING |
-    {LLIntConstant} value=INT |
-    {LLBooleanConstant} value= ('True' | 'False') |
-    {LLThis} 'this' |
-    {LLEnv} 'env' |
-    {LLNone} 'None' |
-    {LLRef} symbol=ID 
-;
+This can parse the following:
+
+*  always()
+*  always() {}
+*  transitions.always() {}
+*  transitions.isTrue(True) {}
+*  transitions.isFalse(False) {}
+*  transitions.isLessThan(10,20) {}
+*  transitions.isLessThan(env.result,20) {}
+*  transitions.isLessThan(env.result, env.x.y) {}
+*  transitions.isLessThan(env.result.y, env.x.y, env) {}
+*  transitions.foo.isLessThan(env.y, env.x.y, env) {}
+*  transitions.isEqualTo(env.result, "myvalue") {}
+*  transitions.isEqualTo(env.result, 'myvalue') {}
+
+Can not parse right now...:
+
+*  transitions.isLessThan(env.result.y, commons.a()) {}
 
 '''
 

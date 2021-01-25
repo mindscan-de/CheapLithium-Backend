@@ -28,6 +28,7 @@ SOFTWARE.
 
 from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
+from symbol import except_clause
 
 # ##############################
 # Simple Interface to the parser
@@ -292,16 +293,62 @@ class LithiumParser(object):
 
 
     '''
+    LLStatement:
+        LLExpressionStatement ';'
+    ;
     '''
     def parseLLStatement(self):
-        ## TODO: start 
-        return None;
+        expressionStatement = self.parseLLExpressionStatement
+        
+        # if next token is FOLLOW MENGE of parseLLStatement (';')
+        if True:
+            # TODO: consume ';'
+            return expressionStatement;
+        else:
+            # raise exception, that we were expecting the follow 
+            raise Exception("Missing ';'")
+        
 
     '''
+    LLExpressionStatement:
+        LLAssignment |
+        LLExpression
+    ;
     '''
-    def parseLLMethodInvocation(self):
-        return None;
+    def parseLLExpressionStatement(self):
+        if False:
+            raise Exception ("We did not expect that token for a Expression Statement")
+
+        # we may have to store a marker so we can return, if we parsed it the wrong way.        
+        try:
+            assignment = self.parseLLAssignment()
+            return assignment
+        except:
+            pass
+        
+        # we may have to restore the position now, so we can return the expression.
+        try:
+            expression = self.parseLLExpression()
+            return expression
+        except:
+            pass
+        
+        raise Exception ("This should eithe be an assigment or an Expression.")
     
+
+    '''
+    TODO: implement the rule
+    '''
+    def parseLLAssignment(self):
+        return None
+    
+    '''
+    TODO: implement the rule
+    '''
+    def parseLLExpression(self):
+        return None
+
+
 
 
     def parse_guard(self):

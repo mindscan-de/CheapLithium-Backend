@@ -26,7 +26,7 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
-from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply
+from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
 
 # ##############################
@@ -224,8 +224,13 @@ class LithiumParser(object):
         self.tokens = LATokenIterator(tokens)
         self.tokens.set_default(EndOfInput(None))
     
+    '''
+    Model:
+        {Model} model = (VMLithiumCompileUnit)?
+    ;
+    '''
     def parse(self):
-        return self.parse_compile_unit()
+        return self.parseVMLithiumCompileUnit()
 
 #
 #
@@ -240,25 +245,72 @@ class LithiumParser(object):
 # ----------------------------------------------------------------------------
     
     '''
-    Model:
-        guard=LLGuard ( body=LLMethodBody )?  
+    VMLithiumCompileUnit:
+        {VMLithiumCompileUnit} guard = LLMethodInvocation ( body = VMBody )?
     ;
     '''
-    def parse_compile_unit(self):
-        guard = self.parse_guard( )
-
+    def parseVMLithiumCompileUnit(self):
+        guard = None
         body = None
-        if self.try_accept(Separator('{')):
-            body = self.parse_method_body()
-            self.accept(Separator('}'))
+        
+        # TODO: if next token in first-Menge then
+        if True: 
+            guard = self.parseLLMethodInvocation( )
+        
+        # TODO: if next token is in FirstMenge '{'
+        if True:
+            if self.try_accept(Separator('{')):
+                body = self.parseVMBody()
+                self.accept(Separator('}'))
             
         return VMLithiumCompileUnit( guard = guard, body = body)
+
+    '''
+    VMBody:
+        {VMBody} '{' statements+=LLStatement* '}'
+    ;
+    '''
+    def parseVMBody(self):
+        statements = []
+        
+        while(True):
+            # peek
+            
+            # TODO: if next token is followmenge of VMMody ( '}' )
+            if False:
+                break
+            
+            # TODO: if next token is end of input -> raise exception
+            if False:
+                pass
+            
+            statement = self.parseLLStatement()
+            if not statement is None:
+                statements.append(statement)
+        
+        return VMBody(statements = statements)
+
+
+    '''
+    '''
+    def parseLLStatement(self):
+        ## TODO: start 
+        return None;
+
+    '''
+    '''
+    def parseLLMethodInvocation(self):
+        return None;
+    
+
 
     def parse_guard(self):
         
         selector = DictSelector(index=Literal(value='always'))
         name = Literal(value='transitions', selector=selector )
         return VMApply(func=name, arguments=None)
+
+
     
     def try_accept(self, *accepted_tokens):
         return False

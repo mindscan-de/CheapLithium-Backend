@@ -90,3 +90,6 @@ class VMApply(Node):
 
 class VMLithiumCompileUnit(Node):
     nodeAttrs = ['guard', 'body']
+    
+class VMBody(Node):
+    nodeAttrs=['statements']

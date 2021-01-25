@@ -338,17 +338,46 @@ class LithiumParser(object):
 
     '''
     TODO: implement the rule
+    LLAssignment:
+        PrimaryAndSelection
+        (
+            {LLAssignment.left=current} '=' right=LLExpression 
+        )
+    ;
     '''
     def parseLLAssignment(self):
-        return None
+        current = self.parsePrimaryAndSelection()
+        
+        # TODO if next token is '='
+        if True:
+            # TODO consume '='
+            
+            left = current
+            right = self.parseLLExpression()
+            
+            # TODO: create an assignment node, otherwise we will return the right 
+            #       value instead...
+            return right
+        
+        else:
+            raise Exception("an '=' was expected, but we might give it a second try in a different rule")
+        
     
     '''
     TODO: implement the rule
+    LLExpression returns Expression:
+        LLMethodInvocation
+    ;
     '''
     def parseLLExpression(self):
         return None
 
-
+    def parseLLMethodInvocation(self):
+        return None
+    
+    def parsePrimaryAndSelection(self):
+        return None
+    
 
 
     def parse_guard(self):

@@ -28,7 +28,6 @@ SOFTWARE.
 
 from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
-from symbol import except_clause
 
 # ##############################
 # Simple Interface to the parser
@@ -231,6 +230,11 @@ class LithiumParser(object):
     ;
     '''
     def parse(self):
+        
+        # if tokens are empty, we don't need to invoke the parser any more... Just saying. 
+        if False:
+            return None;
+        
         return self.parseVMLithiumCompileUnit()
 
 #

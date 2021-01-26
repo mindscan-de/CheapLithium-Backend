@@ -26,7 +26,7 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
-from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody
+from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody, VMPrimary
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator
 
 # ##############################
@@ -368,21 +368,90 @@ class LithiumParser(object):
         
     
     '''
-    TODO: implement the rule
     LLExpression returns Expression:
         LLMethodInvocation
     ;
     '''
     def parseLLExpression(self):
-        return None
+        result = self.parseLLMethodInvocation()
+        return result
 
+
+    '''
+    LLMethodInvocation returns Expression:
+        PrimaryAndSelection
+        (
+            {LLMethodInvocation.func=current} '(' (args+=LLExpression (',' args+=LLExpression)* )? ')'
+        )?
+    ;
+    '''
     def parseLLMethodInvocation(self):
-        return None
+        current = self.parsePrimaryAndSelection()
+        
+        # TODO: if next is '('
+        if True:
+            # TODO consume '('
+            
+            func = current
+            arguments = []
+            
+            #TODO
+            # (args+=LLExpression (',' args+=LLExpression)* )
+            
+            # TODO CHECK if ')'
+            if True:
+                return VMApply(func = func, arguments = arguments)
+                
+            return VMApply(func = func, arguments = arguments)
+        
+        return current
     
+    
+    '''
+    PrimaryAndSelection returns Expression:
+        LLMemberSelection    
+    ;
+    '''
     def parsePrimaryAndSelection(self):
-        return None
+        return self.parseLLMemberSelection
     
-
+    
+    '''
+    LLMemberSelection returns Expression:
+        LLLiteral
+        (
+            {LLMemberSelection.value=current} '.' (selector+=ID ('.' selector+=ID)*)
+        )?
+    ;    
+    '''
+    def parseLLMemberSelection(self):
+        current = self.parseLLLiteral()
+        
+        # TODO: tryconsume '.'
+        if True:
+            selectors=[]
+            
+            # TODO parse the selector and create a DictSelectorNode
+            
+            return VMPrimary(value = current, selector = selectors)
+        pass
+    
+    
+    '''
+    LLLiteral returns Expression:
+        {LLStringLiteral} value = STRING |
+        {LLIntegerLiteral} value = INT |
+        {LLBooleanLiteral} value = ('True' | 'False') |
+        {LLNoneLiteral} value = 'None' |
+        {LLEnv} 'env' |
+        {LLThis} 'this' |
+        {LLRef} value=ID
+    ;
+    '''
+    def parseLLLiteral(self):
+        pass
+    
+    
 
     def parse_guard(self):
         

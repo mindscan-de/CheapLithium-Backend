@@ -452,6 +452,11 @@ class LithiumParser(object):
         pass
     
     
+    
+    
+    # #######################
+    # OBSOLETE ?
+    # #######################
 
     def parse_guard(self):
         

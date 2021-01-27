@@ -76,6 +76,9 @@ class Separator(LithiumToken):
 class Identifier(LithiumToken):
     pass
 
+class KeyWordIdentifier(LithiumToken):
+    SETOF = set(['env', 'this'])
+
 # ########################################
 # Lithium Language Tokenizer
 # ########################################
@@ -174,6 +177,8 @@ class LithiumTokenizer(object):
             return Boolean
         elif (tokenValue in NONE.SETOF):
             return NONE
+        elif (tokenValue in KeyWordIdentifier.SETOF):
+            return KeyWordIdentifier
          
         return Identifier
         

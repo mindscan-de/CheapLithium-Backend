@@ -143,6 +143,17 @@ class Test(unittest.TestCase):
         stokens = [str(token) for token in tokens]
         self.assertEqual(stokens,['Identifier "i"'])
         
+    def testTokenize_KeywordIdentifierEnv_expectkeyWordIdentifierEnv(self):
+        tokens = tokenizer.tokenize("env")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['KeyWordIdentifier "env"'])
+
+    def testTokenize_KeywordIdentifierThis_expectkeyWordIdentifierThis(self):
+        tokens = tokenizer.tokenize("this")
+        stokens = [str(token) for token in tokens]
+        self.assertEqual(stokens,['KeyWordIdentifier "this"'])
+        
+        
     def testTokenize_WhiteSpace_expectEmptyGenerator(self):
         tokens = tokenizer.tokenize(" ")
         self.assertEqual(next(tokens, None), None)

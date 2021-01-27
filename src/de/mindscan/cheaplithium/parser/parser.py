@@ -26,8 +26,10 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
-from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody, VMPrimary
-from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator, Boolean, Integer, NONE, Identifier
+from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody, VMPrimary,\
+    Env, This
+from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator, Boolean, Integer, NONE, Identifier,\
+    KeyWordIdentifier
 
 # ##############################
 # Simple Interface to the parser
@@ -459,8 +461,14 @@ class LithiumParser(object):
         if self.tryAndAcceptType( NONE ):
             next(self.tokens)
             return Literal(value = None)
-        # TODO: ENV
-        # TODO:^^ THIS
+        if self.tryAndAcceptType( KeyWordIdentifier ):
+            kw_identifier = next(self.tokens)
+            if(kw_identifier.token_value == 'env'):
+                return Env()
+            elif (kw_identifier.token_value == 'this'):
+                return This()
+            #TODO: raise exception, that we don't know that keyword identifier
+            return Literal(value = kw_identifier.token_value)
         if self.tryAndAcceptType( Identifier ):
             identifier = next(self.tokens)
             return Literal(value = identifier.token_value)

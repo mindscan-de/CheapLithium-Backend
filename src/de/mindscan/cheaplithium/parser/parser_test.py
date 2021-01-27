@@ -30,7 +30,7 @@ import unittest
 
 from de.mindscan.cheaplithium.parser import tokenizer
 from de.mindscan.cheaplithium.parser.parser import LithiumParser
-from de.mindscan.cheaplithium.parser.ast import Literal
+from de.mindscan.cheaplithium.parser.ast import Literal, Env, This
 
 
 class Test(unittest.TestCase):
@@ -158,7 +158,26 @@ class Test(unittest.TestCase):
         
         #assert
         self.assertEqualAST(result, Literal(value="y"))
+
+    def testParseLLLiteral_Env_expectEnvironment(self):
+        # arrange
+        parser = self.parserHelper("env")
         
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Env())
+        
+    def testParseLLLiteral_This_expectThis(self):
+        # arrange
+        parser = self.parserHelper("this")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, This())
         
     
     def assertEqualAST(self, result, expected):

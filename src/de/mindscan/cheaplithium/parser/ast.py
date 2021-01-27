@@ -61,7 +61,10 @@ class Primary(Node):
     nodeAttrs=['selector']
 
 class Env(Primary):
-    nodeAttrs=['selector']    
+    nodeAttrs=['selector']
+    
+class This(Primary):
+    nodeAttrs=['selector'] 
     
 class Literal(Primary):
     nodeAttrs=['value', 'selector']

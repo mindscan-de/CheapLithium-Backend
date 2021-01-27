@@ -28,7 +28,6 @@ SOFTWARE.
 
 import unittest
 
-from de.mindscan.cheaplithium.parser import parser
 from de.mindscan.cheaplithium.parser import tokenizer
 from de.mindscan.cheaplithium.parser.parser import LithiumParser
 from de.mindscan.cheaplithium.parser.ast import Literal
@@ -67,6 +66,17 @@ class Test(unittest.TestCase):
         
         #assert
         self.assertEqualAST(result, Literal(value=True))
+        
+    def testParseLLLiteral_BooleanFalse_expectLiteralWithBooleanFalse(self):
+        # arrange
+        parser = self.parserHelper("False")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value=False))
+        
     
     def assertEqualAST(self, result, expected):
         self.assertEqual(str(result), str(expected))

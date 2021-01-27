@@ -356,7 +356,7 @@ class LithiumParser(object):
         if True:
             # TODO consume '='
             
-            left = current
+            _sleft = current
             right = self.parseLLExpression()
             
             # TODO: create an assignment node, otherwise we will return the right 
@@ -449,14 +449,29 @@ class LithiumParser(object):
     ;
     '''
     def parseLLLiteral(self):
-        if self.tryAndConsume( Boolean(True) ):
-            return Literal(value = True)
+        if self.tryAndAcceptType( Boolean ):
+            boolean = next(self.tokens)
+            return Literal(value = (boolean.token_value == 'True'))
         else:
             raise Exception("can not parse the current token.")
     
-
-    def tryAndConsume(self, acceptableToken):
+    def tryAndAccept(self, acceptableToken):
+        la = self.tokens.lookahead()
+        
+        if not (la.token_value == acceptableToken ):
+            return False
+        
+        next(self.tokens)
         return True
+
+    def tryAndAcceptType(self, acceptableType):
+        la = self.tokens.lookahead()
+        
+        if isinstance(la,acceptableType):
+            return True
+            
+        return False
+            
     
     # #######################
     # OBSOLETE ?

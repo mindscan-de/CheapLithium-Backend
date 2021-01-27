@@ -77,6 +77,39 @@ class Test(unittest.TestCase):
         #assert
         self.assertEqualAST(result, Literal(value=False))
         
+    def testParseLLLiteral_IntegerZero_expectLiteralWithIntegerValueZero(self):
+        # arrange
+        parser = self.parserHelper("0")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value=0))
+
+    def testParseLLLiteral_IntegerOne_expectLiteralWithIntegerValueOne(self):
+        # arrange
+        parser = self.parserHelper("1")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value=1))
+        
+        
+    def testParseLLLiteral_Integer123_expectLiteralWithIntegerValue123(self):
+        # arrange
+        parser = self.parserHelper("123")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value=123))
+        
+        
+        
     
     def assertEqualAST(self, result, expected):
         self.assertEqual(str(result), str(expected))

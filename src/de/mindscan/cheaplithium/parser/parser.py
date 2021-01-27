@@ -462,12 +462,12 @@ class LithiumParser(object):
             next(self.tokens)
             return Literal(value = None)
         if self.tryAndAcceptType( KeyWordIdentifier ):
-            kw_identifier = next(self.tokens)
-            if(kw_identifier.token_value == 'env'):
+            if self.tryAndConsumetAsString('env'):
                 return Env()
-            elif (kw_identifier.token_value == 'this'):
+            elif self.tryAndConsumeAsString('this'):
                 return This()
             #TODO: raise exception, that we don't know that keyword identifier
+            kw_identifier=next(self.tokens)
             return Literal(value = kw_identifier.token_value)
         if self.tryAndAcceptType( Identifier ):
             identifier = next(self.tokens)
@@ -483,6 +483,16 @@ class LithiumParser(object):
         
         next(self.tokens)
         return True
+    
+    def tryAndConsumeAsString(self, acceptableToken):
+        la = self.tokens.lookahead()
+        
+        if not (la.token_value == acceptableToken ):
+            return False
+        
+        next(self.tokens)
+        return True
+    
 
     def tryAndAcceptType(self, acceptableType):
         la = self.tokens.lookahead()

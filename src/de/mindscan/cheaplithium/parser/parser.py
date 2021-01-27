@@ -462,7 +462,7 @@ class LithiumParser(object):
             next(self.tokens)
             return Literal(value = None)
         if self.tryAndAcceptType( KeyWordIdentifier ):
-            if self.tryAndConsumetAsString('env'):
+            if self.tryAndConsumeAsString('env'):
                 return Env()
             elif self.tryAndConsumeAsString('this'):
                 return This()

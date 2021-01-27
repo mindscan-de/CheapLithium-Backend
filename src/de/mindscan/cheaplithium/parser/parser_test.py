@@ -118,6 +118,46 @@ class Test(unittest.TestCase):
         
         #assert
         self.assertEqualAST(result, Literal(value=None))
+
+    def testParseLLLiteral_LiteralMember1_expectLiteralWithValueMember1(self):
+        # arrange
+        parser = self.parserHelper("member1")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value="member1"))
+
+    def testParseLLLiteral_LiteralMember2_expectLiteralWithValueMember2(self):
+        # arrange
+        parser = self.parserHelper("member2")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value="member2"))
+        
+    def testParseLLLiteral_LiteralX_expectLiteralWithValueX(self):
+        # arrange
+        parser = self.parserHelper("x")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value="x"))
+        
+    def testParseLLLiteral_LiteralY_expectLiteralWithValueY(self):
+        # arrange
+        parser = self.parserHelper("y")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value="y"))
         
         
     

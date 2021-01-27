@@ -27,7 +27,7 @@ SOFTWARE.
 '''
 
 from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody, VMPrimary
-from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator, Boolean, Integer
+from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator, Boolean, Integer, NONE
 
 # ##############################
 # Simple Interface to the parser
@@ -449,12 +449,16 @@ class LithiumParser(object):
     ;
     '''
     def parseLLLiteral(self):
+        # TODO: String 
         if self.tryAndAcceptType( Boolean ):
             boolean = next(self.tokens)
             return Literal(value = (boolean.token_value == 'True'))
         if self.tryAndAcceptType( Integer ):
             integer = next(self.tokens)
             return Literal(value = int(integer.token_value))
+        if self.tryAndAcceptType( NONE ):
+            next(self.tokens)
+            return Literal(value = None)
         else:
             raise Exception("can not parse the current token.")
     

@@ -108,6 +108,16 @@ class Test(unittest.TestCase):
         #assert
         self.assertEqualAST(result, Literal(value=123))
         
+
+    def testParseLLLiteral_None_expectLiteralWithValueNone(self):
+        # arrange
+        parser = self.parserHelper("None")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value=None))
         
         
     

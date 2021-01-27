@@ -31,32 +31,50 @@ import unittest
 from de.mindscan.cheaplithium.parser import parser
 from de.mindscan.cheaplithium.parser import tokenizer
 from de.mindscan.cheaplithium.parser.parser import LithiumParser
+from de.mindscan.cheaplithium.parser.ast import Literal
 
 
 class Test(unittest.TestCase):
 
 
-    def testParse_TransitionsAlwaysNoArgsNoBody_expectLitiumCompileUnitWithGuard(self):
+#     def testParse_TransitionsAlwaysNoArgsNoBody_expectLitiumCompileUnitWithGuard(self):
+#         # arrange
+#         tokens = tokenizer.tokenize("transitions.always()")
+#         
+#         #act
+#         parsed_ast = parser.parse(tokens)
+#         
+#         #assert
+#         self.assertEqual(str(parsed_ast), 'VMLithiumCompileUnit(guard:VMApply(func:Literal(value:transitions, selector:DictSelector(index:Literal(value:always, selector:None))), arguments:None), body:None)')
+# 
+# 
+#     def testParseBody_TransitionsAlwaysNoARgumentsNoBody_expectTransition(self):
+#         # arrange
+#         tokens = tokenizer.tokenize("transitions.always()")
+#         
+#         #act
+#         parsed_ast = LithiumParser(tokens).parse_guard()
+#         
+#         #assert
+#         self.assertEqual(str(parsed_ast), 'VMApply(func:Literal(value:transitions, selector:DictSelector(index:Literal(value:always, selector:None))), arguments:None)')
+
+    def testParseLLLiteral_BooleanTrue_expectLiteralWithBooleanTrue(self):
         # arrange
-        tokens = tokenizer.tokenize("transitions.always()")
+        parser = self.parserHelper("True")
         
         #act
-        parsed_ast = parser.parse(tokens)
+        result = parser.parseLLLiteral()
         
         #assert
-        self.assertEqual(str(parsed_ast), 'VMLithiumCompileUnit(guard:VMApply(func:Literal(value:transitions, selector:DictSelector(index:Literal(value:always, selector:None))), arguments:None), body:None)')
-
-
-    def testParseBody_TransitionsAlwaysNoARgumentsNoBody_expectTransition(self):
-        # arrange
-        tokens = tokenizer.tokenize("transitions.always()")
+        self.assertEqualAST(result, Literal(value=True))
+    
+    def assertEqualAST(self, result, expected):
+        self.assertEqual(str(result), str(expected))
         
-        #act
-        parsed_ast = LithiumParser(tokens).parse_guard()
+    def parserHelper(self, code) -> LithiumParser:
+        tokens = tokenizer.tokenize(code)
         
-        #assert
-        self.assertEqual(str(parsed_ast), 'VMApply(func:Literal(value:transitions, selector:DictSelector(index:Literal(value:always, selector:None))), arguments:None)')
-        
+        return LithiumParser(tokens)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

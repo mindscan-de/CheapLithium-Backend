@@ -452,18 +452,17 @@ class LithiumParser(object):
     '''
     def parseLLLiteral(self):
         if self.tryAndAcceptType( String ):
-            string = next(self.tokens)
+            string = self.tokens.last()
             return Literal( value = self.unescapeString(string.token_value))
         if self.tryAndAcceptType( Boolean ):
-            boolean = next(self.tokens)
+            boolean = self.tokens.last()
             return Literal(value = (boolean.token_value == 'True'))
         if self.tryAndAcceptType( Integer ):
-            integer = next(self.tokens)
+            integer = self.tokens.last()
             return Literal(value = int(integer.token_value))
         if self.tryAndAcceptType( NONE ):
-            next(self.tokens)
             return Literal(value = None)
-        if self.tryAndAcceptType( KeyWordIdentifier ):
+        if self.tryType( KeyWordIdentifier ):
             if self.tryAndConsumeAsString('env'):
                 return Env()
             elif self.tryAndConsumeAsString('this'):
@@ -472,7 +471,7 @@ class LithiumParser(object):
             kw_identifier=next(self.tokens)
             return Literal(value = kw_identifier.token_value)
         if self.tryAndAcceptType( Identifier ):
-            identifier = next(self.tokens)
+            identifier = self.tokens.last()
             return Literal(value = identifier.token_value)
         else:
             raise Exception("can not parse the current token.")
@@ -499,10 +498,20 @@ class LithiumParser(object):
     def tryAndAcceptType(self, acceptableType):
         la = self.tokens.lookahead()
         
-        if isinstance(la,acceptableType):
-            return True
+        if not isinstance(la,acceptableType):
+            return False
+        
+        next(self.tokens)
+        return True
+    
+    def tryType(self, acceptableType):
+        la = self.tokens.lookahead()
+        
+        if not isinstance(la,acceptableType):
+            return False
             
-        return False
+        return True
+    
             
     # TODO: handle escape sequences and such.
     # good enough until we need more.

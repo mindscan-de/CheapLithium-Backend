@@ -30,7 +30,7 @@ import unittest
 
 from de.mindscan.cheaplithium.parser import tokenizer
 from de.mindscan.cheaplithium.parser.parser import LithiumParser
-from de.mindscan.cheaplithium.parser.ast import Literal, Env, This, VMPrimary
+from de.mindscan.cheaplithium.parser.ast import Literal, Env, This, VMPrimary, VMApply
 
 
 class Test(unittest.TestCase):
@@ -61,40 +61,40 @@ class Test(unittest.TestCase):
         # arrange
         parser = self.parserHelper("True")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value=True))
         
     def testParseLLLiteral_BooleanFalse_expectLiteralWithBooleanFalse(self):
         # arrange
         parser = self.parserHelper("False")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value=False))
         
     def testParseLLLiteral_IntegerZero_expectLiteralWithIntegerValueZero(self):
         # arrange
         parser = self.parserHelper("0")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value=0))
 
     def testParseLLLiteral_IntegerOne_expectLiteralWithIntegerValueOne(self):
         # arrange
         parser = self.parserHelper("1")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value=1))
         
         
@@ -102,10 +102,10 @@ class Test(unittest.TestCase):
         # arrange
         parser = self.parserHelper("123")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value=123))
         
 
@@ -113,100 +113,100 @@ class Test(unittest.TestCase):
         # arrange
         parser = self.parserHelper("None")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value=None))
 
     def testParseLLLiteral_LiteralMember1_expectLiteralWithValueMember1(self):
         # arrange
         parser = self.parserHelper("member1")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value="member1"))
 
     def testParseLLLiteral_LiteralMember2_expectLiteralWithValueMember2(self):
         # arrange
         parser = self.parserHelper("member2")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value="member2"))
         
     def testParseLLLiteral_LiteralX_expectLiteralWithValueX(self):
         # arrange
         parser = self.parserHelper("x")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value="x"))
         
     def testParseLLLiteral_LiteralY_expectLiteralWithValueY(self):
         # arrange
         parser = self.parserHelper("y")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value="y"))
 
     def testParseLLLiteral_Env_expectEnvironment(self):
         # arrange
         parser = self.parserHelper("env")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Env())
         
     def testParseLLLiteral_This_expectThis(self):
         # arrange
         parser = self.parserHelper("this")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, This())
         
     def testParseLLLiteral_StringHelloWorldSQ_expectStringHelloWorldWithoutSQ(self):
         # arrange
         parser = self.parserHelper("'HelloWorld'")
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value="HelloWorld"))
         
     def testParseLLLiteral_StringHelloWorldDQ_expectStringHelloWorldWithoutDQ(self):
         # arrange
         parser = self.parserHelper('"HelloWorld"')
         
-        #act
+        # act
         result = parser.parseLLLiteral()
         
-        #assert
+        # assert
         self.assertEqualAST(result, Literal(value="HelloWorld"))
 
     def testParseLLMemberSelection_ADotB_expectPrimaryOfLiteralUsingALiteral(self):
         # arrange
         parser = self.parserHelper('a.b')
         
-        #act
+        # act
         result = parser.parseLLMemberSelection()
         
-        #assert
+        # assert
         self.assertEqualAST(result, VMPrimary(value=Literal(value='a'), selector=Literal(value='b') ) )
         
     def testParseLLMemberSelection_ADotBDotC_expectPrimaryOfLiteralUsingALiteral(self):
@@ -228,10 +228,10 @@ class Test(unittest.TestCase):
         # arrange
         parser = self.parserHelper('a.b.c.d')
         
-        #act
+        # act
         result = parser.parseLLMemberSelection()
         
-        #assert
+        # assert
         a = Literal(value='a')
         b = Literal(value='b')
         a_b = VMPrimary(value=a, selector=b )
@@ -240,6 +240,16 @@ class Test(unittest.TestCase):
         d = Literal(value='d')
         a_b_c_d = VMPrimary(value=a_b_c, selector=d )
         self.assertEqualAST(result, a_b_c_d )
+        
+    def testParseLLMethodInvocation_InvokeInvokeMe_expectVMApplyNode(self):
+        # arrange
+        parser = self.parserHelper('invokeMe()')
+        
+        # act
+        result = parser.parseLLMethodInvocation()
+        
+        # assert
+        self.assertEqualAST(result, VMApply(func=Literal(value="invokeMe"), arguments = []) )
         
 
     def assertEqualAST(self, result, expected):

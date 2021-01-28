@@ -390,21 +390,18 @@ class LithiumParser(object):
     def parseLLMethodInvocation(self):
         current = self.parsePrimaryAndSelection()
         
-        # TODO: if next is '('
-        if True:
-            # TODO consume '('
-            
+        if self.tryAndConsumeAsString('('):
             func = current
             arguments = []
             
-            #TODO
+            # TODO: 
             # (args+=LLExpression (',' args+=LLExpression)* )
             
-            # TODO CHECK if ')'
-            if True:
+            if self.tryAndConsumeAsString(')'):
                 return VMApply(func = func, arguments = arguments)
-                
-            return VMApply(func = func, arguments = arguments)
+        
+        else:
+            print ("FAILED " +  str(current))
         
         return current
     
@@ -415,7 +412,7 @@ class LithiumParser(object):
     ;
     '''
     def parsePrimaryAndSelection(self):
-        return self.parseLLMemberSelection
+        return self.parseLLMemberSelection()
     
     
     '''

@@ -179,7 +179,27 @@ class Test(unittest.TestCase):
         #assert
         self.assertEqualAST(result, This())
         
-    
+    def testParseLLLiteral_StringHelloWorldSQ_expectStringHelloWorldWithoutSQ(self):
+        # arrange
+        parser = self.parserHelper("'HelloWorld'")
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value="HelloWorld"))
+        
+    def testParseLLLiteral_StringHelloWorldDQ_expectStringHelloWorldWithoutDQ(self):
+        # arrange
+        parser = self.parserHelper('"HelloWorld"')
+        
+        #act
+        result = parser.parseLLLiteral()
+        
+        #assert
+        self.assertEqualAST(result, Literal(value="HelloWorld"))
+
+
     def assertEqualAST(self, result, expected):
         self.assertEqual(str(result), str(expected))
         

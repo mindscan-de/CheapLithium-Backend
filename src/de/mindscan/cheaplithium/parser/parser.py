@@ -29,7 +29,7 @@ SOFTWARE.
 from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody, VMPrimary,\
     Env, This
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator, Boolean, Integer, NONE, Identifier,\
-    KeyWordIdentifier
+    KeyWordIdentifier, String
 
 # ##############################
 # Simple Interface to the parser
@@ -451,7 +451,9 @@ class LithiumParser(object):
     ;
     '''
     def parseLLLiteral(self):
-        # TODO: String 
+        if self.tryAndAcceptType( String ):
+            string = next(self.tokens)
+            return Literal( value = self.unescapeString(string.token_value))
         if self.tryAndAcceptType( Boolean ):
             boolean = next(self.tokens)
             return Literal(value = (boolean.token_value == 'True'))
@@ -502,6 +504,10 @@ class LithiumParser(object):
             
         return False
             
+    # TODO: handle escape sequences and such.
+    # good enough until we need more.
+    def unescapeString(self, string):
+        return string[1:-1] 
     
     # #######################
     # OBSOLETE ?

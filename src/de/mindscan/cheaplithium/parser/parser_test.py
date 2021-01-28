@@ -208,6 +208,39 @@ class Test(unittest.TestCase):
         
         #assert
         self.assertEqualAST(result, VMPrimary(value=Literal(value='a'), selector=Literal(value='b') ) )
+        
+    def testParseLLMemberSelection_ADotBDotC_expectPrimaryOfLiteralUsingALiteral(self):
+        # arrange
+        parser = self.parserHelper('a.b.c')
+        
+        #act
+        result = parser.parseLLMemberSelection()
+        
+        #assert
+        a = Literal(value='a')
+        b = Literal(value='b')
+        a_b = VMPrimary(value=a, selector=b )
+        c = Literal(value='c')
+        a_b_c = VMPrimary(value=a_b, selector=c )
+        self.assertEqualAST(result, a_b_c )
+
+    def testParseLLMemberSelection_ADotBDotCDotD_expectPrimaryOfLiteralUsingALiteral(self):
+        # arrange
+        parser = self.parserHelper('a.b.c.d')
+        
+        #act
+        result = parser.parseLLMemberSelection()
+        
+        #assert
+        a = Literal(value='a')
+        b = Literal(value='b')
+        a_b = VMPrimary(value=a, selector=b )
+        c = Literal(value='c')
+        a_b_c = VMPrimary(value=a_b, selector=c )
+        d = Literal(value='d')
+        a_b_c_d = VMPrimary(value=a_b_c, selector=d )
+        self.assertEqualAST(result, a_b_c_d )
+        
 
     def assertEqualAST(self, result, expected):
         self.assertEqual(str(result), str(expected))

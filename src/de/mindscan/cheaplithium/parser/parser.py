@@ -432,6 +432,10 @@ class LithiumParser(object):
         if self.tryAndConsumeAsString('.'):
             selector = self.parseLLLiteral()
             
+            while self.tryAndConsumeAsString('.'):
+                current = VMPrimary(value = current, selector = selector)
+                selector = self.parseLLLiteral()
+            
             return VMPrimary(value = current, selector = selector)
         
         return current

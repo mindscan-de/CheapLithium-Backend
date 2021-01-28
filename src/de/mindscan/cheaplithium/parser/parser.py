@@ -399,10 +399,12 @@ class LithiumParser(object):
                 argument = self.parseLLExpression()
                 arguments.append(argument)
                 
+                # TODO:
                 # (args+=LLExpression (',' args+=LLExpression)* )
-#                #while self.tryAndConsumeAsString(','):
-#                #    argument = self.parseLLExpression()
-#                #    arguments.append(argument)
+                #while self.tryAndConsumeAsString(','):
+                #    argument = self.parseLLExpression()
+                #    arguments.append(argument)
+                
             # Shall Consume token
             if self.tryAndConsumeAsString(')'):
                 return VMApply(func = func, arguments = arguments)

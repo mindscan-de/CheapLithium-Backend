@@ -399,10 +399,10 @@ class LithiumParser(object):
             
             if self.tryAndConsumeAsString(')'):
                 return VMApply(func = func, arguments = arguments)
-        
-        else:
-            print ("FAILED " +  str(current))
-        
+            else:
+                raise Exception("Expected ')'")
+            
+            
         return current
     
     

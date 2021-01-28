@@ -250,6 +250,35 @@ class Test(unittest.TestCase):
         
         # assert
         self.assertEqualAST(result, VMApply(func=Literal(value="invokeMe"), arguments = []) )
+
+    def testParseLLMethodInvocation_InvokeTransitionsAlways_expectVMApplyNode(self):
+        # arrange
+        parser = self.parserHelper('transitions.always()')
+        
+        # act
+        result = parser.parseLLMethodInvocation()
+        
+        # assert
+        transitions = Literal(value="transitions")
+        always = Literal(value="always")
+        transitions_always = VMPrimary(value=transitions, selector=always)
+        self.assertEqualAST(result, VMApply(func=transitions_always, arguments = []) )
+
+    def testParseLLMethodInvocation_InvokeTransitionsIsTrueOneArgument_expectVMApplyNodeWithOneArgument(self):
+        # arrange
+        parser = self.parserHelper('transitions.isTrue(True)')
+        
+        # act
+        result = parser.parseLLMethodInvocation()
+        
+        # assert
+        transitions = Literal(value="transitions")
+        istrue = Literal(value="isTrue")
+        transitions_istrue = VMPrimary(value=transitions, selector=istrue)
+        booleantrue = Literal(value="True")
+        self.assertEqualAST(result, VMApply(func=transitions_istrue, arguments = [booleantrue]) )
+
+
         
 
     def assertEqualAST(self, result, expected):

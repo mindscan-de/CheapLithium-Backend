@@ -394,14 +394,21 @@ class LithiumParser(object):
             func = current
             arguments = []
             
-            # TODO: 
-            # (args+=LLExpression (',' args+=LLExpression)* )
-            
+            # ATTN must not consume token
+            if not self.tryAsString(')'):
+                argument = self.parseLLExpression()
+                arguments.append(argument)
+                
+                # (args+=LLExpression (',' args+=LLExpression)* )
+#                #while self.tryAndConsumeAsString(','):
+#                #    argument = self.parseLLExpression()
+#                #    arguments.append(argument)
+            # Shall Consume token
             if self.tryAndConsumeAsString(')'):
                 return VMApply(func = func, arguments = arguments)
             else:
-                raise Exception("Expected ')'")
-            
+                # something else than a ',' or ')'
+                raise("We got something unexpected in pareLLMethodInvocation.")
             
         return current
     
@@ -515,6 +522,14 @@ class LithiumParser(object):
             
         return True
     
+    def tryAsString(self, acceptableToken):
+        la = self.tokens.lookahead()
+        
+        if not (la.token_value == acceptableToken ):
+            return False
+        
+        return True
+        
             
     # TODO: handle escape sequences and such.
     # good enough until we need more.

@@ -429,15 +429,12 @@ class LithiumParser(object):
     def parseLLMemberSelection(self):
         current = self.parseLLLiteral()
         
-        # TODO: tryconsume '.'
-        if True:
-            selectors=[]
+        if self.tryAndConsumeAsString('.'):
+            selector = self.parseLLLiteral()
             
-            # TODO parse the selector and create a DictSelectorNode
-            
-            return VMPrimary(value = current, selector = selectors)
-        pass
-    
+            return VMPrimary(value = current, selector = selector)
+        
+        return current
     
     '''
     LLLiteral returns Expression:
@@ -475,6 +472,11 @@ class LithiumParser(object):
             return Literal(value = identifier.token_value)
         else:
             raise Exception("can not parse the current token.")
+    
+    
+    # ##########################
+    # Parser Intrastructure code
+    # ##########################
     
     def tryAndAccept(self, acceptableToken):
         la = self.tokens.lookahead()

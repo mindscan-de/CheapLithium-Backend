@@ -27,7 +27,7 @@ SOFTWARE.
 '''
 
 from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody, VMPrimary,\
-    Env, This
+    Env, This, VMAssignment
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator, Boolean, Integer, NONE, Identifier,\
     KeyWordIdentifier, String
 
@@ -343,7 +343,6 @@ class LithiumParser(object):
     
 
     '''
-    TODO: implement the rule
     LLAssignment:
         PrimaryAndSelection
         (
@@ -354,21 +353,15 @@ class LithiumParser(object):
     def parseLLAssignment(self):
         current = self.parsePrimaryAndSelection()
         
-        # TODO if next token is '='
-        if True:
-            # TODO consume '='
-            
-            _sleft = current
+        if self.tryAndConsumeAsString('='):
+
+            left = current
             right = self.parseLLExpression()
             
-            # TODO: create an assignment node, otherwise we will return the right 
-            #       value instead...
-            return right
-        
+            return VMAssignment(left=left, right=right)
         else:
             raise Exception("an '=' was expected, but we might give it a second try in a different rule")
         
-    
     '''
     LLExpression returns Expression:
         LLMethodInvocation

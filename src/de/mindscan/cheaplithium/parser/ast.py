@@ -75,12 +75,8 @@ class DictSelector(Node):
 class Expression(Node):
     pass
 
-class Assignment(Expression):
-    # leftexpression
-    # value
-    pass
-
-
+class VMAssignment(Expression):
+    nodeAttrs=['left', 'right']
 
 class VMModule(Node):
     nodeAttrs=['name']

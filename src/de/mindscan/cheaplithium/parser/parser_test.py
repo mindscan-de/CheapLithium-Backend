@@ -30,7 +30,7 @@ import unittest
 
 from de.mindscan.cheaplithium.parser import tokenizer
 from de.mindscan.cheaplithium.parser.parser import LithiumParser
-from de.mindscan.cheaplithium.parser.ast import Literal, Env, This, VMPrimary, VMApply
+from de.mindscan.cheaplithium.parser.ast import Literal, Env, This, VMPrimary, VMApply, VMAssignment
 
 
 class Test(unittest.TestCase):
@@ -293,7 +293,23 @@ class Test(unittest.TestCase):
         booleanfalse = Literal(value="False")
         self.assertEqualAST(result, VMApply(func=transitions_istrue, arguments = [booleantrue, booleanfalse]) )
 
+    def textParseLLAssignment_expectSomething(self):
+        # arrange
+        parser = self.parserHelper('x = common.add(1,2)')
         
+        # act
+        result = parser.parseLLAssignment()
+        
+        # assert
+        left = Literal(value="x")
+        common = Literal(value="common")
+        add = Literal(value="add")
+        common_add = VMPrimary(value=common, selector=add)
+        one = Literal(value = 1)
+        two = Literal(value = 2)
+        common_add_invoke = VMApply(func = common_add, argments=[one, two])
+        self.assertEqualAST(result, VMAssignment(left=left, right=common_add_invoke ))
+    
 
     def assertEqualAST(self, result, expected):
         self.assertEqual(str(result), str(expected))

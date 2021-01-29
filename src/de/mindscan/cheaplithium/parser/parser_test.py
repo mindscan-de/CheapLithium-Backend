@@ -278,6 +278,20 @@ class Test(unittest.TestCase):
         booleantrue = Literal(value="True")
         self.assertEqualAST(result, VMApply(func=transitions_istrue, arguments = [booleantrue]) )
 
+    def testParseLLMethodInvocation_InvokeTransitionsIsEqualTwoArguments_expectVMApplyNodeWithTwoArguments(self):
+        # arrange
+        parser = self.parserHelper('transitions.isEqual(True, False)')
+        
+        # act
+        result = parser.parseLLMethodInvocation()
+        
+        # assert
+        transitions = Literal(value="transitions")
+        istrue = Literal(value="isEqual")
+        transitions_istrue = VMPrimary(value=transitions, selector=istrue)
+        booleantrue = Literal(value="True")
+        booleanfalse = Literal(value="False")
+        self.assertEqualAST(result, VMApply(func=transitions_istrue, arguments = [booleantrue, booleanfalse]) )
 
         
 

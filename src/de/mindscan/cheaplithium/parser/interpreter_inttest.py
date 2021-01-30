@@ -134,6 +134,76 @@ class Test(unittest.TestCase):
         
         # assert
         self.assertEquals(result, True)
+
+    def testEvalTransition_isLessThan1020UsingEnvironmentWithEmptyBody_returnsTrue(self):
+        # arrange
+        environment = {'result':10}
+        ast = self.parseToAst('transitions.isLessThan(env.result,20) {}')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, True)
+
+    def testEvalTransition_isLessThan3020UsingEnvironmentWithEmptyBody_returnsFalse(self):
+        # arrange
+        environment = {'result':30}
+        ast = self.parseToAst('transitions.isLessThan(env.result,20) {}')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, False)
+    
+    def testEvalTransition_isLessThan1020UsingEnvironmentWithdifferntDepth_returnsTrue(self):
+        # arrange
+        environment = {'result':10,'x':{'y':20}}
+        ast = self.parseToAst('transitions.isLessThan(env.result,env.x.y) {}')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, True)
+        
+    def testEvalTransition_isLessThan3020UsingEnvironmentWithdifferntDepth_returnsFalse(self):
+        # arrange
+        environment = {'result':30,
+                       'x': {
+                           'y':20
+                           }}
+        ast = self.parseToAst('transitions.isLessThan(env.result,env.x.y) {}')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, False)
+
+    def testEvalTransition_isEqualHelloWorld_returnsTrue(self):
+        # arrange
+        environment = {'result':"Hello World!"}
+        ast = self.parseToAst('transitions.isEqual(env.result, "Hello World!") {}')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, True)
+        
+    def testEvalTransition_isEqualHelloWorldHelloUniverse_returnsFalse(self):
+        # arrange
+        environment = {'result':"Hello World!"}
+        ast = self.parseToAst('transitions.isEqual(env.result, "Hello Universe!") {}')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, False)
+        
         
 
     def parseToAst(self, code):

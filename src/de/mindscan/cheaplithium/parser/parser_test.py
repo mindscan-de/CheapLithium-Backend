@@ -463,7 +463,6 @@ class Test(unittest.TestCase):
         invoke_a = VMApply(func = a, arguments=[] )
         self.assertEqualAST(result, VMBody(statements=[invoke_a, invoke_a]) )
     
-
     def testParseVMLithiumCompileUnit_EmptyBody_returnsEmptyVMCompileUnit(self):
         # arrange
         parser = self.parserHelper('')
@@ -474,6 +473,21 @@ class Test(unittest.TestCase):
         # assert
         self.assertEqualAST(result, VMLithiumCompileUnit() )
         
+    def testParseVMLithiumCompileUnit_transitionAlwaysNoBody_returnsVMCompileUnitWithInvocationInGuard(self):
+        # arrange
+        parser = self.parserHelper('transitions.always()')
+        
+        # act
+        result = parser.parseVMLithiumCompileUnit()
+        
+        # assert
+        transitions=Literal(value="transitions")
+        always = Literal(value="always")
+        transitions_always = VMPrimary(value = transitions, selector=always)
+        guard = VMApply(func=transitions_always, arguments=[])
+        self.assertEqualAST(result, VMLithiumCompileUnit(guard = guard) )
+        
+    
 
 
     def assertEqualAST(self, result, expected):

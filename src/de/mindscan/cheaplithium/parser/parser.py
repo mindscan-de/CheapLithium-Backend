@@ -268,16 +268,10 @@ class LithiumParser(object):
         if self.tryType(EndOfInput):
             return VMLithiumCompileUnit( guard = guard, body = body)
 
+        guard = self.parseLLMethodInvocation( )
         
-        # TODO: if next token in first-Menge then
-        if True: 
-            guard = self.parseLLMethodInvocation( )
-        
-        # TODO: if next token is in FirstMenge '{'
-        if True:
-            if self.try_accept(Separator('{')):
-                body = self.parseVMBody()
-                self.accept(Separator('}'))
+        if self.tryAsString('{'):
+            body = self.parseVMBody()
             
         return VMLithiumCompileUnit( guard = guard, body = body)
 

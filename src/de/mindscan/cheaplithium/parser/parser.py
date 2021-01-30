@@ -174,10 +174,9 @@ Can not parse right now...:
 
 '''
 
-# TODO: the AST then can be executed, and interpreted in different ways, such 
-#       that the same "code" has different meanings, eg. as e.g as 
-#       INPUT-specification, initialization, guard, etc, it is so much more flexible...
-
+# --------------------------------------------------------------
+# Some additional Infrastructure code to handle the token stream
+# --------------------------------------------------------------
 
 class LATokenIterator(object):
     
@@ -243,12 +242,7 @@ class LithiumParser(object):
     def parse(self):
         return self.parseVMLithiumCompileUnit()
 
-#
-#
-#
-#
 
-    
 # ----------------------------------------------------------------------------
 # Parser Rules implementation
 # ----------------------------------------------------------------------------

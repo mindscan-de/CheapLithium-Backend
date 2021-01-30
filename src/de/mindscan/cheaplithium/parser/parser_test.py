@@ -30,7 +30,7 @@ import unittest
 
 from de.mindscan.cheaplithium.parser import tokenizer
 from de.mindscan.cheaplithium.parser.parser import LithiumParser
-from de.mindscan.cheaplithium.parser.ast import Literal, Env, This, VMPrimary, VMApply, VMAssignment
+from de.mindscan.cheaplithium.parser.ast import Literal, Env, This, VMPrimary, VMApply, VMAssignment, VMBody
 
 
 class Test(unittest.TestCase):
@@ -391,6 +391,76 @@ class Test(unittest.TestCase):
 
         self.assertEqualAST(result, VMApply(func = y, arguments=[]) )
         
+    def testParseVMBody_EmptyBody_expectVMBodyWithEmptyStatementsArray(self):
+        # arrange
+        parser = self.parserHelper('{}')
+        
+        # act
+        result = parser.parseVMBody()
+        
+        # assert
+        self.assertEqualAST(result, VMBody(statements=[]) )
+
+#     def testParseVMBody_prematureBody_expectVMBodyWithEmptyStatementsArray(self):
+#         # arrange
+#         parser = self.parserHelper('{')
+#         
+#         # act
+#         result = parser.parseVMBody()
+#         
+#         # assert
+#         self.assertEqualAST(result, VMBody(statements=[]) )
+
+    def testParseVMBody_SingleAssignment_expectVMBodyWithAssignmentStatement(self):
+        # arrange
+        parser = self.parserHelper('{ a=b; }')
+        
+        # act
+        result = parser.parseVMBody()
+        
+        # assert
+        a = Literal(value = 'a')
+        b = Literal(value = 'b')
+        assign_b_to_a = VMAssignment(left = a, right = b)
+        self.assertEqualAST(result, VMBody(statements=[assign_b_to_a]) )
+        
+    def testParseVMBody_TwoAssignments_expectVMBodyWithTwoAssignmentStatements(self):
+        # arrange
+        parser = self.parserHelper('{ a=b; a=b;}')
+        
+        # act
+        result = parser.parseVMBody()
+        
+        # assert
+        a = Literal(value = 'a')
+        b = Literal(value = 'b')
+        assign_b_to_a = VMAssignment(left = a, right = b)
+        self.assertEqualAST(result, VMBody(statements=[assign_b_to_a, assign_b_to_a]) )
+        
+
+    def testParseVMBody_SingleInvocation_expectVMBodyWithInvokeStatement(self):
+        # arrange
+        parser = self.parserHelper('{ a(); }')
+        
+        # act
+        result = parser.parseVMBody()
+        
+        # assert
+        a = Literal(value = 'a')
+        invoke_a = VMApply(func = a, arguments=[] )
+        self.assertEqualAST(result, VMBody(statements=[invoke_a]) )
+
+    def testParseVMBody_TwoInvocations_expectVMBodyWithTwoInvokeStatements(self):
+        # arrange
+        parser = self.parserHelper('{ a(); a(); }')
+        
+        # act
+        result = parser.parseVMBody()
+        
+        # assert
+        a = Literal(value = 'a')
+        invoke_a = VMApply(func = a, arguments=[] )
+        self.assertEqualAST(result, VMBody(statements=[invoke_a, invoke_a]) )
     
 
     def assertEqualAST(self, result, expected):

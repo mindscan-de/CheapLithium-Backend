@@ -205,7 +205,7 @@ class LATokenIterator(object):
             self.value = self.list[self.current_position]
             self.current_position += 1
         except IndexError:
-            raise StopIteration
+            raise StopIteration()
         
         return self.value
     
@@ -289,20 +289,23 @@ class LithiumParser(object):
     def parseVMBody(self):
         statements = []
         
-        while(True):
-            # peek
-            
-            # TODO: if next token is followmenge of VMMody ( '}' )
-            if False:
-                break
-            
-            # TODO: if next token is end of input -> raise exception
-            if False:
-                pass
-            
-            statement = self.parseLLStatement()
-            if not statement is None:
-                statements.append(statement)
+        if self.tryAndConsumeAsString('{'):
+            while True:
+                if self.tryAndConsumeAsString('}'):
+                    break
+                
+                # This must not consume the EndOfInput..
+                if self.tryType(EndOfInput):
+                    raise Exception("premature end of input.") 
+                
+                # curent token is something different than stop set
+                # parse as it were/is a statement
+                try:
+                    statement = self.parseLLStatement()
+                    if not statement is None:
+                        statements.append(statement)
+                except:
+                    raise Exception("ParserError..")
         
         return VMBody(statements = statements)
 

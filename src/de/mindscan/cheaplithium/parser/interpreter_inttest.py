@@ -203,8 +203,99 @@ class Test(unittest.TestCase):
         
         # assert
         self.assertEquals(result, False)
+
+    def testEvalHitRenderInputInterface_nopNoUserInput_returnsEmptyList(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('common.nop() {}')
         
+        # act
+        result = interpreter.eval_hit_render_input_interface(ast, environment)
         
+        # assert
+        self.assertEquals(result, [])
+        
+    def testEvalHitRenderInputInterface_nopYesNoUserInput_returnsYesnoElementList(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('common.nop() { inputui.user_yesnoselection("myLabel","myDescription"); }')
+        
+        # act
+        result = interpreter.eval_hit_render_input_interface(ast, environment)
+        
+        # assert
+        self.assertEquals(result, [{'label': 'myLabel', 'type': 'yesnoselection', 'description': 'myDescription'}])
+
+    def testEvalHitRenderInputInterface_nopYesNoUserInput123_returnsYesnoElementList123(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('common.nop() { inputui.user_yesnoselection("myLabel123","myDescription123"); }')
+        
+        # act
+        result = interpreter.eval_hit_render_input_interface(ast, environment)
+        
+        # assert
+        self.assertEquals(result, [{'label': 'myLabel123', 'type': 'yesnoselection', 'description': 'myDescription123'}])
+
+    def testEvalHitRenderInputInterface_nopTextFieldUserInput_returnsTextFieldElement(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('common.nop() { inputui.user_textfield("myLabel","myDescription"); }')
+        
+        # act
+        result = interpreter.eval_hit_render_input_interface(ast, environment)
+        
+        # assert
+        self.assertEquals(result, [{'label': 'myLabel', 'type': 'textfield', 'description': 'myDescription'}])
+
+    def testEvalHitRenderInputInterface_nopTextFieldUserInput123_returnsTextFieldElement123(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('common.nop() { inputui.user_textfield("myLabel123","myDescription123"); }')
+        
+        # act
+        result = interpreter.eval_hit_render_input_interface(ast, environment)
+        
+        # assert
+        self.assertEquals(result, [{'label': 'myLabel123', 'type': 'textfield', 'description': 'myDescription123'}])
+
+    def testEvalHitRenderInputInterface_nopTextAreaUserInput_returnsTextAreaElement(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('common.nop() { inputui.user_textarea("myLabel","myDescription"); }')
+        
+        # act
+        result = interpreter.eval_hit_render_input_interface(ast, environment)
+        
+        # assert
+        self.assertEquals(result, [{'label': 'myLabel', 'type': 'textarea', 'description': 'myDescription'}])
+
+    def testEvalHitRenderInputInterface_nopTextAreaUserInput123_returnsTextAreaElement123(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('common.nop() { inputui.user_textarea("myLabel123","myDescription123"); }')
+        
+        # act
+        result = interpreter.eval_hit_render_input_interface(ast, environment)
+        
+        # assert
+        self.assertEquals(result, [{'label': 'myLabel123', 'type': 'textarea', 'description': 'myDescription123'}])
+
+    def testEvalHitRenderInputInterface_nopdifferentInputs_returnsAllInputs(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('common.nop() { inputui.user_textarea("myLabelA","DescriptionA"); inputui.user_textfield("myLabelB","DescriptionB"); inputui.user_yesnoselection("myLabelC","myDescriptionC"); }')
+        
+        # act
+        result = interpreter.eval_hit_render_input_interface(ast, environment)
+        
+        # assert
+        self.assertEquals(result, [
+            {'description': 'DescriptionA', 'label': 'myLabelA', 'type': 'textarea'},
+            {'description': 'DescriptionB', 'label': 'myLabelB', 'type': 'textfield'},
+            {'description': 'myDescriptionC', 'label': 'myLabelC', 'type': 'yesnoselection'}])
+        
+           
 
     def parseToAst(self, code):
         return self.parserHelper(code).parse()

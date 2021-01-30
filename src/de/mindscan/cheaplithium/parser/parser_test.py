@@ -309,6 +309,38 @@ class Test(unittest.TestCase):
         two = Literal(value = 2)
         common_add_invoke = VMApply(func = common_add, argments=[one, two])
         self.assertEqualAST(result, VMAssignment(left=left, right=common_add_invoke ))
+        
+    def textParseLLExpressionStatement_expectSomething(self):
+        # arrange
+        parser = self.parserHelper('x = common.add(1,2)')
+        
+        # act
+        result = parser.parseLLExpressionStatement()
+        
+        # assert
+        left = Literal(value="x")
+        common = Literal(value="common")
+        add = Literal(value="add")
+        common_add = VMPrimary(value=common, selector=add)
+        one = Literal(value = 1)
+        two = Literal(value = 2)
+        common_add_invoke = VMApply(func = common_add, argments=[one, two])
+        self.assertEqualAST(result, VMAssignment(left=left, right=common_add_invoke ))
+        
+    def testParseLLExpressionStatement_InvokeTransitionsIsEqualTwoArguments_expectVMApplyNodeWithTwoArguments(self):
+        # arrange
+        parser = self.parserHelper('transitions.isEqual(True, False)')
+        
+        # act
+        result = parser.parseLLExpressionStatement()
+        
+        # assert
+        transitions = Literal(value="transitions")
+        istrue = Literal(value="isEqual")
+        transitions_istrue = VMPrimary(value=transitions, selector=istrue)
+        booleantrue = Literal(value="True")
+        booleanfalse = Literal(value="False")
+        self.assertEqualAST(result, VMApply(func=transitions_istrue, arguments = [booleantrue, booleanfalse]) )
     
 
     def assertEqualAST(self, result, expected):

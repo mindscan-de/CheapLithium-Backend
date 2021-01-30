@@ -174,12 +174,9 @@ Can not parse right now...:
 
 '''
 
-# TODO: then we need some DecisionLanguageParser - Call it "LithiumParser"?
-# TODO: takes the tokens and parses them into an AST
 # TODO: the AST then can be executed, and interpreted in different ways, such 
 #       that the same "code" has different meanings, eg. as e.g as 
 #       INPUT-specification, initialization, guard, etc, it is so much more flexible...
-# TODO: but someone must write it...  
 
 
 class LATokenIterator(object):
@@ -189,6 +186,7 @@ class LATokenIterator(object):
         self.current_position = 0
         self.default_token = None
         self.value = None
+        self.marked_position = None
     
     def __iter__(self):
         return self
@@ -219,6 +217,17 @@ class LATokenIterator(object):
         
         return self.value
     
+    def pushmarker(self):
+        self.marked_position = self.current_position
+    
+    def popmarker(self):
+        if not self.marked_position is None:
+            self.current_position = self.marked_position
+        else:
+            raise Exception("Popmaker with invalid state.")
+    
+    def discardmarker(self):
+        self.marked_position = None
 
 class LithiumParser(object):
     
@@ -325,14 +334,19 @@ class LithiumParser(object):
         if False:
             raise Exception ("We did not expect that token for a Expression Statement")
 
-        # we may have to store a marker so we can return, if we parsed it the wrong way.        
+        # store the current position in the tokenstream
+        self.tokens.pushmarker()        
         try:
             assignment = self.parseLLAssignment()
+            # remove the marked position because we were successfull
+            self.tokens.discardmarker()
             return assignment
         except:
             pass
         
-        # we may have to restore the position now, so we can return the expression.
+        # restore the parser position from before the assignment
+        self.tokens.popmarker()
+        
         try:
             expression = self.parseLLExpression()
             return expression

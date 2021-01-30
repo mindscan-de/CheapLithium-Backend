@@ -442,6 +442,8 @@ class LithiumParser(object):
             selector = self.parseLLLiteral()
             
             while self.tryAndConsumeAsString('.'):
+                # TODO Do we have an error here and shouldn't we have that 
+                #      wrapped in a DictSelector? We will see in runtime later.  
                 current = VMPrimary(value = current, selector = selector)
                 selector = self.parseLLLiteral()
             

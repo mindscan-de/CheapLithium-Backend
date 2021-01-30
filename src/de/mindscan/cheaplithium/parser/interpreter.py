@@ -45,9 +45,9 @@ def eval_transition(compileunit, environment:dict ):
     special_engine = SpecialEngine()
     if isinstance(compileunit, VMLithiumCompileUnit):
         guard_result = eval_ll(compileunit.guard, environment,special_engine);
-        if guard_result is False:
+        if guard_result is False or guard_result is None:
             # TODO: add a second return result
-            return guard_result  #TODO: reenable this ",None"
+            return False  #TODO: reenable this ",None"
         
         # TODO: This result should contain the data which is added to the transition data.
         __body_result = eval_ll(compileunit.body, environment,special_engine)
@@ -118,11 +118,9 @@ def eval_ll( ast, environment, special_engine=None):
         return None
     
     elif isinstance(ast,Literal):
-        if not special_engine is None:
+        if (special_engine != None) and (special_engine.isModuleName(ast.value)):
             # in case it is a module - wrap it with a vmmodule node
-            if special_engine.isModuleName(ast.value) :
-                print("injecting Moudle ast.value="+str(ast.value))
-                return eval_ll( VMModule(name=ast.value), environment, special_engine )
+            return eval_ll( VMModule(name=ast.value), environment, special_engine )
              
         return ast.value
     

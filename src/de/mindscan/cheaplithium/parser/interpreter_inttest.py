@@ -58,6 +58,62 @@ class Test(unittest.TestCase):
         # assert
         self.assertEquals(result, False)
 
+    def testEvalTransition_TransitionsIsTrueWithTrue_returnsTrue(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('transitions.isTrue(True)')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, True)
+
+    def testEvalTransition_TransitionsIsTrueWithFalse_returnsFalse(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('transitions.isTrue(False)')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, False)
+
+    def testEvalTransition_TransitionsIsFalseWithTrue_returnsFalse(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('transitions.isFalse(True)')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, False)
+
+    def testEvalTransition_TransitionsIsFalseWithFalse_returnsTrue(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('transitions.isFalse(False)')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, True)
+
+    def testEvalTransition_Empty_returnsFalse(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, False)
+
+
 
     def parseToAst(self, code):
         return self.parserHelper(code).parse()

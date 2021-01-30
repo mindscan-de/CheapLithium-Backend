@@ -41,7 +41,6 @@ from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
 # TODO: return the data assigned in the lithium-compileunit.body
 def eval_transition(compileunit, environment:dict ):
-    
     if isinstance(compileunit, VMLithiumCompileUnit):
         guard_result = eval_ll(compileunit.guard, environment);
         if guard_result is False:
@@ -138,7 +137,7 @@ def eval_ll( ast, environment, special_engine=None):
         return evaluatedList
     
     elif isinstance(ast,VMModule):
-        module_name = eval_ll(ast.name, environment, special_engine)
+        module_name = ast.name
         themodule = importlib.import_module('.'+module_name, package='de.mindscan.cheaplithium.vm')
 
         if special_engine:

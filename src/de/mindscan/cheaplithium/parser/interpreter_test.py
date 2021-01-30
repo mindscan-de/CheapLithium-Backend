@@ -38,7 +38,7 @@ class Test(unittest.TestCase):
 
     def testEvalTransition_invokeTransitionsAlways_expectReturnsTrue(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='always'))
         vmprimary = VMPrimary(value = module, selector = selector)
         guard = VMApply(func=vmprimary, arguments=[])
@@ -51,7 +51,7 @@ class Test(unittest.TestCase):
 
     def testEvalTransition_invokeTransitionsNever_expectReturnsFalse(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='never'))
         vmprimary = VMPrimary(value = module, selector = selector)
         guard = VMApply(func=vmprimary, arguments=[])
@@ -64,7 +64,7 @@ class Test(unittest.TestCase):
 
     def testEvalTransition_invokeTransitionsIsTrue_expectReturnsTrue(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='isTrue'))
         vmprimary = VMPrimary(value = module, selector = selector)
         guard = VMApply(func=vmprimary, arguments=[Literal(value=True)])
@@ -77,7 +77,7 @@ class Test(unittest.TestCase):
 
     def testEvalTransition_invokeTransitionsIsTrueWithFalse_expectReturnsFalse(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='isTrue'))
         vmprimary = VMPrimary(value = module, selector = selector)
         guard = VMApply(func=vmprimary, arguments=[Literal(value=False)])
@@ -109,19 +109,19 @@ class Test(unittest.TestCase):
         self.assertEqual(result, 'otherValue')
     
     def testEvalLL_invokeVMModuleForTransitions_expectResultIsModuleType(self):
-        ast = VMModule(name=Literal(value='transitions'))
+        ast = VMModule(name='transitions')
         result = interpreter.eval_ll(ast, {})
         self.assertIsInstance(result, ModuleType)
         
     def testEvalLL_invokeVMModuleForTransitions_expectModuleNameIsTransitions(self):
-        ast = VMModule(name=Literal(value='transitions'))
+        ast = VMModule(name='transitions')
         result = interpreter.eval_ll(ast, {})
         self.assertEquals(result.__name__, 'de.mindscan.cheaplithium.vm.transitions')
         
         
     def testEvalLL_selectVMModuleAlwaysMethod_expectMethodNameIsAlways(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='always'))
         ast = VMPrimary(value = module, selector = selector)
         # act
@@ -131,7 +131,7 @@ class Test(unittest.TestCase):
         
     def testEvalLL_invokeVMModuleAlwaysMethod_expectMethodResultIsTrue(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='always'))
         vmprimary = VMPrimary(value = module, selector = selector)
         ast = VMApply(func=vmprimary, arguments=[])
@@ -142,7 +142,7 @@ class Test(unittest.TestCase):
 
     def testEvalLL_invokeVMModuleNeverMethod_expectMethodResultIsFalse(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='never'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[])
@@ -153,7 +153,7 @@ class Test(unittest.TestCase):
 
     def testEvalLL_invokeVMModuleIsTrueMethodWithTrueValue_expectMethodResultIsTrue(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='isTrue'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=True)])
@@ -164,7 +164,7 @@ class Test(unittest.TestCase):
         
     def testEvalLL_invokeVMModuleIsTrueMethodWithFalseValue_expectMethodResultIsFalse(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='isTrue'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=False)])
@@ -175,7 +175,7 @@ class Test(unittest.TestCase):
 
     def testEvalLL_invokeVMModuleIsLessThanMethod1020_expectMethodResultIsTrue(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='isLessThan'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=10), Literal(value=20)])
@@ -186,7 +186,7 @@ class Test(unittest.TestCase):
 
     def testEvalLL_invokeVMModuleIsLessThanMethod2010_expectMethodResultIsFalse(self):
         # arrange
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='isLessThan'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=20), Literal(value=10)])
@@ -198,7 +198,7 @@ class Test(unittest.TestCase):
     def testEvalLL_invokeIsTrueWithEnvValueTrue_expectReturnsTrue(self):
         # arrange
         environment = {'myValue':True}
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='isTrue'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Env(selector=DictSelector(index=Literal(value='myValue')))])
@@ -210,7 +210,7 @@ class Test(unittest.TestCase):
     def testEvalLL_invokeIsTrueWithEnvValueFalse_expectReturnsFalse(self):
         # arrange
         environment = {'myValue':False}
-        module = VMModule(name=Literal(value='transitions'))
+        module = VMModule(name='transitions')
         selector = DictSelector(index=Literal(value='isTrue'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Env(selector=DictSelector(index=Literal(value='myValue')))])

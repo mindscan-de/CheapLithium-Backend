@@ -487,6 +487,20 @@ class Test(unittest.TestCase):
         guard = VMApply(func=transitions_always, arguments=[])
         self.assertEqualAST(result, VMLithiumCompileUnit(guard = guard) )
         
+    def testParseVMLithiumCompileUnit_transitionAlwaysEmptyBody_returnsVMCompileUnitWithInvocationInGuardAndEmptyBody(self):
+        # arrange
+        parser = self.parserHelper('transitions.always() {}')
+        
+        # act
+        result = parser.parseVMLithiumCompileUnit()
+        
+        # assert
+        transitions=Literal(value="transitions")
+        always = Literal(value="always")
+        transitions_always = VMPrimary(value = transitions, selector=always)
+        guard = VMApply(func=transitions_always, arguments=[])
+        empty_body = VMBody(statements=[])
+        self.assertEqualAST(result, VMLithiumCompileUnit(guard = guard,body=empty_body) )
     
 
 

@@ -198,6 +198,17 @@ class Test(unittest.TestCase):
         
         # assert
         self.assertEqualAST(result, Literal(value="HelloWorld"))
+        
+    def testParseLLLiteral_EmptyStringDQ_expectEmptyStringWithoutDQ(self):
+        # arrange
+        parser = self.parserHelper('""')
+        
+        # act
+        result = parser.parseLLLiteral()
+        
+        # assert
+        self.assertEqualAST(result, Literal(value=""))
+        
 
     def testParseLLMemberSelection_ADotB_expectPrimaryOfLiteralUsingALiteral(self):
         # arrange

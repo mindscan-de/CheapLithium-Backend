@@ -313,14 +313,11 @@ class LithiumParser(object):
     ;
     '''
     def parseLLStatement(self):
-        expressionStatement = self.parseLLExpressionStatement
+        expressionStatement = self.parseLLExpressionStatement()
         
-        # if next token is FOLLOW MENGE of parseLLStatement (';')
-        if True:
-            # TODO: consume ';'
+        if self.tryAndConsumeAsString(';'):
             return expressionStatement;
         else:
-            # raise exception, that we were expecting the follow 
             raise Exception("Missing ';'")
         
 

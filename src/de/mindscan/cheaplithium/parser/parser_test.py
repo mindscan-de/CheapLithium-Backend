@@ -342,6 +342,45 @@ class Test(unittest.TestCase):
         booleanfalse = Literal(value="False")
         self.assertEqualAST(result, VMApply(func=transitions_istrue, arguments = [booleantrue, booleanfalse]) )
     
+    def testParseLLStatement_AssignYToX_expectAnAssignment(self):
+        # arrange
+        parser = self.parserHelper('x=y;')
+        
+        # act
+        result = parser.parseLLStatement()
+        
+        # assert
+        x = Literal(value="x")
+        y = Literal(value="y")
+        self.assertEqualAST(result, VMAssignment(left=x, right=y) )
+
+    def testParseLLStatement_AssignYInvocationToX_expectAnAssignmentNode(self):
+        # arrange
+        parser = self.parserHelper('x=y();')
+        
+        # act
+        result = parser.parseLLStatement()
+        
+        # assert
+        x = Literal(value="x")
+        y = Literal(value="y")
+        y_invoke = VMApply(func = y, arguments=[])
+
+        self.assertEqualAST(result, VMAssignment(left=x, right=y_invoke) )
+        
+    def testParseLLStatement_YInvocation_expectAnInvocationNode(self):
+        # arrange
+        parser = self.parserHelper('y();')
+        
+        # act
+        result = parser.parseLLStatement()
+        
+        # assert
+        y = Literal(value="y")
+
+        self.assertEqualAST(result, VMApply(func = y, arguments=[]) )
+        
+    
 
     def assertEqualAST(self, result, expected):
         self.assertEqual(str(result), str(expected))

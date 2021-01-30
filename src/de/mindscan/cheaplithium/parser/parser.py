@@ -296,7 +296,12 @@ class LithiumParser(object):
                 
                 # This must not consume the EndOfInput..
                 if self.tryType(EndOfInput):
-                    raise Exception("premature end of input.") 
+                    raise Exception("premature end of input. expected '}'")
+                
+                # TODO: Support multiple levels of '{'
+                #if self.tryAsString('{'):
+                #    statement = self.parseVMBody()
+                #    statements.append(statement)
                 
                 # curent token is something different than stop set
                 # parse as it were/is a statement

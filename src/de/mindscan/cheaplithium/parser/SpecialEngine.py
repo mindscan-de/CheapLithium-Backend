@@ -75,3 +75,7 @@ class SpecialEngine(object):
             return self._userLabelledInput[label]
         else:
             return label+"Missing"
+        
+        
+    def isModuleName(self,modulename):
+        return modulename in ('inputui', 'transitions', 'common')

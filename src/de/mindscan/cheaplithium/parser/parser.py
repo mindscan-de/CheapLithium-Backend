@@ -26,9 +26,9 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
-from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  DictSelector, Literal, VMApply, VMBody, VMPrimary,\
+from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit, DictSelector, Literal, VMApply, VMBody, VMPrimary,\
     Env, This, VMAssignment
-from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Separator, Boolean, Integer, NONE, Identifier,\
+from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Boolean, Integer, NONE, Identifier,\
     KeyWordIdentifier, String
 
 # ##############################
@@ -539,52 +539,3 @@ class LithiumParser(object):
     def unescapeString(self, string):
         return string[1:-1] 
     
-    # #######################
-    # OBSOLETE ?
-    # #######################
-
-    def parse_guard(self):
-        
-        selector = DictSelector(index=Literal(value='always'))
-        name = Literal(value='transitions', selector=selector )
-        return VMApply(func=name, arguments=None)
-
-
-    
-    def try_accept(self, *accepted_tokens):
-        return False
-
-
-
-
-    # Doesnt't work
-    def parse_data_transfer_body(self):
-        # TODO: use an AST element
-        # a data_transferbody contains a list of assignments
-        data_transfer_body = None
-        
-        currentToken = EndOfInput("")
-        if isinstance( currentToken, EndOfInput ):
-            return data_transfer_body
-        
-        
-        # check if next is Separateor."{" -- otherwise is parser error
-        # consume Separator."{" -- this can actually check
-        parser_error=None
-        if not isinstance( currentToken, Separator) or not currentToken.token_value.equals("{"):
-            return parser_error;
-        
-        
-        # while tokens avail (!=EndOfInput)
-        #  if token is Separator."}" - consume - return data transfer_body
-        #  assignment = parseDataAssignment()
-        #  
-        
-        currentToken = EndOfInput("")
-        if not isinstance(currentToken, EndOfInput):
-            # unexpected tokens after body close
-            # everything else should be ignored?
-            return data_transfer_body
-        
-        
-        return data_transfer_body

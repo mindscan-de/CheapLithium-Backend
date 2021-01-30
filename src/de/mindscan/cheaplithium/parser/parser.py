@@ -241,11 +241,6 @@ class LithiumParser(object):
     ;
     '''
     def parse(self):
-        
-        # if tokens are empty, we don't need to invoke the parser any more... Just saying. 
-        if False:
-            return None;
-        
         return self.parseVMLithiumCompileUnit()
 
 #
@@ -268,6 +263,11 @@ class LithiumParser(object):
     def parseVMLithiumCompileUnit(self):
         guard = None
         body = None
+        
+        # if end of input - return empty VMLithumCompileUnit
+        if self.tryType(EndOfInput):
+            return VMLithiumCompileUnit( guard = guard, body = body)
+
         
         # TODO: if next token in first-Menge then
         if True: 

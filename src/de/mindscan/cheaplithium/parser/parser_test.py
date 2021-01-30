@@ -30,7 +30,8 @@ import unittest
 
 from de.mindscan.cheaplithium.parser import tokenizer
 from de.mindscan.cheaplithium.parser.parser import LithiumParser
-from de.mindscan.cheaplithium.parser.ast import Literal, Env, This, VMPrimary, VMApply, VMAssignment, VMBody
+from de.mindscan.cheaplithium.parser.ast import Literal, Env, This, VMPrimary, VMApply, VMAssignment, VMBody,\
+    VMLithiumCompileUnit
 
 
 class Test(unittest.TestCase):
@@ -462,6 +463,18 @@ class Test(unittest.TestCase):
         invoke_a = VMApply(func = a, arguments=[] )
         self.assertEqualAST(result, VMBody(statements=[invoke_a, invoke_a]) )
     
+
+    def testParseVMLithiumCompileUnit_EmptyBody_returnsEmptyVMCompileUnit(self):
+        # arrange
+        parser = self.parserHelper('')
+        
+        # act
+        result = parser.parseVMLithiumCompileUnit()
+        
+        # assert
+        self.assertEqualAST(result, VMLithiumCompileUnit() )
+        
+
 
     def assertEqualAST(self, result, expected):
         self.assertEqual(str(result), str(expected))

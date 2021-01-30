@@ -26,7 +26,7 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
-from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit, DictSelector, Literal, VMApply, VMBody, VMPrimary,\
+from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit, Literal, VMApply, VMBody, VMPrimary,\
     Env, This, VMAssignment
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Boolean, Integer, NONE, Identifier,\
     KeyWordIdentifier, String

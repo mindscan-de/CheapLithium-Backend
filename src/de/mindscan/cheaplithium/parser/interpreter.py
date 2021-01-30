@@ -41,14 +41,16 @@ from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
 # TODO: return the data assigned in the lithium-compileunit.body
 def eval_transition(compileunit, environment:dict ):
+    # use special Engine as part of the environment, where we decide what's a module
+    special_engine = SpecialEngine()
     if isinstance(compileunit, VMLithiumCompileUnit):
-        guard_result = eval_ll(compileunit.guard, environment);
+        guard_result = eval_ll(compileunit.guard, environment,special_engine);
         if guard_result is False:
             # TODO: add a second return result
             return guard_result  #TODO: reenable this ",None"
         
         # TODO: This result should contain the data which is added to the transition data.
-        __body_result = eval_ll(compileunit.body, environment)
+        __body_result = eval_ll(compileunit.body, environment,special_engine)
         # TODO: return a pair of returnresult (one for the result of the Guard and one for the result of the body
         return guard_result
           
@@ -116,6 +118,12 @@ def eval_ll( ast, environment, special_engine=None):
         return None
     
     elif isinstance(ast,Literal):
+        if not special_engine is None:
+            # in case it is a module - wrap it with a vmmodule node
+            if special_engine.isModuleName(ast.value) :
+                print("injecting Moudle ast.value="+str(ast.value))
+                return eval_ll( VMModule(name=ast.value), environment, special_engine )
+             
         return ast.value
     
     elif isinstance(ast, DictSelector):
@@ -152,7 +160,10 @@ def eval_ll( ast, environment, special_engine=None):
         value = eval_ll(ast.value,environment, special_engine)
         if ast.selector is None:
             return value
-        
+        # ATTN: fix the mising Dict Selection on the fly. 
+        if not isinstance(ast.selector, DictSelector):
+            ast.selector = DictSelector(index = ast.selector)
+
         selector = eval_ll(ast.selector, environment, special_engine)
         return selector(value)
     

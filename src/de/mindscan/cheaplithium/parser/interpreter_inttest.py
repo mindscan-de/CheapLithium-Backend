@@ -113,7 +113,28 @@ class Test(unittest.TestCase):
         # assert
         self.assertEquals(result, False)
 
+    def testEvalTransition_isLessThan1020_returnsTrue(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('transitions.isLessThan(10,20)')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, True)
 
+    def testEvalTransition_isLessThan1020WithEmptyBody_returnsTrue(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('transitions.isLessThan(10,20) {}')
+        
+        # act
+        result = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, True)
+        
 
     def parseToAst(self, code):
         return self.parserHelper(code).parse()

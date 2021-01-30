@@ -32,7 +32,8 @@ sys.path.insert(0,SRC_BASE_DIR)
 
 import importlib
 
-from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMModule, VMPrimary, VMApply, VMLithiumCompileUnit
+from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMModule, VMPrimary, VMApply, VMLithiumCompileUnit,\
+    VMBody
 from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
 
@@ -142,6 +143,11 @@ def eval_ll( ast, environment, special_engine=None):
             evaluatedList.append( result )
         return evaluatedList
     
+    elif isinstance(ast, VMBody):
+        for element in ast.statements:
+            result = eval_ll(element, environment, special_engine)
+        return None
+    
     elif isinstance(ast,VMModule):
         module_name = ast.name
         themodule = importlib.import_module('.'+module_name, package='de.mindscan.cheaplithium.vm')
@@ -172,7 +178,8 @@ def eval_ll( ast, environment, special_engine=None):
             return theFunction()
         else:
             return theFunction(*arguments)
-        
+    
+    
     
     raise Exception("eval_ll can't evaluate {}: (NYI) please implement this type!".format(type(ast)))
     

@@ -43,7 +43,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
         
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         result = theModule.user_textfield("myLabel","myDescription")
@@ -56,7 +56,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
         
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         result = theModule.user_textfield("myOtherLabel","myDescription")
@@ -69,7 +69,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
         
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         result = theModule.user_textfield("myLabel","myDescription")
@@ -82,7 +82,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
         
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         result = theModule.user_textfield("myLabel","myOtherDescription")
@@ -95,7 +95,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
         
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         result = theModule.user_textfield("myLabel","myDescription")
@@ -108,7 +108,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(False)
         
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         result = theModule.user_textfield("myLabel","myDescription")
@@ -121,7 +121,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(False)
 
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         result = theModule.user_textfield("myOtherLabel","myDescription")
@@ -135,7 +135,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setUserLabeledInput({'myLabel':'MyLabelInput'})
 
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         result = theModule.user_textfield("myLabel","myDescription")
@@ -148,7 +148,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
         
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         theModule.user_textfield("myLabel","myDescription")
@@ -163,7 +163,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
         
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         theModule.user_textarea("myLabel","myDescription")
@@ -178,7 +178,7 @@ class Test(unittest.TestCase):
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
         
-        theModule = self.createModule('inputui')
+        theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
         theModule.user_yesnoselection("myLabel","myDescription")

@@ -31,6 +31,7 @@ import sys
 sys.path.insert(0,SRC_BASE_DIR)
 
 import importlib
+import copy
 
 from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, This 
 from de.mindscan.cheaplithium.parser.ast import VMModule, VMPrimary, VMApply, VMLithiumCompileUnit, VMBody, VMAssignment
@@ -83,23 +84,21 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
         raise Exception("eval_hit_node can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
 
-# TODO: prevent the environment to change because we use (execute) this method as a  help to identify 
-#       thevalues which are input data and which nit, because all other statements are exevuted too and
-#       manipulate the environment. Therefore the environment may has to be firewalled...
-#       make a deep copy of the environment first. 
 def eval_hit_render_input_interface(compileunit, environment:dict):
-    
+
+    copied_environment = copy.deepcopy(environment)
+
     if isinstance(compileunit, VMLithiumCompileUnit):
         # enable the recording mode, for the user interface
         special_engine = SpecialEngine()
-        special_engine.setEnvironment(environment)
+        special_engine.setEnvironment(copied_environment)
         special_engine.setInterfaceRenderMode(True)
         
-        # TODO: should the guard be calcuated at all?
+        # No calculation of the guard in case of retrieving the InputInterface
         # eval_ll(compileunit.guard, environment, special_engine)
         
         # record the user input interface into special engine, while execution
-        eval_ll(compileunit.body, environment, special_engine)
+        eval_ll(compileunit.body, copied_environment, special_engine)
         # replay user input interface after evaluation
         return special_engine.getInputInterface()
     else:

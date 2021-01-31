@@ -93,29 +93,29 @@ class Test(unittest.TestCase):
     def testEvalLL_invokeEnv_expectReturnsEnvironment(self):
         environment = {'this':'is the environment'}
         ast = Env()
-        result = interpreter.eval_ll(ast, environment)
+        result = interpreter.eval_ll(ast, environment, None)
         self.assertDictEqual(result, environment)
         
     def testEvalLL_invokeEnvWithSelector_expectReturnsEnvironmentValue(self):
         environment = {'this':'is the environment'}
         ast = Env(selector=DictSelector(index=Literal(value='this')))
-        result = interpreter.eval_ll(ast, environment)
+        result = interpreter.eval_ll(ast, environment, None)
         self.assertEqual(result, 'is the environment')
         
     def testEvalLL_invokeEnvWithSelectorOtherKey_expectReturnsOthertValue(self):
         environment = {'this':'is the environment','otherKey':'otherValue'}
         ast = Env(selector=DictSelector(index=Literal(value='otherKey')))
-        result = interpreter.eval_ll(ast, environment)
+        result = interpreter.eval_ll(ast, environment, None)
         self.assertEqual(result, 'otherValue')
     
     def testEvalLL_invokeVMModuleForTransitions_expectResultIsModuleType(self):
         ast = VMModule(name='transitlib')
-        result = interpreter.eval_ll(ast, {})
+        result = interpreter.eval_ll(ast, {}, None)
         self.assertIsInstance(result, ModuleType)
         
     def testEvalLL_invokeVMModuleForTransitions_expectModuleNameIsTransitions(self):
         ast = VMModule(name='transitlib')
-        result = interpreter.eval_ll(ast, {})
+        result = interpreter.eval_ll(ast, {}, None)
         self.assertEquals(result.__name__, 'de.mindscan.cheaplithium.vm.transitlib')
         
         
@@ -125,7 +125,7 @@ class Test(unittest.TestCase):
         selector = DictSelector(index=Literal(value='always'))
         ast = VMPrimary(value = module, selector = selector)
         # act
-        result = interpreter.eval_ll(ast, {})
+        result = interpreter.eval_ll(ast, {}, None)
         # assert
         self.assertEquals(result.__name__, "always")
         
@@ -136,7 +136,7 @@ class Test(unittest.TestCase):
         vmprimary = VMPrimary(value = module, selector = selector)
         ast = VMApply(func=vmprimary, arguments=[])
         # act
-        result = interpreter.eval_ll(ast, {})
+        result = interpreter.eval_ll(ast, {}, None)
         # assert
         self.assertEquals(result, True)
 
@@ -147,7 +147,7 @@ class Test(unittest.TestCase):
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[])
         # act
-        result = interpreter.eval_ll(ast, {})
+        result = interpreter.eval_ll(ast, {}, None)
         # assert
         self.assertEquals(result, False)
 
@@ -158,7 +158,7 @@ class Test(unittest.TestCase):
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=True)])
         # act
-        result = interpreter.eval_ll(ast, {})
+        result = interpreter.eval_ll(ast, {}, None)
         # assert
         self.assertEquals(result, True)
         
@@ -169,7 +169,7 @@ class Test(unittest.TestCase):
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=False)])
         # act
-        result = interpreter.eval_ll(ast, {})
+        result = interpreter.eval_ll(ast, {}, None)
         # assert
         self.assertEquals(result, False)
 
@@ -180,7 +180,7 @@ class Test(unittest.TestCase):
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=10), Literal(value=20)])
         # act
-        result = interpreter.eval_ll(ast, {})
+        result = interpreter.eval_ll(ast, {}, None)
         # assert
         self.assertEquals(result, True)
 
@@ -191,7 +191,7 @@ class Test(unittest.TestCase):
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=20), Literal(value=10)])
         # act
-        result = interpreter.eval_ll(ast, {})
+        result = interpreter.eval_ll(ast, {}, None)
         # assert
         self.assertEquals(result, False)
 
@@ -203,7 +203,7 @@ class Test(unittest.TestCase):
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Env(selector=DictSelector(index=Literal(value='myValue')))])
         # act
-        result = interpreter.eval_ll(ast, environment)
+        result = interpreter.eval_ll(ast, environment, None)
         # assert
         self.assertEquals(result, True)
 
@@ -215,7 +215,7 @@ class Test(unittest.TestCase):
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Env(selector=DictSelector(index=Literal(value='myValue')))])
         # act
-        result = interpreter.eval_ll(ast, environment)
+        result = interpreter.eval_ll(ast, environment, None)
         # assert
         self.assertEquals(result, False)
         

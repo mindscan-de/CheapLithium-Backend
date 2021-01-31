@@ -109,7 +109,7 @@ def eval_mit_node(ast, environment:dict):
 
 
 # eval lithium language
-def eval_ll( ast, environment, special_engine=None):
+def eval_ll( ast, environment, special_engine):
     if ast is None:
         return None
     

@@ -38,7 +38,7 @@ class Test(unittest.TestCase):
     def testEvalTransition_TransitionsAlways_returnsTrue(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('transitions.always()')
+        ast = self.parseToAst('transitlib.always()')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -46,10 +46,10 @@ class Test(unittest.TestCase):
         # assert
         self.assertEquals(result, True)
 
-    def testEvalTransition_TransitionsNever_returnsFalse(self):
+    def testEvalTransition_transitlibNever_returnsFalse(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('transitions.never()')
+        ast = self.parseToAst('transitlib.never()')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -60,7 +60,7 @@ class Test(unittest.TestCase):
     def testEvalTransition_TransitionsIsTrueWithTrue_returnsTrue(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('transitions.isTrue(True)')
+        ast = self.parseToAst('transitlib.isTrue(True)')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -68,10 +68,10 @@ class Test(unittest.TestCase):
         # assert
         self.assertEquals(result, True)
 
-    def testEvalTransition_TransitionsIsTrueWithFalse_returnsFalse(self):
+    def testEvalTransition_transitlibIsTrueWithFalse_returnsFalse(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('transitions.isTrue(False)')
+        ast = self.parseToAst('transitlib.isTrue(False)')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -82,7 +82,7 @@ class Test(unittest.TestCase):
     def testEvalTransition_TransitionsIsFalseWithTrue_returnsFalse(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('transitions.isFalse(True)')
+        ast = self.parseToAst('transitlib.isFalse(True)')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -90,10 +90,10 @@ class Test(unittest.TestCase):
         # assert
         self.assertEquals(result, False)
 
-    def testEvalTransition_TransitionsIsFalseWithFalse_returnsTrue(self):
+    def testEvalTransition_transitlibIsFalseWithFalse_returnsTrue(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('transitions.isFalse(False)')
+        ast = self.parseToAst('transitlib.isFalse(False)')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -115,7 +115,7 @@ class Test(unittest.TestCase):
     def testEvalTransition_isLessThan1020_returnsTrue(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('transitions.isLessThan(10,20)')
+        ast = self.parseToAst('transitlib.isLessThan(10,20)')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -126,7 +126,7 @@ class Test(unittest.TestCase):
     def testEvalTransition_isLessThan1020WithEmptyBody_returnsTrue(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('transitions.isLessThan(10,20) {}')
+        ast = self.parseToAst('transitlib.isLessThan(10,20) {}')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -137,7 +137,7 @@ class Test(unittest.TestCase):
     def testEvalTransition_isLessThan1020UsingEnvironmentWithEmptyBody_returnsTrue(self):
         # arrange
         environment = {'result':10}
-        ast = self.parseToAst('transitions.isLessThan(env.result,20) {}')
+        ast = self.parseToAst('transitlib.isLessThan(env.result,20) {}')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -148,7 +148,7 @@ class Test(unittest.TestCase):
     def testEvalTransition_isLessThan3020UsingEnvironmentWithEmptyBody_returnsFalse(self):
         # arrange
         environment = {'result':30}
-        ast = self.parseToAst('transitions.isLessThan(env.result,20) {}')
+        ast = self.parseToAst('transitlib.isLessThan(env.result,20) {}')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -159,7 +159,7 @@ class Test(unittest.TestCase):
     def testEvalTransition_isLessThan1020UsingEnvironmentWithdifferntDepth_returnsTrue(self):
         # arrange
         environment = {'result':10,'x':{'y':20}}
-        ast = self.parseToAst('transitions.isLessThan(env.result,env.x.y) {}')
+        ast = self.parseToAst('transitlib.isLessThan(env.result,env.x.y) {}')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -173,7 +173,7 @@ class Test(unittest.TestCase):
                        'x': {
                            'y':20
                            }}
-        ast = self.parseToAst('transitions.isLessThan(env.result,env.x.y) {}')
+        ast = self.parseToAst('transitlib.isLessThan(env.result,env.x.y) {}')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -184,7 +184,7 @@ class Test(unittest.TestCase):
     def testEvalTransition_isEqualHelloWorld_returnsTrue(self):
         # arrange
         environment = {'result':"Hello World!"}
-        ast = self.parseToAst('transitions.isEqual(env.result, "Hello World!") {}')
+        ast = self.parseToAst('transitlib.isEqual(env.result, "Hello World!") {}')
         
         # act
         result = interpreter.eval_transition(ast, environment)
@@ -195,7 +195,7 @@ class Test(unittest.TestCase):
     def testEvalTransition_isEqualHelloWorldHelloUniverse_returnsFalse(self):
         # arrange
         environment = {'result':"Hello World!"}
-        ast = self.parseToAst('transitions.isEqual(env.result, "Hello Universe!") {}')
+        ast = self.parseToAst('transitlib.isEqual(env.result, "Hello Universe!") {}')
         
         # act
         result = interpreter.eval_transition(ast, environment)

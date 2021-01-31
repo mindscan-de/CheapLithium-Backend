@@ -78,4 +78,4 @@ class SpecialEngine(object):
         
         
     def isModuleName(self,modulename):
-        return modulename in ('inputui', 'transitions', 'common', 'uilib', 'stdlib')
+        return modulename in ('transitions', 'uilib', 'stdlib', 'cmplib', 'transitlib')

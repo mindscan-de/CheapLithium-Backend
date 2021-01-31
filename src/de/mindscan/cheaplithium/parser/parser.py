@@ -26,8 +26,10 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 
-from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit, Literal, VMApply, VMBody, VMPrimary,\
-    Env, This, VMAssignment
+from de.mindscan.cheaplithium.parser.ast import VMLithiumCompileUnit,  VMApply, VMBody, VMPrimary, VMAssignment
+from de.mindscan.cheaplithium.parser.ast import Env, This, Literal 
+
+from de.mindscan.cheaplithium.parser import tokenizer
 from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Boolean, Integer, NONE, Identifier,\
     KeyWordIdentifier, String
 
@@ -35,11 +37,13 @@ from de.mindscan.cheaplithium.parser.tokenizer import EndOfInput, Boolean, Integ
 # Simple Interface to the parser
 # ##############################
 
-def parse(tokens):
-    parser = LithiumParser(tokens)
-    return parser.parse()
+def parseToAst(code):
+    return _parserHelper(code).parse()
 
- 
+def _parserHelper(code):
+    tokens = tokenizer.tokenize(code)
+    return LithiumParser(tokens)
+
 
 '''
 =================================

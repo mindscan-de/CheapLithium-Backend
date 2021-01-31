@@ -27,8 +27,7 @@ SOFTWARE.
 '''
 
 import unittest
-from de.mindscan.cheaplithium.parser.parser import LithiumParser
-from de.mindscan.cheaplithium.parser import tokenizer, interpreter
+from de.mindscan.cheaplithium.parser import interpreter, parser
 
 #
 # Interpreter Integration Test - Some EndToEndTest 
@@ -312,11 +311,7 @@ class Test(unittest.TestCase):
            
 
     def parseToAst(self, code):
-        return self.parserHelper(code).parse()
-    
-    def parserHelper(self, code) -> LithiumParser:
-        tokens = tokenizer.tokenize(code)
-        return LithiumParser(tokens)
+        return parser.parseToAst(code)
     
 
 if __name__ == "__main__":

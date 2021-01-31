@@ -281,7 +281,7 @@ class Test(unittest.TestCase):
         # assert
         self.assertEquals(result, [{'label': 'myLabel123', 'type': 'textarea', 'description': 'myDescription123'}])
 
-    def testEvalHitRenderInputInterface_nopdifferentInputs_returnsAllInputs(self):
+    def testEvalHitRenderInputInterface_nopDifferentInputs_returnsAllInputs(self):
         # arrange
         environment = {}
         ast = self.parseToAst('common.nop() { inputui.user_textarea("myLabelA","DescriptionA"); inputui.user_textfield("myLabelB","DescriptionB"); inputui.user_yesnoselection("myLabelC","myDescriptionC"); }')
@@ -295,6 +295,20 @@ class Test(unittest.TestCase):
             {'description': 'DescriptionB', 'label': 'myLabelB', 'type': 'textfield'},
             {'description': 'myDescriptionC', 'label': 'myLabelC', 'type': 'yesnoselection'}])
         
+    def testEvalHitRenderInputInterface_nopDifferentInputAssignments_returnsAllInputs(self):
+        # arrange
+        environment = {}
+        ast = self.parseToAst('common.nop() { x=inputui.user_textarea("myLabelA","DescriptionA"); y=inputui.user_textfield("myLabelB","DescriptionB"); z=inputui.user_yesnoselection("myLabelC","myDescriptionC"); }')
+        
+        # act
+        result = interpreter.eval_hit_render_input_interface(ast, environment)
+        
+        # assert
+        self.assertEquals(result, [
+            {'description': 'DescriptionA', 'label': 'myLabelA', 'type': 'textarea'},
+            {'description': 'DescriptionB', 'label': 'myLabelB', 'type': 'textfield'},
+            {'description': 'myDescriptionC', 'label': 'myLabelC', 'type': 'yesnoselection'}])
+
            
 
     def parseToAst(self, code):

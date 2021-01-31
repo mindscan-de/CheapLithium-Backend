@@ -33,7 +33,7 @@ sys.path.insert(0,SRC_BASE_DIR)
 import importlib
 
 from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMModule, VMPrimary, VMApply, VMLithiumCompileUnit,\
-    VMBody
+    VMBody, VMAssignment
 from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
 
@@ -159,6 +159,11 @@ def eval_ll( ast, environment, special_engine=None):
                 pass
         
         return themodule
+    
+    elif isinstance(ast,VMAssignment):
+        _right = eval_ll(ast.right, environment, special_engine)
+        # TODO: eval the left side and do the assignment;
+        return None
     
     elif isinstance(ast,VMPrimary):
         value = eval_ll(ast.value,environment, special_engine)

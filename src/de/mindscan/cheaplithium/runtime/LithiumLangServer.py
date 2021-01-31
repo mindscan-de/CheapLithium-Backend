@@ -30,9 +30,8 @@ from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
-from de.mindscan.cheaplithium.parser import tokenizer
-from de.mindscan.cheaplithium.parser import parser
 from de.mindscan.cheaplithium.parser import interpreter
+from de.mindscan.cheaplithium.parser import parser
 
 class LithiumLangServer(object):
     '''
@@ -62,45 +61,20 @@ class LithiumLangServer(object):
         node = self.__modelProvider.select_decision_node_from_decision_model(model, thread[DT_CURRENTNODE])
         return self.__compileNodeToInputInterFace(node, environment)
     
-    def __compileNodeToInputInterFace(self, node, _environment):
+    def __compileNodeToInputInterFace(self, node, environment):
         emptyInterface = self.__compileEmptyInterface()
 
         if DN_NODEACTION not in node:
             # TODO: add parserError, that node action was not defined for this
             return emptyInterface
 
-        # tokenize
-        _tokens = tokenizer.tokenize(node[DN_NODEACTION])
-        
         # calculate, whether it is a HIT node 
         # (only HIT Nodes should return a user interface)
         if node[DN_TYPE] == DN_TYPE_HIT:
-            #             # parse AST from tokens
-            #             _ast_compileunit = parser.parse(_tokens)
-            #             
-            #             # compile to UserInputInterface / dictionary 
-            #             _interface = interpreter.eval_hit_render_input_interface(_ast_compileunit, environment)
-            #             
-            #             # return compiled interface.
-            #             return { 'uiInputInterface': _interface }
-            
-            return { 'uiInputInterface': [
-                                {
-                                    'label':'myTextFieldLabel',
-                                    'type':'textfield',
-                                    'description':'How was your experience using this product?'
-                                },
-                                {
-                                    'label':'myTextAreaLabel',
-                                    'type':'textarea',
-                                    'description':'Please drop the stack trace into this text area!'
-                                },
-                                {
-                                    'label':'myYesNoSelectionLabel',
-                                    'type':'yesnoselection',
-                                    'description':'What about saying just "yes" or "no" now?'
-                                }
-                                  ]}
+            compileunit = parser.parseToAst( node[DN_NODEACTION] )
+            interface = interpreter.eval_hit_render_input_interface(compileunit, environment)
+            return { 'uiInputInterface': interface}
+        
         elif node[DN_TYPE] == DN_TYPE_START:
             return emptyInterface
         elif node[DN_TYPE] == DN_TYPE_MIT:

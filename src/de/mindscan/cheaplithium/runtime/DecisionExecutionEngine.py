@@ -487,9 +487,7 @@ class DecisionExecutionEngine(object):
         
         compileunit = parser.parseToAst(transition[DNT_GUARD_SIGNATURE]);
         
-        # TODO: solve the assignment problem, then we can have the result 
-        transitionresult = interpreter.eval_transition(compileunit, thread_environment)
-        transition_data = {}
+        transitionresult, transition_data = interpreter.eval_transition(compileunit, thread_environment)
         
         return transitionresult, transition_data
 

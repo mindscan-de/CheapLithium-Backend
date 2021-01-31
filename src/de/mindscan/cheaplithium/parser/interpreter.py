@@ -41,19 +41,19 @@ from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 #       make the lithium runtime engine update the runtime data / threadenvironment  
 
 # TODO: return the data assigned in the lithium-compileunit.body
+# TODO: solve the assignment problem in the interpreter, then we can have the result 
 def eval_transition(compileunit, environment:dict ):
     # use special Engine as part of the environment, where we decide what's a module
     special_engine = SpecialEngine()
     if isinstance(compileunit, VMLithiumCompileUnit):
         guard_result = eval_ll(compileunit.guard, environment,special_engine);
         if guard_result is False or guard_result is None:
-            # TODO: add a second return result
-            return False  #TODO: reenable this ",None"
+            return False, {}
         
         # TODO: This result should contain the data which is added to the transition data.
         __body_result = eval_ll(compileunit.body, environment,special_engine)
         # TODO: return a pair of returnresult (one for the result of the Guard and one for the result of the body
-        return guard_result
+        return guard_result, {}
           
     else:
         raise Exception("eval_transition can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))

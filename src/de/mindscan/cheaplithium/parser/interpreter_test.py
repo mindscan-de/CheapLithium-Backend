@@ -44,7 +44,7 @@ class Test(unittest.TestCase):
         guard = VMApply(func=vmprimary, arguments=[])
         compileunit = VMLithiumCompileUnit(guard=guard, body = None)
         # act
-        result = interpreter.eval_transition(compileunit,{})  
+        result,_ = interpreter.eval_transition(compileunit,{})  
         # assert
         self.assertEquals(result, True)
 
@@ -57,7 +57,7 @@ class Test(unittest.TestCase):
         guard = VMApply(func=vmprimary, arguments=[])
         compileunit = VMLithiumCompileUnit(guard=guard, body = None)
         # act
-        result = interpreter.eval_transition(compileunit,{})  
+        result,_ = interpreter.eval_transition(compileunit,{})  
         # assert
         self.assertEquals(result, False)
 
@@ -70,7 +70,7 @@ class Test(unittest.TestCase):
         guard = VMApply(func=vmprimary, arguments=[Literal(value=True)])
         compileunit = VMLithiumCompileUnit(guard=guard, body = None)
         # act
-        result = interpreter.eval_transition(compileunit,{})  
+        result,_ = interpreter.eval_transition(compileunit,{})  
         # assert
         self.assertEquals(result, True)
 
@@ -83,7 +83,7 @@ class Test(unittest.TestCase):
         guard = VMApply(func=vmprimary, arguments=[Literal(value=False)])
         compileunit = VMLithiumCompileUnit(guard=guard, body = None)
         # act
-        result = interpreter.eval_transition(compileunit,{})  
+        result,_ = interpreter.eval_transition(compileunit,{})  
         # assert
         self.assertEquals(result, False)
 

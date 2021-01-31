@@ -24,7 +24,7 @@
     {
       "uuid": "DN_cefacc87-4d5f-48c9-9d85-9e64f829b570",
       "name": "001.decide_small_sample_size",
-      "type": "mit",
+      "type": "hit",
       "kbarticle": "",
       "nextactions": [
         {
@@ -40,7 +40,7 @@
           "guard": "isGreaterThan( env.samplesize , 50 )"
         }
       ],
-      "nodeaction": "calculateNumberOfSamples(5) {}"
+      "nodeaction": "stdlib.nop() {\r\n  env.samplesize= uilib.textfield(\"mySamplesize\", \"Please enter the number of samples you have to train this model...\");\r\n}"
     },
     {
       "uuid": "DN_d2d5eacc-3dba-456c-b8dc-62b58afd0e68",

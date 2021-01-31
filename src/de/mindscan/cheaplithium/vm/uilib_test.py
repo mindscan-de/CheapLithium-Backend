@@ -38,7 +38,7 @@ from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 class Test(unittest.TestCase):
 
 
-    def testUserTextField_SetInputInterfaceRenderMode_resultContainsSameLabelname(self):
+    def testTextField_SetInputInterfaceRenderMode_resultContainsSameLabelname(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
@@ -46,12 +46,12 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        result = theModule.user_textfield("myLabel","myDescription")
+        result = theModule.textfield("myLabel","myDescription")
         # assert
         self.assertEqual(result['label'], 'myLabel')
         
         
-    def testUserTextField_SetInputInterfaceRenderModeOtherLabelname_resultContainsTheOtherLabelname(self):
+    def testTextField_SetInputInterfaceRenderModeOtherLabelname_resultContainsTheOtherLabelname(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
@@ -59,12 +59,12 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        result = theModule.user_textfield("myOtherLabel","myDescription")
+        result = theModule.textfield("myOtherLabel","myDescription")
         # assert
         self.assertEqual(result['label'], 'myOtherLabel')
         
         
-    def testUserTextField_SetInputInterfaceRenderMode_resultContainsSameDescription(self):
+    def testTextField_SetInputInterfaceRenderMode_resultContainsSameDescription(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
@@ -72,12 +72,12 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        result = theModule.user_textfield("myLabel","myDescription")
+        result = theModule.textfield("myLabel","myDescription")
         # assert
         self.assertEqual(result['description'], 'myDescription')
 
 
-    def testUserTextField_SetInputInterfaceRenderModeOtherDescription_resultContainsTheOtherDescription(self):
+    def testTextField_SetInputInterfaceRenderModeOtherDescription_resultContainsTheOtherDescription(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
@@ -85,12 +85,12 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        result = theModule.user_textfield("myLabel","myOtherDescription")
+        result = theModule.textfield("myLabel","myOtherDescription")
         # assert
         self.assertEqual(result['description'], 'myOtherDescription')
         
 
-    def testUserTextField_SetInputInterfaceRenderMode_resultHastextfieldType(self):
+    def testTextField_SetInputInterfaceRenderMode_resultHastextfieldType(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
@@ -98,12 +98,12 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        result = theModule.user_textfield("myLabel","myDescription")
+        result = theModule.textfield("myLabel","myDescription")
         # assert
         self.assertEqual(result['type'], 'textfield')
         
 
-    def testUserTextField_NoEngineNoInputForMyLabel_expectMyLabelMissing(self):
+    def testTextField_NoEngineNoInputForMyLabel_expectMyLabelMissing(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(False)
@@ -111,12 +111,12 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        result = theModule.user_textfield("myLabel","myDescription")
+        result = theModule.textfield("myLabel","myDescription")
         # assert
         self.assertEqual(result, 'myLabelMissing')
         
         
-    def testUserTextField_NoEngineNoInputForMyOtherLabel_expectMyOtherLabelMissing(self):
+    def testTextField_NoEngineNoInputForMyOtherLabel_expectMyOtherLabelMissing(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(False)
@@ -124,13 +124,13 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        result = theModule.user_textfield("myOtherLabel","myDescription")
+        result = theModule.textfield("myOtherLabel","myDescription")
         
         # assert
         self.assertEqual(result, 'myOtherLabelMissing')
 
 
-    def testUserTextField_SetEngineWithUserDataForMyLabel_expectMyLabelInputFromInputDictionary(self):
+    def testTextField_SetEngineWithUserDataForMyLabel_expectMyLabelInputFromInputDictionary(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setUserLabeledInput({'myLabel':'MyLabelInput'})
@@ -138,12 +138,12 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        result = theModule.user_textfield("myLabel","myDescription")
+        result = theModule.textfield("myLabel","myDescription")
         # assert
         self.assertEqual(result, 'MyLabelInput')
 
 
-    def testUserTextField_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
+    def testTextField_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
@@ -151,14 +151,14 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        theModule.user_textfield("myLabel","myDescription")
+        theModule.textfield("myLabel","myDescription")
         result = special_engine.getInputInterface()
         
         # assert
         self.assertEqual(result, [{'label':'myLabel', 'type':'textfield', 'description':'myDescription' }])
 
 
-    def testUserTextArea_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
+    def testTextArea_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
@@ -166,14 +166,14 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        theModule.user_textarea("myLabel","myDescription")
+        theModule.textarea("myLabel","myDescription")
         result = special_engine.getInputInterface()
         
         # assert
         self.assertEqual(result, [{'label':'myLabel', 'type':'textarea', 'description':'myDescription' }])
 
 
-    def testUserYesNoSelection_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
+    def testYesNoSelection_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
@@ -181,7 +181,7 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        theModule.user_yesnoselection("myLabel","myDescription")
+        theModule.yesnoselection("myLabel","myDescription")
         result = special_engine.getInputInterface()
         
         # assert

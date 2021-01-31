@@ -37,7 +37,7 @@ def _inject_engine(engine:SpecialEngine):
         __input__local_engine = engine
 
  
-def user_textfield(label:str, description:str):
+def textfield(label:str, description:str):
     global __input__local_engine
     if __input__local_engine.isInterfaceRenderMode():
         item = {
@@ -51,7 +51,7 @@ def user_textfield(label:str, description:str):
         return __input__local_engine.getUserLabelledInput(label)
         
         
-def user_textarea(label:str, description:str):
+def textarea(label:str, description:str):
     global __input__local_engine
     if __input__local_engine.isInterfaceRenderMode():
         item = {
@@ -65,7 +65,7 @@ def user_textarea(label:str, description:str):
         return __input__local_engine.getUserLabelledInput(label)
 
 
-def user_yesnoselection(label:str, description:str):
+def yesnoselection(label:str, description:str):
     global __input__local_engine
     if __input__local_engine.isInterfaceRenderMode():
         item = {

@@ -217,7 +217,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopYesNoUserInput_returnsYesnoElementList(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.user_yesnoselection("myLabel","myDescription"); }')
+        ast = self.parseToAst('common.nop() { uilib.yesnoselection("myLabel","myDescription"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -228,7 +228,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopYesNoUserInput123_returnsYesnoElementList123(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.user_yesnoselection("myLabel123","myDescription123"); }')
+        ast = self.parseToAst('common.nop() { uilib.yesnoselection("myLabel123","myDescription123"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -239,7 +239,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopTextFieldUserInput_returnsTextFieldElement(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.user_textfield("myLabel","myDescription"); }')
+        ast = self.parseToAst('common.nop() { uilib.textfield("myLabel","myDescription"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -250,7 +250,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopTextFieldUserInput123_returnsTextFieldElement123(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.user_textfield("myLabel123","myDescription123"); }')
+        ast = self.parseToAst('common.nop() { uilib.textfield("myLabel123","myDescription123"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -261,7 +261,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopTextAreaUserInput_returnsTextAreaElement(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.user_textarea("myLabel","myDescription"); }')
+        ast = self.parseToAst('common.nop() { uilib.textarea("myLabel","myDescription"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -272,7 +272,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopTextAreaUserInput123_returnsTextAreaElement123(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.user_textarea("myLabel123","myDescription123"); }')
+        ast = self.parseToAst('common.nop() { uilib.textarea("myLabel123","myDescription123"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -283,7 +283,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopDifferentInputs_returnsAllInputs(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.user_textarea("myLabelA","DescriptionA"); uilib.user_textfield("myLabelB","DescriptionB"); uilib.user_yesnoselection("myLabelC","myDescriptionC"); }')
+        ast = self.parseToAst('common.nop() { uilib.textarea("myLabelA","DescriptionA"); uilib.textfield("myLabelB","DescriptionB"); uilib.yesnoselection("myLabelC","myDescriptionC"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -297,7 +297,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopDifferentInputAssignments_returnsAllInputs(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { x=uilib.user_textarea("myLabelA","DescriptionA"); y=uilib.user_textfield("myLabelB","DescriptionB"); z=uilib.user_yesnoselection("myLabelC","myDescriptionC"); }')
+        ast = self.parseToAst('common.nop() { x=uilib.textarea("myLabelA","DescriptionA"); y=uilib.textfield("myLabelB","DescriptionB"); z=uilib.yesnoselection("myLabelC","myDescriptionC"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)

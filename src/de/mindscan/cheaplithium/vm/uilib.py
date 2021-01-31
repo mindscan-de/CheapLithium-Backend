@@ -65,7 +65,7 @@ def textarea(label:str, description:str):
         return __input__local_engine.getUserLabelledInput(label)
 
 
-def yesnoselection(label:str, description:str):
+def yesno(label:str, description:str):
     global __input__local_engine
     if __input__local_engine.isInterfaceRenderMode():
         item = {

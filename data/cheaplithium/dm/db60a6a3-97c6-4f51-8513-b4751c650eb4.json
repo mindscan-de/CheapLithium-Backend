@@ -61,7 +61,7 @@
           "transitif": ""
         }
       ],
-      "nodeaction": "input() {\r\n}"
+      "nodeaction": "stdlib.nop() {\r\n  env.isCategoryTask = uilib.yesno(\"myCategorySelection\",\"Are going to predict categories? Select Yes if you going to predict categories, select No if you want to predict a quantity or just look on the data.\");\r\n}"
     },
     {
       "uuid": "DN_85c6502c-f3ca-4fa2-a299-4cc83cfec614",

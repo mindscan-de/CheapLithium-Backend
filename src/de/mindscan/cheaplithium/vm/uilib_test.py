@@ -173,7 +173,7 @@ class Test(unittest.TestCase):
         self.assertEqual(result, [{'label':'myLabel', 'type':'textarea', 'description':'myDescription' }])
 
 
-    def testYesNoSelection_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
+    def testYesNo_SetInputInterfaceRenderModeCollectInputInterface_SpecialEngineContainsFieldDescription(self):
         # arrange
         special_engine = SpecialEngine()
         special_engine.setInterfaceRenderMode(True)
@@ -181,7 +181,7 @@ class Test(unittest.TestCase):
         theModule = self.createModule('uilib')
         theModule._inject_engine(special_engine)
         # act
-        theModule.yesnoselection("myLabel","myDescription")
+        theModule.yesno("myLabel","myDescription")
         result = special_engine.getInputInterface()
         
         # assert

@@ -31,6 +31,7 @@ from types import ModuleType
 
 from . import interpreter
 from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMModule, VMPrimary, VMApply, VMLithiumCompileUnit
+from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
 # TODO: work on the execution model first
 
@@ -93,29 +94,38 @@ class Test(unittest.TestCase):
     def testEvalLL_invokeEnv_expectReturnsEnvironment(self):
         environment = {'this':'is the environment'}
         ast = Env()
-        result = interpreter.eval_ll(ast, environment, None)
+        special_engine = SpecialEngine()
+        special_engine.setEnvironment(environment)
+
+        result = interpreter.eval_ll(ast, special_engine)
         self.assertDictEqual(result, environment)
         
     def testEvalLL_invokeEnvWithSelector_expectReturnsEnvironmentValue(self):
-        environment = {'this':'is the environment'}
         ast = Env(selector=DictSelector(index=Literal(value='this')))
-        result = interpreter.eval_ll(ast, environment, None)
+        special_engine = SpecialEngine()
+        special_engine.setEnvironment({'this':'is the environment'})
+
+        result = interpreter.eval_ll(ast, special_engine)
         self.assertEqual(result, 'is the environment')
         
     def testEvalLL_invokeEnvWithSelectorOtherKey_expectReturnsOthertValue(self):
-        environment = {'this':'is the environment','otherKey':'otherValue'}
+        special_engine = SpecialEngine()
+        special_engine.setEnvironment({'this':'is the environment', 'otherKey':'otherValue'})
+        
         ast = Env(selector=DictSelector(index=Literal(value='otherKey')))
-        result = interpreter.eval_ll(ast, environment, None)
+        result = interpreter.eval_ll(ast, special_engine)
         self.assertEqual(result, 'otherValue')
     
     def testEvalLL_invokeVMModuleForTransitions_expectResultIsModuleType(self):
+        special_engine = SpecialEngine()
         ast = VMModule(name='transitlib')
-        result = interpreter.eval_ll(ast, {}, None)
+        result = interpreter.eval_ll(ast, special_engine)
         self.assertIsInstance(result, ModuleType)
         
     def testEvalLL_invokeVMModuleForTransitions_expectModuleNameIsTransitions(self):
+        special_engine = SpecialEngine()
         ast = VMModule(name='transitlib')
-        result = interpreter.eval_ll(ast, {}, None)
+        result = interpreter.eval_ll(ast, special_engine)
         self.assertEquals(result.__name__, 'de.mindscan.cheaplithium.vm.transitlib')
         
         
@@ -124,8 +134,9 @@ class Test(unittest.TestCase):
         module = VMModule(name='transitlib')
         selector = DictSelector(index=Literal(value='always'))
         ast = VMPrimary(value = module, selector = selector)
+        special_engine = SpecialEngine()
         # act
-        result = interpreter.eval_ll(ast, {}, None)
+        result = interpreter.eval_ll(ast, special_engine)
         # assert
         self.assertEquals(result.__name__, "always")
         
@@ -135,8 +146,9 @@ class Test(unittest.TestCase):
         selector = DictSelector(index=Literal(value='always'))
         vmprimary = VMPrimary(value = module, selector = selector)
         ast = VMApply(func=vmprimary, arguments=[])
+        special_engine = SpecialEngine()
         # act
-        result = interpreter.eval_ll(ast, {}, None)
+        result = interpreter.eval_ll(ast, special_engine)
         # assert
         self.assertEquals(result, True)
 
@@ -146,8 +158,9 @@ class Test(unittest.TestCase):
         selector = DictSelector(index=Literal(value='never'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[])
+        special_engine = SpecialEngine()
         # act
-        result = interpreter.eval_ll(ast, {}, None)
+        result = interpreter.eval_ll(ast, special_engine)
         # assert
         self.assertEquals(result, False)
 
@@ -157,8 +170,9 @@ class Test(unittest.TestCase):
         selector = DictSelector(index=Literal(value='isTrue'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=True)])
+        special_engine = SpecialEngine()
         # act
-        result = interpreter.eval_ll(ast, {}, None)
+        result = interpreter.eval_ll(ast, special_engine)
         # assert
         self.assertEquals(result, True)
         
@@ -168,8 +182,9 @@ class Test(unittest.TestCase):
         selector = DictSelector(index=Literal(value='isTrue'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=False)])
+        special_engine = SpecialEngine()
         # act
-        result = interpreter.eval_ll(ast, {}, None)
+        result = interpreter.eval_ll(ast, special_engine)
         # assert
         self.assertEquals(result, False)
 
@@ -179,8 +194,9 @@ class Test(unittest.TestCase):
         selector = DictSelector(index=Literal(value='isLessThan'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=10), Literal(value=20)])
+        special_engine = SpecialEngine()
         # act
-        result = interpreter.eval_ll(ast, {}, None)
+        result = interpreter.eval_ll(ast, special_engine)
         # assert
         self.assertEquals(result, True)
 
@@ -190,32 +206,37 @@ class Test(unittest.TestCase):
         selector = DictSelector(index=Literal(value='isLessThan'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Literal(value=20), Literal(value=10)])
+        special_engine = SpecialEngine()
         # act
-        result = interpreter.eval_ll(ast, {}, None)
+        result = interpreter.eval_ll(ast, special_engine)
         # assert
         self.assertEquals(result, False)
 
     def testEvalLL_invokeIsTrueWithEnvValueTrue_expectReturnsTrue(self):
         # arrange
-        environment = {'myValue':True}
         module = VMModule(name='transitlib')
         selector = DictSelector(index=Literal(value='isTrue'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Env(selector=DictSelector(index=Literal(value='myValue')))])
+        special_engine = SpecialEngine()
+        special_engine.setEnvironment({'myValue':True})
+
         # act
-        result = interpreter.eval_ll(ast, environment, None)
+        result = interpreter.eval_ll(ast, special_engine)
         # assert
         self.assertEquals(result, True)
 
     def testEvalLL_invokeIsTrueWithEnvValueFalse_expectReturnsFalse(self):
         # arrange
-        environment = {'myValue':False}
         module = VMModule(name='transitlib')
         selector = DictSelector(index=Literal(value='isTrue'))
         vmprimary = VMPrimary(value=module, selector = selector)
         ast = VMApply(func = vmprimary, arguments=[Env(selector=DictSelector(index=Literal(value='myValue')))])
+        special_engine = SpecialEngine()
+        special_engine.setEnvironment({'myValue':False})
+
         # act
-        result = interpreter.eval_ll(ast, environment, None)
+        result = interpreter.eval_ll(ast, special_engine)
         # assert
         self.assertEquals(result, False)
         

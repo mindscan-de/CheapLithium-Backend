@@ -44,11 +44,11 @@ def eval_transition(compileunit, environment:dict ):
         special_engine = SpecialEngine()
         special_engine.setEnvironment(environment)
         
-        guard_result = eval_ll(compileunit.guard, environment, special_engine);
+        guard_result = eval_ll(compileunit.guard, special_engine);
         if guard_result is False or guard_result is None:
             return False, {}
         
-        eval_ll(compileunit.body, environment, special_engine)
+        eval_ll(compileunit.body, special_engine)
         
         return guard_result, special_engine.getThis()
     else:
@@ -96,7 +96,7 @@ def eval_hit_render_input_interface(compileunit, environment:dict):
         # eval_ll(compileunit.guard, environment, special_engine)
         
         # record the user input interface into special engine, while execution
-        eval_ll(compileunit.body, copied_environment, special_engine)
+        eval_ll(compileunit.body, special_engine)
         # replay user input interface after evaluation
         return special_engine.getInputInterface()
     else:
@@ -109,27 +109,27 @@ def eval_mit_node(ast, environment:dict):
 
 
 # eval lithium language
-def eval_ll( ast, environment, special_engine):
+def eval_ll( ast, special_engine):
     if ast is None:
         return None
     
     elif isinstance(ast,Literal):
         if (special_engine != None) and (special_engine.isModuleName(ast.value)):
             # in case it is a module - wrap it with a vmmodule node
-            return eval_ll( VMModule(name=ast.value), environment, special_engine )
+            return eval_ll( VMModule(name=ast.value), special_engine )
              
         return ast.value
     
     elif isinstance(ast, DictSelector):
-        index = eval_ll(ast.index,environment, special_engine)
+        index = eval_ll(ast.index, special_engine)
         return lambda theDict: theDict[index] if ( isinstance(theDict, dict) or isinstance(theDict, list) ) else getattr(theDict, index)
     
     elif isinstance(ast, Env):
         if(ast.selector==None):
-            return environment
+            return special_engine.getEnv()
         
-        selector = eval_ll(ast.selector, environment, special_engine)
-        return selector(environment)
+        selector = eval_ll(ast.selector, special_engine)
+        return selector(special_engine.getEnv())
     
     elif isinstance(ast,This):
         if(ast.selector == None):
@@ -138,13 +138,13 @@ def eval_ll( ast, environment, special_engine):
     elif isinstance(ast, list):
         evaluatedList = []
         for element in ast:
-            result = eval_ll(element, environment, special_engine)
+            result = eval_ll(element, special_engine)
             evaluatedList.append( result )
         return evaluatedList
     
     elif isinstance(ast, VMBody):
         for element in ast.statements:
-            result = eval_ll(element, environment, special_engine)
+            result = eval_ll(element, special_engine)
         return None
     
     elif isinstance(ast,VMModule):
@@ -160,33 +160,33 @@ def eval_ll( ast, environment, special_engine):
         return themodule
     
     elif isinstance(ast,VMAssignment):
-        _right = eval_ll(ast.right, environment, special_engine)
+        _right = eval_ll(ast.right, special_engine)
         
         if isinstance(ast.left, VMPrimary):
-            _leftValue = eval_ll_ref(ast.left.value, environment, special_engine)
-            _leftSelector = eval_ll(ast.left.selector, environment, special_engine)
+            _leftValue = eval_ll_ref(ast.left.value, special_engine)
+            _leftSelector = eval_ll(ast.left.selector, special_engine)
             # Do the assignment. Does this work?
             _leftValue[0][_leftSelector] = _right
             return None
              
         # this thing may not exist... and even may not work...
-        _left = eval_ll(ast.left, environment, special_engine)
+        _left = eval_ll(ast.left, special_engine)
         return None
     
     elif isinstance(ast,VMPrimary):
-        value = eval_ll(ast.value,environment, special_engine)
+        value = eval_ll(ast.value, special_engine)
         if ast.selector is None:
             return value
         # ATTN: fix the mising Dict Selection on the fly. 
         if not isinstance(ast.selector, DictSelector):
             ast.selector = DictSelector(index = ast.selector)
 
-        selector = eval_ll(ast.selector, environment, special_engine)
+        selector = eval_ll(ast.selector, special_engine)
         return selector(value)
     
     elif isinstance(ast,VMApply):
-        theFunction = eval_ll(ast.func, environment, special_engine)
-        arguments = eval_ll(ast.arguments, environment, special_engine)
+        theFunction = eval_ll(ast.func, special_engine)
+        arguments = eval_ll(ast.arguments, special_engine)
         if arguments is None:
             return theFunction()
         else:
@@ -197,9 +197,9 @@ def eval_ll( ast, environment, special_engine):
 
 
 # eval as reference; for the assignment problem ...
-def eval_ll_ref( ast, environment, special_engine=None):
+def eval_ll_ref( ast, special_engine):
     if isinstance(ast, Env):
-        return [environment]
+        return special_engine.getEnvByRef()
     elif isinstance(ast, This):
         return special_engine.getThisByRef()
     else:

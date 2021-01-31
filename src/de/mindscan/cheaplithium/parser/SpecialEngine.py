@@ -99,7 +99,7 @@ class SpecialEngine(object):
     def getEnv(self):
         return self._environment
     
-    def getenvByRef(self):
+    def getEnvByRef(self):
         return [self._environment]
 
     def setEnvironment(self, environment):

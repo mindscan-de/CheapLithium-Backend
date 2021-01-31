@@ -49,16 +49,12 @@ def eval_transition(compileunit, environment:dict ):
             return False, {}
         
         eval_ll(compileunit.body, environment, special_engine)
+        
         return guard_result, special_engine.getThis()
-          
     else:
         raise Exception("eval_transition can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
 
-# TODO: the return of the environment and the data is the most important thing after the parsing, because this will 
-#       make the lithium runtime engine update the runtime data / threadenvironment  
-
-# TODO: return the environment after executing the HIT Node    
 def eval_hit_node(compileunit, environment:dict, inputdata:dict):
 
     if isinstance(compileunit, VMLithiumCompileUnit):
@@ -75,11 +71,13 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
         special_engine.setEnvironment(environment)
         special_engine.setUserLabeledInput(filtered_input_data)
         
-        # TODO: evaluate the compileunit guard?
-        # eval_ll(compileunit.guard, environment, special_engine)
+        # evaluate the compileunit guard
+        eval_ll(compileunit.guard, environment, special_engine)
         
         # inject the filtered form inputdata data into the thread, by using the special engine
         eval_ll(compileunit.body, environment, special_engine)
+        
+        return None,special_engine.getEnv()
     else:
         raise Exception("eval_hit_node can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
@@ -102,14 +100,12 @@ def eval_hit_render_input_interface(compileunit, environment:dict):
         # replay user input interface after evaluation
         return special_engine.getInputInterface()
     else:
-        raise Exception()
+        raise Exception("eval_hit_render_input_interface can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
 
 # TODO: code to calculate the MIT nodes.
 def eval_mit_node(ast, environment:dict):
     pass
-
-
 
 
 # eval lithium language

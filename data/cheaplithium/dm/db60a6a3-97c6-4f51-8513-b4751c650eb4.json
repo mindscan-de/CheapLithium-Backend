@@ -17,7 +17,7 @@
           "name": "always",
           "next": "DN_cefacc87-4d5f-48c9-9d85-9e64f829b570",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -31,13 +31,13 @@
           "name": "less_than_or_equal_to_50_samples",
           "next": "DN_c18f5206-d5aa-4c83-91ad-d41fa8e3d897",
           "template": "",
-          "guard": "isLessThanOrEqual( env.samplesize, 50 )"
+          "guard": "transitlib.isLessThanOrEqual( env.samplesize, 50 )"
         },
         {
           "name": "more_than_50_samples",
           "next": "DN_d2d5eacc-3dba-456c-b8dc-62b58afd0e68",
           "template": "",
-          "guard": "isGreaterThan( env.samplesize , 50 )"
+          "guard": "transitlib.isGreaterThan( env.samplesize , 50 )"
         }
       ],
       "nodeaction": "stdlib.nop() {\r\n  env.samplesize= uilib.textfield(\"mySamplesize\", \"Please enter the number of samples you have to train this model...\");\r\n}"
@@ -52,13 +52,13 @@
           "name": "yes",
           "next": "DN_85c6502c-f3ca-4fa2-a299-4cc83cfec614",
           "template": "",
-          "transitif": ""
+          "guard": "transitlib.isYes(env.isCategoryTask)"
         },
         {
           "name": "no",
           "next": "DN_86dff740-85ac-461e-881d-c1a242c30c45",
           "template": "",
-          "transitif": ""
+          "guard": "transitlib.isNo(env.isCategoryTask)"
         }
       ],
       "nodeaction": "stdlib.nop() {\r\n  env.isCategoryTask = uilib.yesno(\"myCategorySelection\",\"Are going to predict categories? Select Yes if you going to predict categories, select No if you want to predict a quantity or just look on the data.\");\r\n}"
@@ -133,7 +133,7 @@
           "name": "always",
           "next": "DN_50621e0e-1d61-415f-925a-2f36d2377788",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -227,7 +227,7 @@
           "name": "always",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -261,7 +261,7 @@
           "name": "always",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -275,7 +275,7 @@
           "name": "always",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -356,7 +356,7 @@
           "name": "always",
           "next": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -370,7 +370,7 @@
           "name": "always",
           "next": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -404,7 +404,7 @@
           "name": "always",
           "next": "DN_95b7f7b4-5efd-442b-97cb-0e8401ebd81b",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -504,7 +504,7 @@
           "name": "always",
           "next": "DN_4cfefb7a-19e6-4bb1-ba2b-3109c72849aa",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -518,7 +518,7 @@
           "name": "always",
           "next": "DN_4cfefb7a-19e6-4bb1-ba2b-3109c72849aa",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -599,7 +599,7 @@
           "name": "always",
           "next": "DN_bf48a565-f3a4-4dac-8fa7-feb9ba13d317",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -613,7 +613,7 @@
           "name": "always",
           "next": "DN_bf48a565-f3a4-4dac-8fa7-feb9ba13d317",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },
@@ -634,7 +634,7 @@
           "name": "always",
           "next": "DN_614b16a9-68f2-42cb-8a9b-14537a764d5b",
           "template": "h4. Conclusion\n\nThe number of samples (numberOfSamples) is far to few. A machine learning approach is not meaningful with such few samples.",
-          "guard": "always()  { numberOfSamples=env.samplesize; }"
+          "guard": "transitlib.always()  { numberOfSamples=env.samplesize; }"
         }
       ]
     },
@@ -648,7 +648,7 @@
           "name": "always",
           "next": "DN_614b16a9-68f2-42cb-8a9b-14537a764d5b",
           "template": "",
-          "guard": "always()"
+          "guard": "transitlib.always()"
         }
       ]
     },

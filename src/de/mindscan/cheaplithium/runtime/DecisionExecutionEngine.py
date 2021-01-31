@@ -36,6 +36,7 @@ from de.mindscan.cheaplithium.datamodel.consts import *  # @UnusedWildImport
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
 from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import DecisionThreadEnvironments
+from de.mindscan.cheaplithium.parser import parser, interpreter
 
 
 ## TODO: work though all the other TODO tags - it will work right away I promise...
@@ -483,57 +484,15 @@ class DecisionExecutionEngine(object):
     def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
         if not DNT_GUARD_SIGNATURE in transition:
             return  False, {}
-
-        # calculate the method to invoke and their parameters 
-        method_name, method_parameters_info, method_body = self.parse_guard_signature(transition[DNT_GUARD_SIGNATURE])
         
-        if method_name is None:
-            return False, {}
+        compileunit = parser.parseToAst(transition[DNT_GUARD_SIGNATURE]);
         
-        # convert the parameters to their correct type and such
-        method_parameters = self.convert_method_parameter_info(method_parameters_info, thread_environment)
-        
-        # invoke the calculated method
-        result = self.invoke_transition_method(method_name, method_parameters)
-
+        # TODO: solve the assignment problem, then we can have the result 
+        transitionresult = interpreter.eval_transition(compileunit, thread_environment)
         transition_data = {}
-        if result is True:
-            transition_data = self.evaluate_decision_node_transition_method_body(method_body, thread_data, thread_environment)
         
-        return result, transition_data
-    
+        return transitionresult, transition_data
 
-    # transition.isTrue(env.XXY) { data: IN:OUT SIGNATURE_DATA, ...}
-    # transition.isEqual(env.XYY, 50) { data: IN:OUT SIGNATURE, }
-    # transition.isGreaterOrEqual(a,b ) { }
-    # transition.isLessOrEqual(a,b) {}
-    # transition.isGreater(a,b) {}
-    # transition.isLess(a,b) {}
-    def parse_guard_signature(self, guard_signature:str):
-        # Much more useful would be an EXPRESSION AST, but currently we don't need that mode of processing signatures
-        # Because i would invoke a lexer which creates tokens and then parse the tokens to build the AST and return it
-                
-        # Signature spliting: we only need something simple right now. 
-        result = re.match("(.*)\((.*?)\)(.*)", guard_signature)
-        if result is None:
-            return None, None, None
-        
-        transition_method = result.group(1)
-        transition_method_parameters = result.group(2)
-        transition_method_body = result.group(3) 
-        
-        print("\ntransition method: {}".format(transition_method))
-        print("\ntransition parameters: {}".format(transition_method_parameters))
-        print("\ntransition method body: {}".format(transition_method_body))
-        
-        # for methods with no parameters
-        if not transition_method_parameters :
-            return transition_method, [], transition_method_body
-        
-        splitted_transition_method_parameters = transition_method_parameters.split(",")
-        
-        return transition_method, splitted_transition_method_parameters, transition_method_body
-    
     
     def convert_method_parameter_info(self, method_parameters_info, thread_environment):
         if method_parameters_info is None:
@@ -578,51 +537,4 @@ class DecisionExecutionEngine(object):
         # just keep that as a string for now.
         return parameter_info
 
-    
-    
-    def invoke_transition_method(self, method_name, method_parameters):
-        # load a predefined package + module 
-        vm_transitions_module = importlib.import_module('.transitions', package='de.mindscan.cheaplithium.vm')
         
-        # find the function - it will raise an exception if method_name doesn't exist
-        func = getattr(vm_transitions_module, method_name)
-        # print("\nfunc: {}".format(func))
-        
-        # invoke method
-        result = func(*method_parameters)
-        return result
-
-
-    def evaluate_decision_node_transition_method_body(self, method_body:str, thread_data:dict, thread_environment:dict):
-        if not method_body:
-            return {}
-
-        # remove the outer brackets        
-        result = re.match(".*\{(.*)\}.*", method_body)
-        parsed_method_body = self.parse_decision_nodetransition_method_body(result.group(1).strip())
-        
-        data = {}
-        for key, value in parsed_method_body.items():
-            data[key] = self.convert_single_method_parameter(value, thread_environment)
-            pass
-
-        return data
-    
-    
-    def parse_decision_nodetransition_method_body(self, method_body:str):
-        result = {}
-        splitted_method_body = method_body.split(";")
-        
-        for assignment_expression in splitted_method_body:
-            if not assignment_expression or not assignment_expression.strip():
-                continue
-            
-            left_expression, right_expression = assignment_expression.split("=",2)
-            left = left_expression.strip()
-            right = right_expression.strip()
-            
-            result[left] = right
-        
-        return result
-    
-    

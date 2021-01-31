@@ -39,9 +39,10 @@ from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
 
 def eval_transition(compileunit, environment:dict ):
-    # use special Engine as part of the environment, where we decide what's a module
-    special_engine = SpecialEngine()
     if isinstance(compileunit, VMLithiumCompileUnit):
+        special_engine = SpecialEngine()
+        special_engine.setEnvironment(environment)
+        
         guard_result = eval_ll(compileunit.guard, environment, special_engine);
         if guard_result is False or guard_result is None:
             return False, {}
@@ -70,6 +71,7 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
 
         # inject the filtered form data into the thread
         special_engine = SpecialEngine()
+        special_engine.setEnvironment(environment)
         special_engine.setUserLabeledInput(filtered_input_data)
         
         # TODO: evaluate the compileunit guard?
@@ -90,6 +92,7 @@ def eval_hit_render_input_interface(compileunit, environment:dict):
     if isinstance(compileunit, VMLithiumCompileUnit):
         # enable the recording mode, for the user interface
         special_engine = SpecialEngine()
+        special_engine.setEnvironment(environment)
         special_engine.setInterfaceRenderMode(True)
         
         # TODO: should the guard be calcuated at all?

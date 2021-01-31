@@ -40,6 +40,7 @@ class SpecialEngine(object):
         self._inputInterface = []
         self._userLabelledInput = {}
         self._thisStore = {}
+        self._environment = {}
     
     # #########################################
     # Interface render Mode 
@@ -82,7 +83,7 @@ class SpecialEngine(object):
         return modulename in ('transitions', 'uilib', 'stdlib', 'cmplib', 'transitlib')
     
     # #########################################
-    # This storage implementation
+    # "This" storage implementation
     # #########################################
     
     def getThis(self):
@@ -90,3 +91,17 @@ class SpecialEngine(object):
     
     def getThisByRef(self):
         return [self._thisStore]
+    
+    # #########################################
+    # Env storage implemention
+    # #########################################
+    
+    def getEnv(self):
+        return self._environment
+    
+    def getenvByRef(self):
+        return [self._environment]
+
+    def setEnvironment(self, environment):
+        self._environment = environment
+        

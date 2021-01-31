@@ -254,7 +254,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopNoUserInput_returnsEmptyList(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() {}')
+        ast = self.parseToAst('stdlib.nop() {}')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -265,7 +265,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopYesNoUserInput_returnsYesnoElementList(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.yesno("myLabel","myDescription"); }')
+        ast = self.parseToAst('stdlib.nop() { uilib.yesno("myLabel","myDescription"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -276,7 +276,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopYesNoUserInput123_returnsYesnoElementList123(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.yesno("myLabel123","myDescription123"); }')
+        ast = self.parseToAst('stdlib.nop() { uilib.yesno("myLabel123","myDescription123"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -287,7 +287,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopTextFieldUserInput_returnsTextFieldElement(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.textfield("myLabel","myDescription"); }')
+        ast = self.parseToAst('stdlib.nop() { uilib.textfield("myLabel","myDescription"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -298,7 +298,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopTextFieldUserInput123_returnsTextFieldElement123(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.textfield("myLabel123","myDescription123"); }')
+        ast = self.parseToAst('stdlib.nop() { uilib.textfield("myLabel123","myDescription123"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -309,7 +309,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopTextAreaUserInput_returnsTextAreaElement(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.textarea("myLabel","myDescription"); }')
+        ast = self.parseToAst('stdlib.nop() { uilib.textarea("myLabel","myDescription"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -320,7 +320,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopTextAreaUserInput123_returnsTextAreaElement123(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.textarea("myLabel123","myDescription123"); }')
+        ast = self.parseToAst('stdlib.nop() { uilib.textarea("myLabel123","myDescription123"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -331,7 +331,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopDifferentInputs_returnsAllInputs(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { uilib.textarea("myLabelA","DescriptionA"); uilib.textfield("myLabelB","DescriptionB"); uilib.yesno("myLabelC","myDescriptionC"); }')
+        ast = self.parseToAst('stdlib.nop() { uilib.textarea("myLabelA","DescriptionA"); uilib.textfield("myLabelB","DescriptionB"); uilib.yesno("myLabelC","myDescriptionC"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -345,7 +345,7 @@ class Test(unittest.TestCase):
     def testEvalHitRenderInputInterface_nopDifferentInputAssignments_returnsAllInputs(self):
         # arrange
         environment = {}
-        ast = self.parseToAst('common.nop() { x=uilib.textarea("myLabelA","DescriptionA"); y=uilib.textfield("myLabelB","DescriptionB"); z=uilib.yesno("myLabelC","myDescriptionC"); }')
+        ast = self.parseToAst('stdlib.nop() { x=uilib.textarea("myLabelA","DescriptionA"); y=uilib.textfield("myLabelB","DescriptionB"); z=uilib.yesno("myLabelC","myDescriptionC"); }')
         
         # act
         result = interpreter.eval_hit_render_input_interface(ast, environment)
@@ -356,7 +356,43 @@ class Test(unittest.TestCase):
             {'description': 'DescriptionB', 'label': 'myLabelB', 'type': 'textfield'},
             {'description': 'myDescriptionC', 'label': 'myLabelC', 'type': 'yesnoselection'}])
 
-           
+    def testEvalHitNode_InputDataProvided_expectInputDataInEnvironment(self):
+        # arrange
+        environment = {}
+        userinputdata = {'myLabelA':'aaa', 'myLabelB':'bbb', 'myLabelC':'ccc'}
+        compileunit = self.parseToAst('stdlib.nop() { env.x=uilib.textarea("myLabelA","DescriptionA"); env.y=uilib.textfield("myLabelB","DescriptionB"); env.z=uilib.yesno("myLabelC","myDescriptionC"); }')
+
+        # act
+        _, result = interpreter.eval_hit_node(compileunit, environment, userinputdata)
+        
+        # assert
+        self.assertEquals(result, {'x':'aaa','y':'bbb','z':'ccc'} )
+
+    def testEvalHitNode_InputDataProvidedXExistsWithOtherValue_expectInputDataInEnvironment(self):
+        # arrange
+        environment = {'x':''}
+        userinputdata = {'myLabelA':'aaa', 'myLabelB':'bbb', 'myLabelC':'ccc'}
+        compileunit = self.parseToAst('stdlib.nop() { env.x=uilib.textarea("myLabelA","DescriptionA"); env.y=uilib.textfield("myLabelB","DescriptionB"); env.z=uilib.yesno("myLabelC","myDescriptionC"); }')
+
+        # act
+        _, result = interpreter.eval_hit_node(compileunit, environment, userinputdata)
+        
+        # assert
+        self.assertEquals(result, {'x':'aaa','y':'bbb','z':'ccc'} )
+
+    def testEvalHitNode_InputDataProvidedEnvContainsOtherValue_expectInputDataInEnvironmentAndOtherValuePersisted(self):
+        # arrange
+        environment = {'other':'persisted'}
+        userinputdata = {'myLabelA':'aaa', 'myLabelB':'bbb', 'myLabelC':'ccc'}
+        compileunit = self.parseToAst('stdlib.nop() { env.x=uilib.textarea("myLabelA","DescriptionA"); env.y=uilib.textfield("myLabelB","DescriptionB"); env.z=uilib.yesno("myLabelC","myDescriptionC"); }')
+
+        # act
+        _, result = interpreter.eval_hit_node(compileunit, environment, userinputdata)
+        
+        # assert
+        self.assertEquals(result, {'x':'aaa','y':'bbb','z':'ccc', 'other':'persisted'} )
+
+               
 
     def parseToAst(self, code):
         return parser.parseToAst(code)

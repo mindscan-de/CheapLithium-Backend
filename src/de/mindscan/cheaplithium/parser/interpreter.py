@@ -72,12 +72,12 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
         special_engine.setUserLabeledInput(filtered_input_data)
         
         # evaluate the compileunit guard
-        eval_ll(compileunit.guard, environment, special_engine)
+        guard_result = eval_ll(compileunit.guard, special_engine)
         
         # inject the filtered form inputdata data into the thread, by using the special engine
-        eval_ll(compileunit.body, environment, special_engine)
+        eval_ll(compileunit.body, special_engine)
         
-        return None,special_engine.getEnv()
+        return guard_result,special_engine.getEnv()
     else:
         raise Exception("eval_hit_node can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
@@ -114,7 +114,7 @@ def eval_ll( ast, special_engine):
         return None
     
     elif isinstance(ast,Literal):
-        if (special_engine != None) and (special_engine.isModuleName(ast.value)):
+        if special_engine.isModuleName(ast.value):
             # in case it is a module - wrap it with a vmmodule node
             return eval_ll( VMModule(name=ast.value), special_engine )
              
@@ -177,6 +177,7 @@ def eval_ll( ast, special_engine):
         value = eval_ll(ast.value, special_engine)
         if ast.selector is None:
             return value
+        
         # ATTN: fix the mising Dict Selection on the fly. 
         if not isinstance(ast.selector, DictSelector):
             ast.selector = DictSelector(index = ast.selector)

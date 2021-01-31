@@ -32,8 +32,8 @@ sys.path.insert(0,SRC_BASE_DIR)
 
 import importlib
 
-from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, VMModule, VMPrimary, VMApply, VMLithiumCompileUnit,\
-    VMBody, VMAssignment
+from de.mindscan.cheaplithium.parser.ast import Literal, Env, DictSelector, This 
+from de.mindscan.cheaplithium.parser.ast import VMModule, VMPrimary, VMApply, VMLithiumCompileUnit, VMBody, VMAssignment
 from de.mindscan.cheaplithium.parser.SpecialEngine import SpecialEngine
 
 
@@ -50,10 +50,10 @@ def eval_transition(compileunit, environment:dict ):
         if guard_result is False or guard_result is None:
             return False, {}
         
-        # TODO: This result should contain the data which is added to the transition data.
-        __body_result = eval_ll(compileunit.body, environment,special_engine)
+        eval_ll(compileunit.body, environment,special_engine)
+        
         # TODO: return a pair of returnresult (one for the result of the Guard and one for the result of the body
-        return guard_result, {}
+        return guard_result, special_engine.getThis()
           
     else:
         raise Exception("eval_transition can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
@@ -136,6 +136,10 @@ def eval_ll( ast, environment, special_engine=None):
         selector = eval_ll(ast.selector, environment, special_engine)
         return selector(environment)
     
+    elif isinstance(ast,This):
+        if(ast.selector == None):
+            return special_engine.getThis()
+    
     elif isinstance(ast, list):
         evaluatedList = []
         for element in ast:
@@ -162,7 +166,16 @@ def eval_ll( ast, environment, special_engine=None):
     
     elif isinstance(ast,VMAssignment):
         _right = eval_ll(ast.right, environment, special_engine)
-        # TODO: eval the left side and do the assignment;
+        
+        if isinstance(ast.left, VMPrimary):
+            _leftValue = eval_ll_ref(ast.left.value, environment, special_engine)
+            _leftSelector = eval_ll(ast.left.selector, environment, special_engine)
+            # Do the assignment. Does this work?
+            _leftValue[0][_leftSelector] = _right
+            return None
+             
+        # this thing may not exist... and even may not work...
+        _left = eval_ll(ast.left, environment, special_engine)
         return None
     
     elif isinstance(ast,VMPrimary):
@@ -185,6 +198,16 @@ def eval_ll( ast, environment, special_engine=None):
             return theFunction(*arguments)
     
     
-    
     raise Exception("eval_ll can't evaluate {}: (NYI) please implement this type!".format(type(ast)))
+
+
+# eval as reference; for the assignment problem ...
+def eval_ll_ref( ast, environment, special_engine=None):
+    if isinstance(ast, Env):
+        return [environment]
+    elif isinstance(ast, This):
+        return special_engine.getThisByRef()
+    else:
+        raise Exception("eval_ll_ref can't evaluate {}: (NYI) please implement this type!".format(type(ast)))        
+
     

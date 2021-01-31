@@ -39,6 +39,7 @@ class SpecialEngine(object):
         self._isInterfaceRenderMode = False
         self._inputInterface = []
         self._userLabelledInput = {}
+        self._thisStore = {}
     
     # #########################################
     # Interface render Mode 
@@ -79,3 +80,13 @@ class SpecialEngine(object):
         
     def isModuleName(self,modulename):
         return modulename in ('transitions', 'uilib', 'stdlib', 'cmplib', 'transitlib')
+    
+    # #########################################
+    # This storage implementation
+    # #########################################
+    
+    def getThis(self):
+        return self._thisStore
+    
+    def getThisByRef(self):
+        return [self._thisStore]

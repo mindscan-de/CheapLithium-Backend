@@ -202,6 +202,54 @@ class Test(unittest.TestCase):
         
         # assert
         self.assertEquals(result, False)
+        
+    def testEvalTransition_TransitionAlwaysMethodBodyAssignmentX_returnsTrue(self):
+        # arrange
+        environment = {'result':"Hello World!"}
+        ast = self.parseToAst('transitlib.always() { this.x = 50; }')
+        
+        # act
+        result,_ = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(result, True)
+        
+    def testEvalTransition_TransitionAlwaysMethodBodyAssignmentX_TransitionDataIsDictionary(self):
+        # arrange
+        environment = {'result':"Hello World!"}
+        ast = self.parseToAst('transitlib.always() { this.x = 50; }')
+        
+        # act
+        _,transition_data = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertIsInstance(transition_data, dict)
+        
+    def testEvalTransition_TransitionAlwaysMethodBodyAssignmentX50_TransitionDataContainsX50(self):
+        # arrange
+        environment = {'result':"Hello World!"}
+        ast = self.parseToAst('transitlib.always() { this.x = 50; }')
+        
+        # act
+        _,transition_data = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(transition_data, {'x':50})
+
+    def testEvalTransition_TransitionAlwaysMethodBodyAssignmentX50Y_TransitionDataContainsX50Y50(self):
+        # arrange
+        environment = {'result':"Hello World!"}
+        ast = self.parseToAst('transitlib.always() { this.x = 50; this.y = this.x; }')
+        
+        # act
+        _,transition_data = interpreter.eval_transition(ast, environment)
+        
+        # assert
+        self.assertEquals(transition_data, {'x':50, 'y':50})
+        
+    ## ############################ 
+    ## EvalHIT_RenderInputInterface
+    ## ############################
 
     def testEvalHitRenderInputInterface_nopNoUserInput_returnsEmptyList(self):
         # arrange

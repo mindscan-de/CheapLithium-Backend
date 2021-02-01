@@ -25,7 +25,6 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
-import re
 import sys
 import traceback
 
@@ -71,16 +70,17 @@ class DecisionExecutionEngine(object):
         
         if model is None:
             return None
+        if DM_START_ENVIRONMENT not in model:
+            return None
         
         # read default environment / non interactive envinroment from model, and unserialize it
-        model_start_environment = model[DM_START_ENVIRONMENT]
+        compileunit = parser.parseToAst(model[DM_START_ENVIRONMENT]);
+
+        # TODO: M.100 identify data to be filled out, and check completeness / use the HIT-Parser 
+        user_input = {}
         
-        # TODO: M.100 identify data to be filled out, and check completeness 
-        # TODO: M.100 if error while model runtime data calculation, return without creating a thread
-        # TODO: M.100 merge the defaultenvironment and the individual thread environment, special data wins
-        # TODO: M.100 insert/create thread, TODO: RUNTIME_ENVIRONMENT : the environment....
-        
-        start_environment = self.build_start_environment(model_start_environment)
+        # a start is nothing else than a human interaction node.
+        _, start_environment = interpreter.eval_hit_node(compileunit, {}, user_input)
         
         # create the thread
         thread_uuid = self.__decisionThreads.create_decision_thread_internal(dmuuid, model[DM_STARTNODE], ticketreference)
@@ -90,33 +90,6 @@ class DecisionExecutionEngine(object):
         return thread_uuid
 
 
-    def build_start_environment(self, model_start_environment:str):
-        model_start_environment = model_start_environment.strip()
-        
-        if not model_start_environment:
-            return {}
-        
-        start_environment = {}
-        
-        # parse model_start_environment
-        splitted_model_start_environment = model_start_environment.split(";")
-        for assignment_expresssion in splitted_model_start_environment:
-            assignment_expresssion = assignment_expresssion.strip()
-            
-            if not assignment_expresssion:
-                continue
-            
-            left_expression, right_expression = assignment_expresssion.split("=",2)
-            
-            # Because there is no thread data available at this moment, we can not provide any 
-            left = self.convert_single_method_parameter(left_expression, None)
-            right = self.convert_single_method_parameter(right_expression, None)
-            
-            start_environment[left] = right
-        
-        return start_environment
-    
-    
     # ended according to the plan (e.g. end-node reached)
     def stop_decision_thread(self, thread_uuid):
         thread_data = self.__decisionThreads.select_decision_thread_by_uuid(thread_uuid)
@@ -436,43 +409,3 @@ class DecisionExecutionEngine(object):
         
         return transitionresult, transition_data
 
-    
-    # ################################
-    # Evaluation of start environment
-    # ################################
-    
-    # TODO:
-    
-    def convert_single_method_parameter(self, parameter_info:str, thread_environment:dict):
-        parameter_info = parameter_info.strip();
-        
-        # match true
-        if   parameter_info.lower() == "true" : 
-            return True 
-        # match false
-        elif parameter_info.lower() == "false":
-            return False
-        # match none type
-        elif parameter_info.lower() == "none":
-            return None
-        # match numbers
-        elif re.match("[-+]?\d+", parameter_info):
-            return int(parameter_info)
-        # use the thread environment as source of truth...
-        elif parameter_info.startswith("env."):
-            # we can currently not subindex, but this should be possible in future (ato de) 
-            key = parameter_info[len("env."):]
-            if thread_environment is None:
-                return key
-            else:
-                value = thread_environment[DTE_RTE_DATA][key]
-                return value
-        # thread data, is there something interesting ? 
-        elif parameter_info.startswith("thread."):
-            # maybe later implement access to thread data (ato de)
-            pass
-        
-        # just keep that as a string for now.
-        return parameter_info
-
-        

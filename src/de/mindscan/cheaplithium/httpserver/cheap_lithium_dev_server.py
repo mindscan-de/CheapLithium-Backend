@@ -266,7 +266,10 @@ async def get_decision_thread_list():
 async def create_decision_thread(uuid:str=Form(...), ticketreference:str = Form("")):
     dmuuid = validate_uuid( strip_uuid(uuid) )
     
-    thread_uuid = decisionExecutionEngine.start_decision_thread_by_model_uuid(dmuuid, ticketreference)
+    # TODO: optional data from the user for this thread
+    #       descriptions of data is described in the model start environment 
+    user_input = {}
+    thread_uuid = decisionExecutionEngine.start_decision_thread_by_model_uuid(dmuuid, user_input, ticketreference)
 
     if thread_uuid is None:
         return {"message":"no such model or something else"}

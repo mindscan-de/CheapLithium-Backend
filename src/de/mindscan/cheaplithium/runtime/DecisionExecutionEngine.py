@@ -64,7 +64,7 @@ class DecisionExecutionEngine(object):
     ##
 
     
-    def start_decision_thread_by_model_uuid(self, dmuuid:str, ticketreference:str=''):
+    def start_decision_thread_by_model_uuid(self, dmuuid:str, user_input:dict={}, ticketreference:str=''):
         # read the model
         model = self.__decisionModels.select_decision_model_by_uuid(dmuuid)
         
@@ -76,9 +76,6 @@ class DecisionExecutionEngine(object):
         # read default environment / non interactive envinroment from model, and unserialize it
         compileunit = parser.parseToAst(model[DM_START_ENVIRONMENT]);
 
-        # TODO: M.100 identify data to be filled out, and check completeness / use the HIT-Parser 
-        user_input = {}
-        
         # a start is nothing else than a human interaction node.
         _, start_environment = interpreter.eval_hit_node(compileunit, {}, user_input)
         

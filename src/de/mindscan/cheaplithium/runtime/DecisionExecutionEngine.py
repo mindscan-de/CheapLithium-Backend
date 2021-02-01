@@ -111,7 +111,7 @@ class DecisionExecutionEngine(object):
     # HIT Human Itelligent Task
     # after a hit is invoked, the thread should be granted compute by calling 
     # process_single_decision_thread on that thread after a HIT node result and content was computed
-    def process_HIT(self, thread_uuid, result):
+    def process_HIT(self, thread_uuid, user_input):
         thread_data = self.__decisionThreads.select_decision_thread_by_uuid(thread_uuid)
 
         if thread_data is None:
@@ -126,28 +126,29 @@ class DecisionExecutionEngine(object):
         if not (node[DN_TYPE] == DN_TYPE_HIT):
             return None
         
-        ## TODO: get thread environment by uuid
-        ## check if environment is good / otherwise the thread must not be advanced
+        ## get thread environment by uuid
+        environment_uuid = thread_data[DT_ENVIRONMENT][DT_ENVIRONMENT_UUID]
+        thread_environment = self.__decisionThreadEnvironments.select_thread_environment_by_uuid(environment_uuid)
         
         if thread_data[DT_CURRENTSTATE] == RT_STATE_BLOCKED:
+
+            ## transfer user_input data into the thread environment according to the node signature data
+            _guard_result, thread_environment = self.evaluate_hit_decision_node_method(node, thread_data, thread_environment, user_input)
             
-            ## TODO: calculate the method signature, so that the resultdata can be put in.
-            ## TODO: process result data
+            # TODO: should we use the guard result for something special?
             
+            # update the decision thread environment
+            self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
+            
+            # update the decition thread
             thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_TRANSIT
-            # this whole thing shall be refactored when the main decision execution engine works
             self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data)
+            
+            pass # endif thread is blocked
         
-            
-                
-            ## TODO: transfer return data into the thread environment according to the signature data
-            
-            ## TODO: update thread environment
-            
-            pass
-        
-        pass
+        pass # /end process_HIT
     
+
     # Process the specuak cases, the SYNC needs extra data for thre thread
     # SYNC - Synchronization Node, e.g. multiple HIT decisions requried, before it can continue
     # NOT YET 
@@ -384,6 +385,22 @@ class DecisionExecutionEngine(object):
         compileunit = parser.parseToAst(decision_node[DN_NODEACTION]);
 
         guard_result, new_environment = interpreter.eval_mit_node(compileunit, thread_environment)
+        
+        return guard_result, new_environment
+
+    # 
+    # HIT - Node Evaluation
+    #
+    def evaluate_hit_decision_node_method(self, decision_node, thread_data, thread_environment, user_input):
+        if not DN_NODEACTION in decision_node:
+            # TODO: we should log that this is an incoplete model
+            # TODO: we should raise an exception instead of returning
+            # TODO: maybe add that to the thread errors list
+            return None, thread_environment
+
+        compileunit = parser.parseToAst(decision_node[DN_NODEACTION]);
+        
+        guard_result, new_environment = interpreter.eval_hit_node(compileunit, thread_environment, user_input)
         
         return guard_result, new_environment
    

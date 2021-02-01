@@ -26,7 +26,6 @@ SOFTWARE.
 @autor: Maxim Gansert, Mindscan
 '''
 import re
-import importlib
 import sys
 import traceback
 
@@ -317,21 +316,13 @@ class DecisionExecutionEngine(object):
             # so lets execute the method(s) and its signature and then update the
             # thread and the thread_environment, since we computed some data for the thread to advance forward
             try:
-                result, result_data = self.evaluate_decision_node_method(current_node, thread_data, thread_environment)
+                result, thread_environment = self.evaluate_decision_node_method(current_node, thread_data, thread_environment)
             except:
                 # TODO: maybe we should do something else, but for now it is better to have it like this.
                 return
             
-            #TODO: thread_data should get a column 'lastcompute' having a timestamp
-            #  fill lastcompute
-            # TODO: this is a crude hack, should be better (but do later)
-            if (result is not None) and ('result' in result):
-                #TODO: update contents of the threadenvironment
-                thread_environment[DTE_RTE_DATA]['result']=result['result']
-            
-            #TODO: maybe we have to rethink that... we should not override the environment this way.
             self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
-            
+
             # advance runtime state
             thread_data[DT_CURRENTSTATE] = RT_STATE_WAIT_FOR_TRANSIT
             self.__decisionThreads.update_decision_thread_by_uuid_iternal(thread_uuid, thread_data) 
@@ -412,74 +403,28 @@ class DecisionExecutionEngine(object):
                 return uuid[4:]
         return uuid
 
-     
-    # evaluated one decision node calculation 
+
+    # ################################
+    # MIT - Node Evaluation
+    # ################################
+
     def evaluate_decision_node_method(self, decision_node, thread_data, thread_environment):
         if not DN_NODEACTION in decision_node:
             # TODO: we should log that this is an incoplete model
             # TODO: we should raise an exception instead of returning
             # TODO: maybe add that to the thread errors list
-            return None, None
+            return None, thread_environment
         
-        # calculate the signature of the method to invoke
-        method_name, method_parameters_info = self.parse_node_mit_signature(decision_node[DN_NODEACTION])
-        
-        if method_name is None:
-            # problem is for a MIT Node, there should be a real signature, even when it is nop() or so.
-            return None, None
-        
-        method_parameters = self.convert_method_parameter_info(method_parameters_info, thread_environment)
-        
-        result, result_data = self.invoke_mit_method(method_name, method_parameters)
-        
-        # TODO: evaluate the "method body" of the MIT-signature
-        # TODO: We might now return also an update packet wor the environment? 
-        return result, result_data
+        compileunit = parser.parseToAst(decision_node[DN_NODEACTION]);
 
-
-    # TODO: parse node MIT signature 
-    def parse_node_mit_signature(self, node_mit_signature:str):
+        guard_result, new_environment = interpreter.eval_mit_node(compileunit, thread_environment)
         
-        result = re.match("(.*)\((.*?)\)(.*)", node_mit_signature)
-        if result is None:
-            return None, None
-        
-        transition_method = result.group(1)
-        transition_method_parameters = result.group(2)
-        transition_method_body = result.group(3) 
-        
-        if not transition_method_parameters :
-            return transition_method, []
-
-        splitted_transition_method_parameters = transition_method_parameters.split(",")
-        
-        return transition_method, splitted_transition_method_parameters
-    
-    
-    def invoke_mit_method(self, method_name, method_parameters ):
-        # load a predefined package + module 
-        vm_common_module = importlib.import_module('.common', package='de.mindscan.cheaplithium.vm')
-        
-        # find the function - it will raise an exception if method_name doesn't exist
-        func = getattr(vm_common_module, method_name)
-        # print("\nfunc: {}".format(func))
-        
-        # invoke method
-        result = func(*method_parameters)
-
-        # return result, result and data separate?
-        return result, {}
-        
-    
-    # TODO: parse node HIT signature    
-    def parse_node_hit_signature(self, node_hit_signature:str):
-        return
-    
+        return guard_result, new_environment
+   
     
     # ################################
     # Transition Handling
     # ################################
-    
     
     def evaluate_decision_node_transition_method(self, transition, thread_data, thread_environment):
         if not DNT_GUARD_SIGNATURE in transition:
@@ -492,16 +437,11 @@ class DecisionExecutionEngine(object):
         return transitionresult, transition_data
 
     
-    def convert_method_parameter_info(self, method_parameters_info, thread_environment):
-        if method_parameters_info is None:
-            return []
-        
-        result = []
-        for parameter_info in method_parameters_info:
-            result.append(self.convert_single_method_parameter(parameter_info, thread_environment))
-        
-        return result
+    # ################################
+    # Evaluation of start environment
+    # ################################
     
+    # TODO:
     
     def convert_single_method_parameter(self, parameter_info:str, thread_environment:dict):
         parameter_info = parameter_info.strip();

@@ -73,11 +73,7 @@ class DecisionExecutionEngine(object):
         if DM_START_ENVIRONMENT not in model:
             return None
         
-        # read default environment / non interactive envinroment from model, and unserialize it
-        compileunit = parser.parseToAst(model[DM_START_ENVIRONMENT]);
-
-        # a start is nothing else than a human interaction node.
-        _, start_environment = interpreter.eval_hit_node(compileunit, {}, user_input)
+        start_environment = self.evaluate_pre_start_environment(model, {}, user_input)
         
         # create the thread
         thread_uuid = self.__decisionThreads.create_decision_thread_internal(dmuuid, model[DM_STARTNODE], ticketreference)
@@ -406,3 +402,16 @@ class DecisionExecutionEngine(object):
         
         return transitionresult, transition_data
 
+
+    # ###############################
+    # Calculate Start Environment
+    # ###############################
+    
+    def evaluate_pre_start_environment(self, model, thread_environment, user_input):
+        # read default environment / non interactive envinroment from model, and unserialize it
+        compileunit = parser.parseToAst(model[DM_START_ENVIRONMENT]);
+
+        # a start is nothing else than a human interaction node.
+        _, start_environment = interpreter.eval_hit_node(compileunit, thread_environment, user_input)
+        
+        return start_environment

@@ -103,9 +103,23 @@ def eval_hit_render_input_interface(compileunit, environment:dict):
         raise Exception("eval_hit_render_input_interface can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
 
-# TODO: code to calculate the MIT nodes.
-def eval_mit_node(ast, environment:dict):
-    pass
+def eval_mit_node(compileunit, environment:dict):
+    
+    if isinstance(compileunit, VMLithiumCompileUnit):
+        # inject the filtered form data into the thread
+        special_engine = SpecialEngine()
+        special_engine.setEnvironment(environment)
+        
+        # evaluate the compileunit guard
+        guard_result = eval_ll(compileunit.guard, special_engine)
+        
+        special_engine.getEnvByRef()[0]['result'] = guard_result
+        
+        eval_ll(compileunit.body, special_engine)
+        
+        return guard_result, special_engine.getEnv()
+    else:
+        raise Exception("eval_hit_node can't evaluate {}: (NYI) please implement this type!".format(type(compileunit)))
 
 
 # eval lithium language

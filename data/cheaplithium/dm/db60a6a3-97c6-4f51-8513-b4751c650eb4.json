@@ -147,13 +147,13 @@
         {
           "name": "is_less_than_100k_samples",
           "next": "DN_bf514192-076e-418f-90bc-9bb77e2ba4f9",
-          "template": "",
+          "template": "Due to the fact that the sample size for this classification task is regarded as small (because smaller than 100k samples), a Linear SVC (Linear Support Vector Classification) was tried.",
           "guard": "transitlib.isLessThan(env.samplesize, 100000)"
         },
         {
-          "name": "is_greater_or_equal_10k_samples",
+          "name": "is_greater_or_equal_100k_samples",
           "next": "DN_3970503f-72ec-404d-a9b4-1047dca6d6df",
-          "template": "",
+          "template": "Because of the size of the given data, which exceeded 100k data samples an SGD Classifier (Stochastic Gradient Descent Classifier) was tried.",
           "guard": "transitlib.isGreaterThanOrEqual(env.samplesize, 100000)"
         }
       ]
@@ -167,13 +167,13 @@
         {
           "name": "is_working",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
-          "template": "",
+          "template": "h4.Results of the SVC-Approach\n\nWe could find out, that this approach of using a Linear Support Vector Classifier (Linear SVC) worked on this data. See our results:",
           "guard": "transitlib.isYes(  env.LinearSVCWorked )"
         },
         {
           "name": "is_not_working",
           "next": "DN_fb7aae19-4b88-45c9-9353-fe30fff9c48a",
-          "template": "",
+          "template": "h5. Results of applying the Linear SVC\n\nWe could figure out, that this approach didn't work on the given data. ",
           "guard": "transitlib.isNo( env.LinearSVCWorked )"
         }
       ],
@@ -208,13 +208,13 @@
         {
           "name": "yes",
           "next": "DN_0ad12d6d-b7c2-443b-8671-46befcbc62ed",
-          "template": "",
+          "template": "Because the data was of textual nature, we decided to use a Naive Bayes approach instead.",
           "guard": "transitlib.isYes( env.isTextData )"
         },
         {
           "name": "no",
           "next": "DN_0680f567-eae7-488d-9fdd-5da9de711167",
-          "template": "",
+          "template": "Because the data was not represented as text, in the next step a K-Neighbor Classifier was selected instead.",
           "guard": "transitlib.isNo( env.isTextData )"
         }
       ],

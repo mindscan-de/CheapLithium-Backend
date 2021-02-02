@@ -133,9 +133,10 @@ class DecisionExecutionEngine(object):
         if thread_data[DT_CURRENTSTATE] == RT_STATE_BLOCKED:
 
             ## transfer user_input data into the thread environment according to the node signature data
-            _guard_result, thread_environment = self.evaluate_hit_decision_node_method(node, thread_data, thread_environment, user_input)
+            _guard_result, updated_environment = self.evaluate_hit_decision_node_method(node, thread_data, thread_environment[DTE_RTE_DATA], user_input)
             
             # TODO: should we use the guard result for something special?
+            thread_environment[DTE_RTE_DATA] = updated_environment
             
             # update the decision thread environment
             self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )

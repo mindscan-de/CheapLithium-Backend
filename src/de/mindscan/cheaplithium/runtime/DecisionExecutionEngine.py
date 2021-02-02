@@ -284,7 +284,8 @@ class DecisionExecutionEngine(object):
             # so lets execute the method(s) and its signature and then update the
             # thread and the thread_environment, since we computed some data for the thread to advance forward
             try:
-                result, thread_environment = self.evaluate_decision_node_method(current_node, thread_data, thread_environment)
+                result, new_environment = self.evaluate_decision_node_method(current_node, thread_data, thread_environment[DTE_RTE_DATA])
+                thread_environment[DTE_RTE_DATA] = new_environment
             except:
                 # TODO: maybe we should do something else, but for now it is better to have it like this.
                 return

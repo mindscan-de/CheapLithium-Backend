@@ -126,25 +126,53 @@ be made - all over the code and the unit tests as well. Anyways I was quite sati
 Later in time I know I will have to add more grammar rules and maybe rewrite the parser, but now since
 I had done it again after a few years I feel quite comfortable to maybe do it once more or twice.
 
+The development gained traction after the parsing was done and I started writing integration level
+tests to make the components work together better and find more errors and finish things up. I also
+solved the assignment problem which was bugging me how to perform the calculation of the reference 
+in case of an value on the left side of the equal sign.
+
 The Third Epoch became quite long as I thought I could split the parser stuff into the fouth Epoch,
 but it became obvious to me that there would be no real progress until the parsing is done "correctly".
 
 But after that, the integration in the whole system should be easy enough and clear enough.
 
+* starting 2021, January 31st
+* finishing 2021, February 2nd.
+
+I was able to finish the integration of the UI and the Backend, such that a thread can be executed 
+and user data can be provided and such. This is quite a major step forward. It turns out, that the 
+system needs some kind of IDE-Mode since doing everything in each one dialog has disadvantages, that 
+will interrupt a nice workflow. But I will leave that for another epoch. 
+
+Anyways I'm quite satisfied with the outcome. Now it is time again to work more on the frontend and
+its backend support rather to work only on the backend sider of the project.
+
+The Third Epoch became quite long as I thought previously I could delay the parser stuff into the 
+fouth Epoch, but it became obvious to me that there would be no real progress until the parsing is 
+done "correctly". And viewing back, this was the right choice. I could also remove a lot of 
+preliminary code, which was there to make the UI work as early as possible.  
+
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ?
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-----------------------------------------------
-The next Epoch: integrate the parser and the interpreter into the Execution Engine and remove all
-preliminary parsing from the DecisionExecutionEngine.
-----------------------------------------------
+So what's next?
 
-# Fourth Epoch (???)
+Fourth Epoch
 
-Anyways a better user experience is also a way to go to next. Also better report generation and 
-presentation capabilities is one of the next options we can take. It looks like the project will 
-enter some kind of maintenance mode with eproch number 4. The heavy lifting seems to be done.
+* starting 2021, February 1st
 
----------------------------
----------------------------
+I can't say whether the fourth epoch started on February first or, but it was quite a seamless 
+transition, where the main objective is to integrate the parser, the interpreter into the Decision-
+ExecutionEngine and remove all the obsolete and preliminary code.
+
+The main goal is to improve the user experience as fast as possible. And to provide a full demo 
+case of the intended use of the whole system. It looks like the main part of the heavy lifting is 
+done by now, but it doesn't mean there is nothing to improve. I will mainly work on the estimator
+model, and i will also hopefully gain some experience using my own system (apply some dogfooding).
+
+So the next steps are report generation, since this was also one of the goals of the whole system.
+
+Later down the line I think I will work on the knowledge base system. Maybe i can also work on
+some quantitative analysis of the runtime of a thread to provide estimates how much time is consumed
+for each step.

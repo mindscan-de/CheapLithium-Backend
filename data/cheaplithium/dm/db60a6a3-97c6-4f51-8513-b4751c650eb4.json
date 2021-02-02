@@ -168,15 +168,16 @@
           "name": "is_working",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
           "template": "",
-          "transitif": ""
+          "guard": "transitlib.isYes(  env.LinearSVCWorked )"
         },
         {
           "name": "is_not_working",
           "next": "DN_fb7aae19-4b88-45c9-9353-fe30fff9c48a",
           "template": "",
-          "transitif": ""
+          "guard": "transitlib.isNo( env.LinearSVCWorked )"
         }
-      ]
+      ],
+      "nodeaction": "stdlib.nop() {\r\n  env.LinearSVCWorked=uilib.yesno(\"linearSVCWorked\",\"Was your attempt to use SVC successful?\");\r\n}"
     },
     {
       "uuid": "DN_3970503f-72ec-404d-a9b4-1047dca6d6df",
@@ -208,15 +209,16 @@
           "name": "yes",
           "next": "DN_0ad12d6d-b7c2-443b-8671-46befcbc62ed",
           "template": "",
-          "transitif": ""
+          "guard": "transitlib.isYes( env.isTextData )"
         },
         {
           "name": "no",
           "next": "DN_0680f567-eae7-488d-9fdd-5da9de711167",
           "template": "",
-          "transitif": ""
+          "guard": "transitlib.isNo( env.isTextData )"
         }
-      ]
+      ],
+      "nodeaction": "stdlib.nop() {\r\n  env.isTextData = uilib.yesno(\"isTextData\",\"Is your data text based?\");\r\n}"
     },
     {
       "uuid": "DN_0ad12d6d-b7c2-443b-8671-46befcbc62ed",
@@ -242,15 +244,16 @@
           "name": "is_working",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
           "template": "",
-          "transitif": ""
+          "guard": "transitlib.isYes( env.wasKNNSuccessful )"
         },
         {
           "name": "is_not_working",
           "next": "DN_ba9d156b-1378-4bd1-b0d4-c26dc640ab0c",
           "template": "",
-          "transitif": ""
+          "guard": "transitlib.isNo( env.wasKNNSuccessful )"
         }
-      ]
+      ],
+      "nodeaction": "stdlib.nop() {\r\n  env.wasKNNSuccessful=uilib.yesno(\"knnsuccess\",\"Was your K-Nearest-Neighbor Classifier Approach Successful?\");\r\n}"
     },
     {
       "uuid": "DN_ba9d156b-1378-4bd1-b0d4-c26dc640ab0c",

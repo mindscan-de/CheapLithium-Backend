@@ -309,7 +309,7 @@ class DecisionExecutionEngine(object):
             for transition in transitions:
                 result = False
                 try:
-                    result, result_data = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment)
+                    result, result_data = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment[DTE_RTE_DATA])
                 except:
                     e,_,trace = sys.exc_info()
                     # ATTN: will update the thread_environment - 

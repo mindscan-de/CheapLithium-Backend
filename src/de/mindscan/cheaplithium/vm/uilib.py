@@ -49,6 +49,21 @@ def textfield(label:str, description:str):
         return item
     else:
         return __input__local_engine.getUserLabelledInput(label)
+    
+
+def textfield_int(label:str, description:str):
+    global __input__local_engine
+    if __input__local_engine.isInterfaceRenderMode():
+        item = {
+            'label' : label,
+            'type' : 'textfield',
+            'description' : description 
+            }
+        __input__local_engine.appendInputInterface(item)
+        return item
+    else:
+        return int(__input__local_engine.getUserLabelledInput(label).strip())
+    
         
         
 def textarea(label:str, description:str):

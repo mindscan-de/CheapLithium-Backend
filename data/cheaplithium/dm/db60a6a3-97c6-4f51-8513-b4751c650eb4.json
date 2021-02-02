@@ -40,7 +40,7 @@
           "guard": "transitlib.isGreaterThan( env.samplesize , 50 )"
         }
       ],
-      "nodeaction": "stdlib.nop() {\r\n  env.samplesize= uilib.textfield(\"mySamplesize\", \"Please enter the number of samples you have to train this model...\");\r\n}"
+      "nodeaction": "stdlib.nop() {\r\n  env.samplesize= uilib.textfield_int(\"mySamplesize\", \"Please enter the number of samples you have to train this model...\");\r\n}"
     },
     {
       "uuid": "DN_d2d5eacc-3dba-456c-b8dc-62b58afd0e68",

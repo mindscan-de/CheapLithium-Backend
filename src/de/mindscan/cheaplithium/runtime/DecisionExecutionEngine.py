@@ -121,7 +121,7 @@ class DecisionExecutionEngine(object):
         current_model_node = thread_data[DT_CURRENTNODE]
         
         model = self.__decisionModels.select_decision_model_by_uuid( current_model_uuid )
-        node = model[DM_NODES][current_model_node]
+        node = self.__decisionModels.select_decision_node_from_decision_model(model, current_model_node)
         
         if not (node[DN_TYPE] == DN_TYPE_HIT):
             return None

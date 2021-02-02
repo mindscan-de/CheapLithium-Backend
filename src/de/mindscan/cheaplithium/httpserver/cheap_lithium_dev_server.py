@@ -301,7 +301,7 @@ async def retry_decision_thread(uuid:str=Form(...)):
     return create_successful_uuid_result( thread_uuid )
 
 @app.post("/CheapLithium/rest/applyHumanDecisionOnDecisionThread")
-async def apply_human_decision_on_decision_thread(uuid:str=Form(...), hitDecision:str=Form("{}")):
+async def apply_human_decision_on_decision_thread(uuid:str=Form(...), hitDecision:str=Form(...)):
     thread_uuid = validate_uuid( strip_uuid( uuid ) )
     hit_user_input = json.loads(hitDecision)    
     

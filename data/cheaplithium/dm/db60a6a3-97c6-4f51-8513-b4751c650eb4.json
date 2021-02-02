@@ -73,15 +73,16 @@
           "name": "yes",
           "next": "DN_d7ebf650-0dfa-4310-ab09-0efc89f0e7eb",
           "template": "",
-          "transitif": ""
+          "guard": "transitlib.isYes(env.isLabelledData)"
         },
         {
           "name": "no",
           "next": "DN_f55e916c-0031-415d-9a8e-2f3c628b4afc",
           "template": "",
-          "transitif": ""
+          "guard": "transitlib.isNo(env.isLabelledData)"
         }
-      ]
+      ],
+      "nodeaction": "stdlib.nop() {\r\n  env.isLabelledData = uilib.yesno(\"myLabelledSelection\",\"Is your data labeeled?\");\r\n}\r\n"
     },
     {
       "uuid": "DN_86dff740-85ac-461e-881d-c1a242c30c45",
@@ -147,13 +148,13 @@
           "name": "is_less_than_100k_samples",
           "next": "DN_bf514192-076e-418f-90bc-9bb77e2ba4f9",
           "template": "",
-          "guard": "isLessThan(env.samplesize, 100000)"
+          "guard": "transitlib.isLessThan(env.samplesize, 100000)"
         },
         {
           "name": "is_greater_or_equal_10k_samples",
           "next": "DN_3970503f-72ec-404d-a9b4-1047dca6d6df",
           "template": "",
-          "guard": "isGreaterThanOrEqual(env.samplesize, 100000)"
+          "guard": "transitlib.isGreaterThanOrEqual(env.samplesize, 100000)"
         }
       ]
     },

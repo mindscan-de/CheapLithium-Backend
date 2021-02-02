@@ -243,13 +243,13 @@
         {
           "name": "is_working",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
-          "template": "",
+          "template": "h4. Results of the KNN-Classifier\n\nThe approach of using the K-Nearest-Neighbor Classifier achieved good results. We finished the work woth the following results:",
           "guard": "transitlib.isYes( env.wasKNNSuccessful )"
         },
         {
           "name": "is_not_working",
           "next": "DN_ba9d156b-1378-4bd1-b0d4-c26dc640ab0c",
-          "template": "",
+          "template": "h5. Results of KNN-Classifier\n\nThis approach didn't work too well and we decided to go on further and try an SVC-Ensemble Classifier instead.",
           "guard": "transitlib.isNo( env.wasKNNSuccessful )"
         }
       ],
@@ -264,13 +264,13 @@
         {
           "name": "success",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
-          "template": "",
+          "template": "h4. Results of the SVC-Ensemble Classifier\n\nIt turned out that this approach was sucessful in processing these data. Please check our results:",
           "guard": "transitlib.isYes( env.wasSVCorEnsembleClassifierSuccess )"
         },
         {
           "name": "failure",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
-          "template": "",
+          "template": "h4. Results of the SVC-Ensemble Classifier\n\nEven this classifier did not work out that well. Anyways we will share our findings:",
           "guard": "transitlib.isNo(env.wasSVCorEnsembleClassifierSuccess)"
         }
       ],

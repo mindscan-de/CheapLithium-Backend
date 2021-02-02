@@ -66,6 +66,9 @@ def eval_hit_node(compileunit, environment:dict, inputdata:dict):
         for input_label in allowed_input_labels:
             filtered_input_data[input_label] = inputdata[input_label]
 
+        # TODO: if filtered input is smaller than allowed input labels, -> form is incomplete?
+        # raise Exception, that this is an 
+
         # inject the filtered form data into the thread
         special_engine = SpecialEngine()
         special_engine.setEnvironment(environment)

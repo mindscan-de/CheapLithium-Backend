@@ -300,6 +300,19 @@ async def retry_decision_thread(uuid:str=Form(...)):
     
     return create_successful_uuid_result( thread_uuid )
 
+@app.post("/CheapLithium/rest/applyHumanDecisionOnDecisionThread")
+async def apply_human_decision_on_decision_thread(uuid:str=Form(...), hitDecision:str=Form("{}")):
+    thread_uuid = validate_uuid( strip_uuid( uuid ) )
+    hit_user_input = json.loads(hitDecision)    
+    
+    if not decisionThreads.isInDatabase(thread_uuid):
+        raise HTTPException(status_code=404, detail="UUID not in database")
+
+    decisionExecutionEngine.process_HIT(thread_uuid, hit_user_input)
+    decisionExecutionEngine.process_single_decision_thread( thread_uuid )
+    
+    return create_successful_uuid_result(thread_uuid)
+
 @app.post("/CheapLithium/rest/getDecisionThreadCurrentUserInterface")
 async def get_decision_thread_current_user_input_interface(uuid:str = Form(...)):
     thread_uuid = validate_uuid( strip_uuid( uuid ) )

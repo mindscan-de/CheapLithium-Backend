@@ -16,7 +16,7 @@
         {
           "name": "always",
           "next": "DN_cefacc87-4d5f-48c9-9d85-9e64f829b570",
-          "template": "",
+          "template": "h4. Model and Algorithm selection\n\n",
           "guard": "transitlib.always()"
         }
       ]
@@ -30,14 +30,14 @@
         {
           "name": "less_than_or_equal_to_50_samples",
           "next": "DN_c18f5206-d5aa-4c83-91ad-d41fa8e3d897",
-          "template": "",
-          "guard": "transitlib.isLessThanOrEqual( env.samplesize, 50 )"
+          "template": "h5. First Assessment\n\nA samplesize of {{this.samplesize}} is too small to start a machine learning project or to gather any meaningful conclusions from this data using data analysis methods. \n\n",
+          "guard": "transitlib.isLessThanOrEqual( env.samplesize, 50 ) {\n  this.samplesize = env.samplesize\n}"
         },
         {
           "name": "more_than_50_samples",
           "next": "DN_d2d5eacc-3dba-456c-b8dc-62b58afd0e68",
-          "template": "",
-          "guard": "transitlib.isGreaterThan( env.samplesize , 50 )"
+          "template": "h5. First Assessment\n\nA samplesize of {{this.samplesize}} samples was enough to start a data analysis task on the given data.\n\n",
+          "guard": "transitlib.isGreaterThan( env.samplesize , 50 ) {\n  this.samplesize = env.samplesize;\n}"
         }
       ],
       "nodeaction": "stdlib.nop() {\r\n  env.samplesize= uilib.textfield_int(\"mySamplesize\", \"Please enter the number of samples you have to train this model...\");\r\n}"
@@ -51,13 +51,13 @@
         {
           "name": "yes",
           "next": "DN_85c6502c-f3ca-4fa2-a299-4cc83cfec614",
-          "template": "",
+          "template": "This data is going to treated as a category task and we can try different approaches using classification or clustering methods.",
           "guard": "transitlib.isYes(env.isCategoryTask)"
         },
         {
           "name": "no",
           "next": "DN_86dff740-85ac-461e-881d-c1a242c30c45",
-          "template": "",
+          "template": "This data is not labelled and the most likely approach is to use some quantity predictive techniques or to use some other means of dimensionality reduction on the data",
           "guard": "transitlib.isNo(env.isCategoryTask)"
         }
       ],
@@ -72,13 +72,13 @@
         {
           "name": "yes",
           "next": "DN_d7ebf650-0dfa-4310-ab09-0efc89f0e7eb",
-          "template": "",
+          "template": "h5. Classification Task\n\nBecause the data is labelled we worked with classification algorithms on the given data.",
           "guard": "transitlib.isYes(env.isLabelledData)"
         },
         {
           "name": "no",
           "next": "DN_f55e916c-0031-415d-9a8e-2f3c628b4afc",
-          "template": "",
+          "template": "h5. Clustering Task\n\nSince the data was not labelled we proceeded with using methods to cluster the data.",
           "guard": "transitlib.isNo(env.isLabelledData)"
         }
       ],
@@ -262,12 +262,19 @@
       "kbarticle": "",
       "nextactions": [
         {
-          "name": "always",
+          "name": "success",
           "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
           "template": "",
-          "guard": "transitlib.always()"
+          "guard": "transitlib.isYes( env.wasSVCorEnsembleClassifierSuccess )"
+        },
+        {
+          "name": "failure",
+          "next": "DN_83f509de-db0c-4e69-956f-bcaf6e2f303f",
+          "template": "",
+          "guard": "transitlib.isNo(env.wasSVCorEnsembleClassifierSuccess)"
         }
-      ]
+      ],
+      "nodeaction": "stdlib.nop() {\r\n  env.wasSVCorEnsembleClassifierSuccess = uilib.yesno(\"svcOrEnsemble\",\"Was one of the following Techniques SVC or the usage of Ensemble Classifiers successful?\");\r\n  env.sharedResults = uilib.textarea(\"sharedResults\",\"Please share your results us: Please describe what you could find out.\");\r\n}"
     },
     {
       "uuid": "DN_1ace7e8a-6ac3-4b36-a6ee-e9dee8f561df",

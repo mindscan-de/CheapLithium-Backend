@@ -30,13 +30,13 @@
         {
           "name": "less_than_or_equal_to_50_samples",
           "next": "DN_c18f5206-d5aa-4c83-91ad-d41fa8e3d897",
-          "template": "h5. First Assessment\n\nA samplesize of {{this.samplesize}} is too small to start a machine learning project or to gather any meaningful conclusions from this data using data analysis methods. \n\n",
-          "guard": "transitlib.isLessThanOrEqual( env.samplesize, 50 ) {\n  this.samplesize = env.samplesize\n}"
+          "template": "h5. First Assessment\n\nA samplesize of {{{this.samplesize}}} is too small to start a machine learning project or to gather any meaningful conclusions from this data using data analysis methods. \n\n",
+          "guard": "transitlib.isLessThanOrEqual( env.samplesize, 50 ) {\n  this.samplesize = env.samplesize;\n}"
         },
         {
           "name": "more_than_50_samples",
           "next": "DN_d2d5eacc-3dba-456c-b8dc-62b58afd0e68",
-          "template": "h5. First Assessment\n\nA samplesize of {{this.samplesize}} samples was enough to start a data analysis task on the given data.\n\n",
+          "template": "h5. First Assessment\n\nA samplesize of {{{this.samplesize}}} samples was enough to start a data analysis task on the given data.\n\n",
           "guard": "transitlib.isGreaterThan( env.samplesize , 50 ) {\n  this.samplesize = env.samplesize;\n}"
         }
       ],
@@ -93,8 +93,7 @@
         {
           "name": "yes",
           "next": "DN_e169aed7-7b2c-4fd7-ac7f-65bd6ddb52e7",
-          "template": "",
-          "transitif": ""
+          "template": "h5. Regression Task\n\n"
         },
         {
           "name": "no",
@@ -113,8 +112,7 @@
         {
           "name": "yes",
           "next": "DN_22d76065-1b10-4617-b8a4-46cd72d92a6c",
-          "template": "",
-          "transitif": ""
+          "template": "h5.  Dimensionality Reduction\n\n"
         },
         {
           "name": "no",

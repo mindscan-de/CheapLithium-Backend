@@ -95,6 +95,21 @@ class ExportModelGenerator(object):
         # return a dictionary for node-uuids to index translations
         return node_translation
 
+    # use same color scheme as web application
+    def getColorByNodeType(self, param1):
+        if DN_TYPE_END == param1:
+            return '#DC3545'
+        elif DN_TYPE_HIT == param1:
+            return '#28a745'
+        elif DN_TYPE_MIT == param1:
+            return '#17a2b8'
+        elif DN_TYPE_START == param1:
+            return '#007bff'
+        elif DN_TYPE_SYNC == param1:
+            return '#e83e8c'
+        else:
+            return '#20c997'
+    
     
     def _write_single_node(self, document, node, index):
         document.write('        <section name="node">')
@@ -110,7 +125,7 @@ class ExportModelGenerator(object):
         document.write('                <attribute key="type" type="String">rectangle</attribute>')
         document.write('                <attribute key="raisedBorder" type="boolean">false</attribute>')
         # TODO use colorcoded boxes for hit, mit, sync, start, end, etc nodes
-        document.write('                <attribute key="fill" type="String">#FF6600</attribute>')
+        document.write('                <attribute key="fill" type="String">{}</attribute>'.format(self.getColorByNodeType(node[DN_TYPE])))
         document.write('                <attribute key="outline" type="String">#000000</attribute>')
         document.write('            </section>')
         document.write('            <section name="LabelGraphics">')

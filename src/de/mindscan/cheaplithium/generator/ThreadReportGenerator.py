@@ -25,6 +25,7 @@ SOFTWARE.
 
 @autor: Maxim Gansert, Mindscan
 '''
+import re
 
 from de.mindscan.cheaplithium.datamodel.DecisionModel import DecisionModel
 from de.mindscan.cheaplithium.datamodel.DecisionThread import DecisionThread
@@ -152,7 +153,14 @@ class ThreadReportGenerator(object):
     
     
     def render_mini_report(self, template, node_data:dict):
-        return template
+        def this_replace(match):
+            varname = match.group(1)
+            if varname in node_data: 
+                return str(node_data[varname])
+            return match
+
+        replaced_template = re.sub(r'\{\{\{this\.(.*)\}\}\}', this_replace, template)
+        return replaced_template
     
     
     

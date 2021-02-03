@@ -16,7 +16,7 @@
         {
           "name": "always",
           "next": "DN_cefacc87-4d5f-48c9-9d85-9e64f829b570",
-          "template": "h4. Model and Algorithm selection\n\n",
+          "template": "h4. Model and Algorithm selection",
           "guard": "transitlib.always()"
         }
       ]

@@ -166,7 +166,10 @@ def eval_ll( ast, special_engine):
     
     elif isinstance(ast,VMModule):
         module_name = ast.name
-        themodule = importlib.import_module('.'+module_name, package='de.mindscan.cheaplithium.vm')
+        # works in Python 3.7 but not in Python 3.6
+        # themodule = importlib.import_module('.'+module_name, package='de.mindscan.cheaplithium.vm')
+        # python 3.6 compatible way - although i don't like it 
+        themodule = importlib.import_module('de.mindscan.cheaplithium.vm.'+module_name)
 
         if special_engine:
             try:

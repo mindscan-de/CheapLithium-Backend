@@ -70,3 +70,6 @@ def isEqual(a,b):
 
 def isNotEqual(a,b):
     return a!=b
+
+def throwException():
+    raise Exception("This Is a transition which throws an exception to develop stacktrace stuff.")

@@ -311,17 +311,23 @@ class DecisionExecutionEngine(object):
                 try:
                     result, result_data = self.evaluate_decision_node_transition_method(transition, thread_data, thread_environment[DTE_RTE_DATA])
                 except:
-                    e,_,trace = sys.exc_info()
-                    # ATTN: will update the thread_environment - 
+                    _,v,tb = sys.exc_info()
+                    
+                    mytrace = {
+                        'transition' : transition[DNT_GUARD_SIGNATURE], 
+                        'exmessage': str( v.args[0] or '' ),
+                        'stacktrace':[]
+                        }
+                    
+                    for (frame, linenr) in traceback.walk_tb(tb):
+                        mytrace['stacktrace'].append("{}#{}: line {}".format(frame.f_code.co_filename,frame.f_code.co_name, linenr ))
+                        
                     thread_environment = \
                         self.__decisionThreadEnvironments.append_error_log_entry(
                             environment_uuid, 
                             'error', 
-                            'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]), 
-                            { 
-                                'exception':str(e),
-                                'traceback':str(''.join(traceback.format_stack(trace)))
-                            })
+                            'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]),
+                            mytrace )
                     continue
                 
                 if result is False:

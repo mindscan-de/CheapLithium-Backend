@@ -50,6 +50,7 @@ from de.mindscan.cheaplithium.datamodel.DecisionThreadEnvironments import Decisi
 from de.mindscan.cheaplithium.datamodel.KnowledgeBaseArticles import KnowledgeBaseArticles
 from de.mindscan.cheaplithium.generator.ExportModelGenerator import ExportModelGenerator
 from de.mindscan.cheaplithium.generator.ThreadReportGenerator import ThreadReportGenerator
+from de.mindscan.cheaplithium.generator.ThreadErrorGenerator import ThreadErrorGenerator
 from de.mindscan.cheaplithium.runtime.DecisionExecutionEngine import DecisionExecutionEngine
 from de.mindscan.cheaplithium.runtime.LithiumLangServer import LithiumLangServer
 
@@ -285,6 +286,15 @@ async def get_decision_thread_report(uuid:str):
     
     reportGenerator = ThreadReportGenerator(decisionThreads, decisionModels, decisionThreadEnvironments)
     result = reportGenerator.generate_thread_report(thread_uuid);
+    if result is not None:
+        return result 
+
+@app.get("/CheapLithium/rest/getDecisionThreadErrors/{uuid}")
+async def get_decision_thread_errors(uuid:str):
+    thread_uuid = validate_uuid( strip_uuid(uuid) )
+    
+    errorReportGenerator = ThreadErrorGenerator(decisionThreads, decisionModels, decisionThreadEnvironments)
+    result = errorReportGenerator.generate_error_report(thread_uuid);
     if result is not None:
         return result 
     

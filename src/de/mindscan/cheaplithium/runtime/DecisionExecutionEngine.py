@@ -314,7 +314,10 @@ class DecisionExecutionEngine(object):
                     _,v,tb = sys.exc_info()
                     
                     mytrace = {
-                        'transition' : transition[DNT_GUARD_SIGNATURE], 
+                        'dnuuid' : current_node[DN_UUID],
+                        'dnname' : current_node[DN_NAME],
+                        'trname' : transition[DNT_NAME],
+                        'signature' : transition[DNT_GUARD_SIGNATURE], 
                         'exmessage': str( v.args[0] or '' ),
                         'stacktrace':[]
                         }
@@ -326,7 +329,7 @@ class DecisionExecutionEngine(object):
                         self.__decisionThreadEnvironments.append_error_log_entry(
                             environment_uuid, 
                             'error', 
-                            'Exception triggererd while evaluating the decision_node transition for transition: named: {}'.format(transition[DNT_NAME]),
+                            'Exception triggererd while evaluating the decision_node transition',
                             mytrace )
                     continue
                 

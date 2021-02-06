@@ -51,4 +51,8 @@ class ThreadErrorGenerator(object):
         thread = self.__threadProvider.select_decision_thread_by_uuid(thread_uuid)
         environment = self.__environmentProvider.select_thread_environment_by_uuid(thread[DT_ENVIRONMENT][DT_ENVIRONMENT_UUID])
         
-        return {'errorlog': environment[DTE_ERROR_LOG]}
+        log = environment[DTE_ERROR_LOG].copy()
+        # sort newest items first
+        log.reverse()
+        
+        return {'errorlog': log}

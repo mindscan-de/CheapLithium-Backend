@@ -287,7 +287,27 @@ class DecisionExecutionEngine(object):
                 result, new_environment = self.evaluate_decision_node_method(current_node, thread_data, thread_environment[DTE_RTE_DATA])
                 thread_environment[DTE_RTE_DATA] = new_environment
             except:
-                # TODO: maybe we should do something else, but for now it is better to have it like this.
+                _,v,tb = sys.exc_info()
+                    
+                mytrace = {
+                    'dnuuid' : current_node[DN_UUID],
+                    'dnname' : current_node[DN_NAME],
+                    'trname' : '',
+                    'signature' : current_node[DN_NODEACTION], 
+                    'exmessage': str( v.args[0] or '' ),
+                    'stacktrace':[]
+                    }
+                
+                for (frame, linenr) in traceback.walk_tb(tb):
+                    mytrace['stacktrace'].append("{}#{}: line {}".format(frame.f_code.co_filename,frame.f_code.co_name, linenr ))
+                    
+                thread_environment = \
+                    self.__decisionThreadEnvironments.append_error_log_entry(
+                        environment_uuid, 
+                        'error', 
+                        'Exception caught while evaluating the node action',
+                        mytrace )
+
                 return
             
             self.__decisionThreadEnvironments.update_decision_environment_by_uuid(environment_uuid, thread_environment )
@@ -329,7 +349,7 @@ class DecisionExecutionEngine(object):
                         self.__decisionThreadEnvironments.append_error_log_entry(
                             environment_uuid, 
                             'error', 
-                            'Exception triggererd while evaluating the decision_node transition',
+                            'Exception caught while evaluating the decision_node transition',
                             mytrace )
                     continue
                 

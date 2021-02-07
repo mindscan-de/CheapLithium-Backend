@@ -79,9 +79,9 @@ class DecisionThread(object):
             DT_CURRENTNODE:startnode, 
             DT_TICKETFERENCE:[ticketreference], 
             DT_OWNER:"",
-            DT_CREATED: str(time.time()),
-            DT_MODIFIED: "",
-            DT_FINALIZED: ""
+            DT_CREATED: time.time(),
+            DT_MODIFIED: 0,
+            DT_FINALIZED: 0
             }
         
         self.__inMemoryDatabase[threadUuid] = newThread
@@ -98,9 +98,10 @@ class DecisionThread(object):
     ## when the decision engine workd
     ## TODO: add update modified date...
     def update_decision_thread_by_uuid_iternal(self, thread_uuid:str, thread_data):
+        thread_data[DT_MODIFIED] = time.time()
         self.__inMemoryDatabase[thread_uuid] = thread_data
         self.save_to_disk(thread_uuid)
-        #TODO: SAVE to disk...
+
         
     def save_to_disk(self, thread_uuid):
         jsonfilepath = self.__datathread_directory + thread_uuid + '.json'

@@ -152,15 +152,10 @@ fouth Epoch, but it became obvious to me that there would be no real progress un
 done "correctly". And viewing back, this was the right choice. I could also remove a lot of 
 preliminary code, which was there to make the UI work as early as possible.  
 
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ?
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-So what's next?
-
 Fourth Epoch
 
 * starting 2021, February 1st
+* finished 2021, February 7th
 
 I can't say whether the fourth epoch started on February first or, but it was quite a seamless 
 transition, where the main objective is to integrate the parser, the interpreter into the Decision-
@@ -176,3 +171,85 @@ So the next steps are report generation, since this was also one of the goals of
 Later down the line I think I will work on the knowledge base system. Maybe i can also work on
 some quantitative analysis of the runtime of a thread to provide estimates how much time is consumed
 for each step.
+
+
+* starting 2021, February 3rd 
+
+Use the same color scheme for the xgml export as in the web application. 
+
+Added some functionality to create and combine the reports. The data of the mini reports for the transition 
+is now inserted into the templates and he GUI was extended to help to generate a report for a thread. 
+
+Also the error handling was improved by a lot, because the runtime exceptions are now accessible through the
+web interface itself. Which hopefully helps to find modelling issues earlier.
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ? Next ?
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+So what's next?
+
+I regard this modelling tool currently as good enough and I think I will shift my attention to 
+other projects I'm working on. I will try to use this tool and see whether it will provide me
+some of the projected benefits to me. 
+
+If this tool is developed to a more user-type and project-manager-type audience instead of the
+current hands-on (this code) developer-type audience it needs developed further to be more of a
+help to the people defining and developing new models and developing vm-parts of the code which 
+will help to automatize and do the analysis. Also serving this to other means that a whole 
+information channel of the console will nt be seen, so everything must become even more robust.
+
+For compley and asynchronous tasks there should also be a complete overhaul of the engine and 
+the storage of the threads and such.
+
+For Project management
+* How much was it?
+** calculate the time from start to end
+** calculate the time for each node and caclulcate more statistics
+** Which paths are/were never taken?
+
+For Optimization and AI
+* Always prefer smaller models over larger models
+* calculate which models are executed after others to have some bayesian predictions for future processing 
+
+For Ticket-Analysis
+* allow to continue with different models, if one of the models already provided basic analysis. 
+  You should be able to continue with a more precise model each time.
+* the system should allow "uploads" and then do analysis on the given data, which will open a 
+  whole new dimension to make it into a "Analysis as a Service" - AAAS - System
+
+For Developers
+* Provide a language server so that it can 
+** check Syntax / maybe even interactively (red or green while typing)
+** make suggestions / autocomplete
+** AST
+* Provide A user defined start-Environment to keep interactions with the user low during the execution of the model
+* Some kind of IDE Mode, where you can make more changes in parallel instead of having an interactive dialog
+  for each of them
+* maybe provide a DSL, which can generate models from a demain specific language. Such that the developer of
+  models doesn't have to do the laborous work using each and every dialog.
+  
+For Knowledge Workers
+* provide a better "Wiki" and syntax and a rendering engine for the Knowledge Base, which then also 
+  can be used to create/improve/render the reports.
+  
+Some Decision Thread model related stuff like
+* Finish and resume threads
+* Archive finished threads
+* continue with other decision threads
+
+Some Usability stuff
+* some interactive Selections and filters (e.g. Search for a decision thread) 
+
+----
+
+For the moment I'm undecided on how to develop that system further and what will provide the most 
+benefit as for the users speaking. Everything above is a way to go, but some of these points are
+more useful than others in the short term. As for now, i will give that project some time to mature
+in my head. But nevertheless, I think that this project, were well spent 11 weeks of my spare time.
+
+I had some time to hone my skills, on topics I learned years ago, so this was a good refresher 
+for some of the topics, such as implementing the whole tokenizer, ast, parser, interpreter and 
+runtime for a graph based modelling tool, for just providing the ability for executing and script 
+the decision tree elements.

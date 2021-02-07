@@ -197,11 +197,13 @@ some of the projected benefits to me.
 If this tool is developed to a more user-type and project-manager-type audience instead of the
 current hands-on (this code) developer-type audience it needs developed further to be more of a
 help to the people defining and developing new models and developing vm-parts of the code which 
-will help to automatize and do the analysis. Also serving this to other means that a whole 
+will help to automatize and do the analysis. Also serving this to others, means that a whole 
 information channel of the console will nt be seen, so everything must become even more robust.
 
 For compley and asynchronous tasks there should also be a complete overhaul of the engine and 
-the storage of the threads and such.
+the storage of the threads and such. So there is a management and web interface and on the other 
+side worker nodes, which are configured to run the models and the threads instead of being done
+on a single machine in the webserver thread. 
 
 For Project management
 * How much was it?

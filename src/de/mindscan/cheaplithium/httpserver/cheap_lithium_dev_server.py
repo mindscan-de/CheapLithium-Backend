@@ -135,7 +135,7 @@ async def provide_decision_model( uuid:str):
 
 @app.post("/CheapLithium/rest/createDecisionModel")
 async def create_decision_model( name:str = Form(...), displayname:str=Form(...), 
-    description:str=Form(...), version:str = Form(...)):
+    description:str=Form("(missing desciption)"), version:str = Form(...)):
     
     _, uuid  = decisionModels.create_decision_model_internal(name, displayname, description, version)
     

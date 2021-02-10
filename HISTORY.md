@@ -192,15 +192,15 @@ So what's next?
 
 I regard this modelling tool currently as good enough and I think I will shift my attention to 
 other projects I'm working on. I will try to use this tool and see whether it will provide me
-some of the projected benefits to me. 
+some of the projected benefits. 
 
 If this tool is developed to a more user-type and project-manager-type audience instead of the
 current hands-on (this code) developer-type audience it needs developed further to be more of a
 help to the people defining and developing new models and developing vm-parts of the code which 
 will help to automatize and do the analysis. Also serving this to others, means that a whole 
-information channel of the console will nt be seen, so everything must become even more robust.
+information channel of the console will not be seen, so everything must become even more robust.
 
-For compley and asynchronous tasks there should also be a complete overhaul of the engine and 
+For complex and asynchronous tasks there should also be a complete overhaul of the engine and 
 the storage of the threads and such. So there is a management and web interface and on the other 
 side worker nodes, which are configured to run the models and the threads instead of being done
 on a single machine in the webserver thread. 
@@ -242,7 +242,7 @@ Some Decision Thread model related stuff like
 * continue with other decision threads
 
 Some Usability stuff
-* some interactive Selections and filters (e.g. Search for a decision thread) 
+* some interactive selections and filters (e.g. search for a decision thread) 
 
 ----
 

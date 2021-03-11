@@ -51,3 +51,13 @@ one person. Therefore do not expect too much work being put into this whole idea
 * Knowledge Base Engine
 * Exection engine
 * Report Engine  
+
+## Optimization
+
+You can think of this system as a recipe. Recipes are easy to follow and will produce same result
+quality all the time. With such a system you can either be the one who follows (executes) the 
+recipe or be the one who creates them (modeller). Or who describes them in detail (knowledge base 
+author).
+
+This can be used for all kind of decision systems, e.g. medical differential diagnosis and such
+things.
